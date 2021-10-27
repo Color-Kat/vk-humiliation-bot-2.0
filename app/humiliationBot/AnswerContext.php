@@ -2,6 +2,7 @@
 
 namespace humiliationBot;
 
+use app\lib\Log;
 use humiliationBot\interfaces\VkMessageAnswerInterface;
 
 /**
@@ -30,8 +31,7 @@ class AnswerContext
     }
 
     public function answer(): bool {
-
-        $this->strategy->setMessage('AnswerContext работает) ');
+        $this->strategy->setMessage('AnswerContext работает)');
         $this->strategy->sendMessage();
 
         return true;

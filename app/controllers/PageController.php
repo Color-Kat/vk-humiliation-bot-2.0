@@ -10,8 +10,6 @@ class PageController
 {
     public function indexAction()
     {
-        Log::info('Logger class 2');
-
         echo 'It is just page';
     }
 }

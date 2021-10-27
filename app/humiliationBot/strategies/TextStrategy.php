@@ -7,6 +7,11 @@ use humiliationBot\VkMessage;
 
 class TextStrategy extends VkMessage implements VkMessageAnswerInterface
 {
+    public function __construct($data)
+    {
+        parent::__construct($data);
+    }
+
     /**
      * @inheritdoc
      */

@@ -2,6 +2,7 @@
 
 namespace humiliationBot;
 
+use app\lib\Log;
 use humiliationBot\strategies\TextStrategy;
 
 class Bot
@@ -83,7 +84,10 @@ class Bot
                 return bot_env('VK_CONFIRMATION_CODE');
 
             case 'message_new':
-                new AnswerContext(new TextStrategy($this->data->object->message->from_id));
+
+                (new AnswerContext(
+                    new TextStrategy($this->data)
+                ))->answer();
 
 //                // create response array
 //                $request_params = [
