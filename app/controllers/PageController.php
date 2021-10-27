@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\lib\Log;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 
@@ -9,12 +10,7 @@ class PageController
 {
     public function indexAction()
     {
-        // create a log channel
-        $log = new Logger('test');
-        $log->pushHandler(new StreamHandler(__DIR__ . '/answer.log', Logger::DEBUG));
-
-        // add records to the log
-        $log->info('logger');
+        Log::info('Logger class 2');
 
         echo 'It is just page';
     }
