@@ -1,10 +1,14 @@
 <?php
 
-namespace app\humiliationBot;
+namespace humiliationBot;
 
-class VkMessage implements \VkMessageInterface
+use humiliationBot\interfaces\VkMessageInterface;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+
+class VkMessage implements VkMessageInterface
 {
-    private $request_params = [];
+    private array $request_params = [];
 
     public function __construct($user_id)
     {
@@ -34,6 +38,14 @@ class VkMessage implements \VkMessageInterface
      */
     public function sendMessage(): bool
     {
+
+        // create a log channel
+        $log = new Logger('test');
+        $log->pushHandler(new StreamHandler(__DIR__ . '/answer.log', Logger::DEBUG));
+
+        // add records to the log
+        $log->info('logger');
+
         // send request
         file_get_contents(
             'https://api.vk.com/method/messages.send?' .

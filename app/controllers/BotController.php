@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\humiliationBot\Bot;
+use humiliationBot\Bot;
 
 class BotController
 {

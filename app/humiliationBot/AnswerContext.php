@@ -1,6 +1,8 @@
 <?php
 
-namespace app\humiliationBot;
+namespace humiliationBot;
+
+use humiliationBot\interfaces\VkMessageAnswerInterface;
 
 /**
  * Паттерн стратегия (strategy)
@@ -9,13 +11,29 @@ namespace app\humiliationBot;
 class AnswerContext
 {
     /**
-     * @var \VkMessageAnswerInterface ссылка на один из объектов стратегии,
+     * @var VkMessageAnswerInterface ссылка на один из объектов стратегии,
      * работа с ним осуществляется через интерфейс стратегии
      */
-    private \VkMessageAnswerInterface $strategy;
+    private VkMessageAnswerInterface $strategy;
 
-    public function __construct()
+    public function __construct(VkMessageAnswerInterface $strategy)
     {
+        $this->strategy = $strategy;
+    }
 
+    /**
+     * set strategy to execute message answer logic
+     */
+    public function setStrategy(VkMessageAnswerInterface $strategy)
+    {
+        $this->strategy = $strategy;
+    }
+
+    public function answer(): bool {
+
+        $this->strategy->setMessage('AnswerContext работает) ');
+        $this->strategy->sendMessage();
+
+        return true;
     }
 }

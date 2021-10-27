@@ -1,5 +1,7 @@
 <?php
 
+namespace humiliationBot\interfaces;
+
 interface VkMessageInterface
 {
     public function setMessage(string $message): void;
