@@ -1,0 +1,40 @@
+{
+  "name" : "test",
+
+  "answers": [
+    {
+      "pattern": "/^regEgs, you are (@insult) $/",
+      "priority": 1,
+      "type": "text",
+      "messages": [
+          "go away!",
+          "no, i aren't! And you are @insult",
+          {
+            "pattern": "/^regEgs, you are fool $/",
+            "messages": "you are fool yourself!"
+          },
+
+          {
+            "with_prev_messages": true,
+            "with_prev_mess_id": "little_train",
+            "messages": "no, but do you want to listen to the tale about the little train?",
+            "next": [
+                {
+                  "with_prev_messages": true,
+                  "with_prev_mess_id": "little_train_1",
+                  "pattern": "/^yes$/",
+                  "messages" : "long story...",
+                  "next" : "that's the end of the fairy tales"
+                },
+                {
+                    "pattern": "/^no/",
+                    "messages": ["i hate you", "go away, asshole!"]
+                }
+            ],
+            "forced": "answer yes or no!",
+            "forced_end": "Okay, i understand, you don't want to listen this history"
+          }
+      ]
+    }
+  ]
+}

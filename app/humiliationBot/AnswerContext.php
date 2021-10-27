@@ -4,8 +4,9 @@ namespace app\humiliationBot;
 
 /**
  * Паттерн стратегия (strategy)
+ * Контекст
  */
-class Answer
+class AnswerContext
 {
     /**
      * @var \VkMessageAnswerInterface ссылка на один из объектов стратегии,
