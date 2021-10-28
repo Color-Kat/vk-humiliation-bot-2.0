@@ -2,11 +2,15 @@
 
 namespace humiliationBot\strategies;
 
+use app\lib\Log;
 use humiliationBot\interfaces\VkMessageAnswerInterface;
+use humiliationBot\traits\DictionaryTrait;
 use humiliationBot\VkMessage;
 
 class TextStrategy extends VkMessage implements VkMessageAnswerInterface
 {
+    use DictionaryTrait;
+
     public function __construct($data)
     {
         parent::__construct($data);
@@ -16,7 +20,7 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
      * @inheritdoc
      */
     public function parse(){
-        \app\lib\Log::info('parse: ', $this->data);
+        $this->loadDictionary('test');
 
         return true;
     }
