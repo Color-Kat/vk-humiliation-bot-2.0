@@ -16,7 +16,7 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
      * @inheritdoc
      */
     public function parse(){
-
+        \app\lib\Log::info('parse: ', $this->data);
 
         return true;
     }
