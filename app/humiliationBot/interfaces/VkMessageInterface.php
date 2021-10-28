@@ -10,6 +10,8 @@ interface VkMessageInterface
 
     public function setReplyTo(float $reply_to): void;
 
+    public function setSticker(float $stickerId): void;
+
     /**
      * build query and send it to vk api
      */

@@ -89,17 +89,6 @@ class Bot
                     new TextStrategy($this->data)
                 ))->answer();
 
-//                // create response array
-//                $request_params = [
-//                    'user_id' => $this->data->object->message->from_id,
-//                    'message' => 'Я родился!',
-//                    'access_token' => bot_env('VK_TOKEN'),
-//                    'v' => '5.81'
-//                ];
-//
-//                // send message
-//                file_get_contents('https://api.vk.com/method/messages.send?' . http_build_query($request_params));
-
                 return 'ok';
 
 //            case 'message_reply':

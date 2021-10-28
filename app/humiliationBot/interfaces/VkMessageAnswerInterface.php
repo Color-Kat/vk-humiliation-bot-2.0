@@ -11,10 +11,9 @@ interface VkMessageAnswerInterface extends VkMessageInterface
     /**
      * парсит сообщение пользователя
      *
-     * @param string $message
      * @return mixed
      */
-    public function parse($data);
+    public function parse();
 
     /**
      * @param string|array $messages array or string, where we need to create answer by template

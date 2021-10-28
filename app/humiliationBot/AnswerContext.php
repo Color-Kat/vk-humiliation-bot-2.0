@@ -31,7 +31,9 @@ class AnswerContext
     }
 
     public function answer(): bool {
-        $this->strategy->setMessage('AnswerContext работает)');
+        $this->strategy->parse();
+        $this->strategy->setMessage('Стикеры работают');
+//        $this->strategy->setSticker(21148);
         $this->strategy->sendMessage();
 
         return true;

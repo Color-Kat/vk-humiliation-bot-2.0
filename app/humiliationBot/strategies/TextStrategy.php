@@ -15,7 +15,9 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
     /**
      * @inheritdoc
      */
-    public function parse($data){
+    public function parse(){
+
+
         return true;
     }
 

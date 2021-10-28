@@ -2,24 +2,25 @@
 
 namespace humiliationBot;
 
+use VK\Client\VKApiClient;
 use app\lib\Log;
 use humiliationBot\interfaces\VkMessageInterface;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 
 class VkMessage implements VkMessageInterface
 {
-    private $data = [];
-    private array $request_params = [];
+    protected \stdClass $data;
+    protected array $request_params = [];
+    private string $access_token;
 
     public function __construct($data)
     {
         $this->data = $data;
+        $this->access_token = bot_env('VK_TOKEN');
 
         // set standard options
         $this->request_params['user_id'] = $this->getUserId();
         $this->request_params['random_id'] = 0;
-        $this->request_params['access_token'] = bot_env('VK_TOKEN');
+        $this->request_params['access_token'] = $this->access_token;
         $this->request_params['v'] = '5.131';
     }
 
@@ -46,18 +47,26 @@ class VkMessage implements VkMessageInterface
         $this->request_params['reply_to'] = $reply_to;
     }
 
+    public function setSticker(float $stickerId): void
+    {
+        $this->request_params['sticker_id'] = $stickerId;
+    }
+
     /**
      * build query and send it to vk api
      */
     public function sendMessage(): bool
     {
 
-        Log::info($this->request_params['message']);
+//        Log::info($this->request_params['message']);
+
+        $vk = new VKApiClient();
+        $vk->messages()->send($this->access_token, $this->request_params);
 
         // send request
-        file_get_contents('https://api.vk.com/method/messages.send?' .
-            http_build_query($this->request_params)
-        );
+//        file_get_contents('https://api.vk.com/method/messages.send?' .
+//            http_build_query($this->request_params)
+//        );
 
 //        $request_params = [
 //            'user_id'      => $this->request_params['user_id'],
