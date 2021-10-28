@@ -2,19 +2,24 @@
 
 namespace humiliationBot;
 
+use humiliationBot\traits\VkObjectParserTrait;
 use VK\Client\VKApiClient;
 use app\lib\Log;
 use humiliationBot\interfaces\VkMessageInterface;
 
 class VkMessage implements VkMessageInterface
 {
-    protected \stdClass $data;
+    use VkObjectParserTrait;
+
+//    protected \stdClass $data;
     protected array $request_params = [];
     private string $access_token;
 
     public function __construct($data)
     {
-        $this->data = $data;
+        // save data via trait method
+        $this->setData($data);
+
         $this->access_token = bot_env('VK_TOKEN');
 
         // set standard options
@@ -22,14 +27,6 @@ class VkMessage implements VkMessageInterface
         $this->request_params['random_id'] = 0;
         $this->request_params['access_token'] = $this->access_token;
         $this->request_params['v'] = '5.131';
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId(): int
-    {
-        return $this->data->object->message->from_id;
     }
 
     public function setMessage(string $message): void

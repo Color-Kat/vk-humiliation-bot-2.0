@@ -24,6 +24,8 @@ trait DictionaryTrait
      */
     public function loadDictionary(string $name): bool
     {
+        // TODO сделать оптимизированный парсинг JSON
+
         // load bigDictionary.json (all dictionaries in one file)
         $bigDictionary = json_decode(
             file_get_contents(DICTIONARY_PATH . '/bigDictionary.json'

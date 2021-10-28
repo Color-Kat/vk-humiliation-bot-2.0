@@ -23,9 +23,12 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
     /**
      * @inheritdoc
      */
-    public function parse(){
+    public function parse()
+    {
         $prevMessageIdFromDB = 'little_train123';
         $messageByPrevMessage = $this->getPrevMessagesById($prevMessageIdFromDB);
+
+        if ($messageByPrevMessage) return $messageByPrevMessage;
 
         Log::info('$messageByPrevMessage: ', $messageByPrevMessage);
 
@@ -35,7 +38,10 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
     /**
      * @inheritdoc
      */
-    public function generateAnswer($messages): string{
+    public function generateAnswer($messages): string
+    {
+
+
         return $messages;
     }
 }
