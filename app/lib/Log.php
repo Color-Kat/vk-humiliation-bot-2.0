@@ -15,7 +15,7 @@ class Log
         self::$logger->pushHandler(new StreamHandler(ROOT . '/logs/.log', Logger::DEBUG));
     }
 
-    public static function info($mess, $data) {
+    public static function info($mess, $data = []) {
         self::$logger->info($mess, (array) $data);
     }
 }

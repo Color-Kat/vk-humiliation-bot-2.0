@@ -84,7 +84,7 @@ class Bot
                 return bot_env('VK_CONFIRMATION_CODE');
 
             case 'message_new':
-
+                // create AnswerContext and strategy with vk data
                 (new AnswerContext(
                     new TextStrategy($this->data)
                 ))->answer();

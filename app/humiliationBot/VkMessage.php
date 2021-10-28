@@ -63,11 +63,6 @@ class VkMessage implements VkMessageInterface
         $vk = new VKApiClient();
         $vk->messages()->send($this->access_token, $this->request_params);
 
-        // send request
-//        file_get_contents('https://api.vk.com/method/messages.send?' .
-//            http_build_query($this->request_params)
-//        );
-
 //        $request_params = [
 //            'user_id'      => $this->request_params['user_id'],
 //            'message'      => 'Я родился!',

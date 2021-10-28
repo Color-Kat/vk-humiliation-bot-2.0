@@ -9,10 +9,14 @@ use humiliationBot\VkMessage;
 
 class TextStrategy extends VkMessage implements VkMessageAnswerInterface
 {
+    // methods for work with dictionaries
     use DictionaryTrait;
 
     public function __construct($data)
     {
+        // load dictionary by name
+        $this->loadDictionary('simple');
+
         parent::__construct($data);
     }
 
@@ -20,7 +24,10 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
      * @inheritdoc
      */
     public function parse(){
-        $this->loadDictionary('test');
+        $prevMessageIdFromDB = 'little_train123';
+        $messageByPrevMessage = $this->getPrevMessagesById($prevMessageIdFromDB);
+
+        Log::info('$messageByPrevMessage: ', $messageByPrevMessage);
 
         return true;
     }
