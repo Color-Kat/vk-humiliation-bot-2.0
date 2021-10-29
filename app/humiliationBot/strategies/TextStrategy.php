@@ -27,14 +27,14 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
         $messageByPrevMessage = $this->getPrevMessagesById($prevMessageIdFromDB);
 
         // return this answers
-        if ($messageByPrevMessage) return $messageByPrevMessage;
+        if ($messageByPrevMessage) return $messageByPrevMessage['messages'];
 
         $match = $this->getMatch($this->getMessage(), $this->dictionary);
 
-        // testing methods
 //        Log::info('isSub', $this->isSubscribed($this->getUserId()));
+//        Log::info('match', $match);
 
-        return true;
+        return $match;
     }
 
     /**
@@ -44,6 +44,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     {
 
 
-        return $messages;
+        return 'Проверка паттернов работает |=';
     }
 }

@@ -17,6 +17,7 @@ interface VkMessageAnswerInterface extends VkMessageInterface
 
     /**
      * @param string|array $messages array or string, where we need to create answer by template
+     *
      * @return string generated answer
      */
     public function generateAnswer($messages): string;

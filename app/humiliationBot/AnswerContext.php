@@ -32,9 +32,10 @@ class AnswerContext
 
     public function answer(): bool {
         $answerVariants = $this->strategy->parse();
-        $message = $this->strategy->generateAnswer($answerVariants);
+        if ($answerVariants) $message = $this->strategy->generateAnswer($answerVariants);
+        else $message = 'Бот не придумал остроумного ответа';
 
-        $this->strategy->setMessage('Стикеры работают');
+        $this->strategy->setMessage($message);
 //        $this->strategy->setSticker(21148);
         $this->strategy->sendMessage();
 

@@ -20,45 +20,72 @@ class AbstractStrategy extends VkMessage
         parent::__construct($data);
     }
 
+    /**
+     * @param string $message string to check matching
+     * @param array $dictionary dictionary
+     * @return mixed|null found
+     */
     public function getMatch(string $message, array $dictionary)
     {
         $match = null;
+
+        // TODO проверять type
 
         // iterate over all answers and search pattern match
         foreach ($dictionary['answers'] as $answer) {
 
             $pattern = $answer['pattern'];
 
-            // ----- substitute values from wordbook ----- //
-            // search all (@var) and save it in $vars
-            if (preg_match_all('/\(@\w+\)/u', $pattern, $vars)) {
-                // iterate over $vars and substitute values from the wordbook
-                foreach ($vars[0] as $var) {
-                    // get var from (@var)
-                    $var = preg_replace('/[@\(\)]/', '', $var);
+            $pattern = $this->varSubstitution($pattern);
 
-                    // and finally substitute values
-                    $pattern = preg_replace(
-                        "/\(@$var\)/u",
-                        '(' . implode('|', $this->wordbook[$var]) . ')',
-                        $pattern
-                    );
-                }
-            }
+            // ----- substitute values from wordbook ----- //
+//            // search all (@var) and save it in $vars
+//            if (preg_match_all('/\(@\w+\)/u', $pattern, $vars)) {
+//                // iterate over $vars and substitute values from the wordbook
+//                foreach ($vars[0] as $var) {
+//                    // get var from (@var)
+//                    $var = preg_replace('/[@\(\)]/', '', $var);
+//
+//                    // and finally substitute values
+//                    $pattern = preg_replace(
+//                        "/\(@$var\)/u",
+//                        '(' . implode('|', $this->wordbook[$var]) . ')',
+//                        $pattern
+//                    );
+//                }
+//            }
 
             // add /ui flags to support russian language and case insensitivity
             $pattern .= 'ui';
 
-            // check match
+            // check match and save answer with higher priority
             if (preg_match($pattern, $message) && ($answer['priority'] ?? 0) >= ($match['priority'] ?? 0)) {
                 $match = $answer;
             }
-
-            Log::info('pattern: ', $pattern);
         }
 
-        Log::info('match: ', $match['priority']);
+        return $match['messages'];
+    }
 
-        return 123;
+    public function varSubstitution($pattern) {
+        // search all (@var) and save it in $vars
+        if (preg_match_all('/\(@\w+\)/u', $pattern, $vars)) {
+
+            // iterate over $vars and substitute values from the wordbook
+            foreach ($vars[0] as $var) {
+
+                // get var from (@var)
+                $var = preg_replace('/[@\(\)]/', '', $var);
+
+                // and finally substitute values
+                $pattern = preg_replace(
+                    "/\(@$var\)/u",
+                    '(' . implode('|', $this->wordbook[$var]) . ')',
+                    $pattern
+                );
+            }
+        }
+
+        return $pattern;
     }
 }
