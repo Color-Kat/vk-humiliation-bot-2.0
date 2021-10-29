@@ -2,14 +2,23 @@
 //
 //use VK\Client\VKApiClient;
 
+use app\lib\Log;
+
 session_start();
 
 define('IS_DEV', true);
+
+$start = microtime(true);
 
 require 'app/env.php';
 require 'app/lib/dev.php';
 require 'vendor/autoload.php';
 require 'app/bootstrap.php';
+
+$time = microtime(true) - $start;
+//Log::info("time: $time");
+
+// last time is ~0.16298913955688
 
 
 ////$vk = new VKApiClient();

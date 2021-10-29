@@ -4,13 +4,9 @@ namespace humiliationBot\strategies;
 
 use app\lib\Log;
 use humiliationBot\interfaces\VkMessageAnswerInterface;
-use humiliationBot\traits\DictionaryTrait;
-use humiliationBot\VkMessage;
 
-class TextStrategy extends VkMessage implements VkMessageAnswerInterface
+class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
 {
-    // methods for work with dictionaries
-    use DictionaryTrait;
 
     public function __construct($data)
     {
@@ -25,10 +21,16 @@ class TextStrategy extends VkMessage implements VkMessageAnswerInterface
      */
     public function parse()
     {
+        // TODO get prev message from DB
+        // get prev message if from DB and get answer by this id
         $prevMessageIdFromDB = 'little_train123';
         $messageByPrevMessage = $this->getPrevMessagesById($prevMessageIdFromDB);
 
+        // return this answers
         if ($messageByPrevMessage) return $messageByPrevMessage;
+
+
+        $match = $this->getMatch($this->getMessage(), $this->dictionary);
 
         Log::info('$messageByPrevMessage: ', $messageByPrevMessage);
 
