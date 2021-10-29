@@ -14,7 +14,6 @@ class VkMessage implements VkMessageInterface
     use VkObjectParserTrait;
 
     protected array $request_params = [];
-    private string $access_token;
     protected VKApiClient $vk;
 
     public function __construct($data)

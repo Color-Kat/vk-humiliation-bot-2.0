@@ -16,7 +16,7 @@ require 'vendor/autoload.php';
 require 'app/bootstrap.php';
 
 $time = microtime(true) - $start;
-//Log::info("time: $time");
+Log::info("time: $time");
 
 // last time is ~0.16298913955688
 

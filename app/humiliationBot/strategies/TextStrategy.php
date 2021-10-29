@@ -29,10 +29,10 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
         // return this answers
         if ($messageByPrevMessage) return $messageByPrevMessage;
 
-
         $match = $this->getMatch($this->getMessage(), $this->dictionary);
 
-        Log::info('$messageByPrevMessage: ', $messageByPrevMessage);
+        // testing methods
+//        Log::info('isSub', $this->isSubscribed($this->getUserId()));
 
         return true;
     }

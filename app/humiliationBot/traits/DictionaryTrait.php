@@ -17,21 +17,37 @@ trait DictionaryTrait
      * @var array current dictionary
      */
     protected array $dictionary;
+
+    /**
+     * @var array array of insults, praises, phrases and other parts of the proposal
+     */
+    protected array $wordbook;
+
+    /**
+     * @var array array of answers with property "$with_prev_messages"
+     */
     protected array $with_prev_messages;
 
     /**
+     * load dictionary by name to property $dictionary
+     *
      * @param string $name - name of dictionary
      */
     public function loadDictionary(string $name): bool
     {
         // TODO сделать оптимизированный парсинг JSON
 
+        $filename = DICTIONARY_PATH . '/bigDictionary.json';
+
+        if(!file_exists($filename)) return false;
+
         // load bigDictionary.json (all dictionaries in one file)
         $bigDictionary = json_decode(
-            file_get_contents(DICTIONARY_PATH . '/bigDictionary.json'
-            ), true);
+            file_get_contents($filename),
+            true
+        );
 
-        if(!$bigDictionary[$name]) return false;
+        if (!$bigDictionary[$name]) return false;
 
         // save dictionary by name
         $this->dictionary = $bigDictionary[$name];
@@ -39,12 +55,33 @@ trait DictionaryTrait
     }
 
     /**
+     *
+     */
+    public function loadWordbook(): bool
+    {
+        $filename = DICTIONARY_PATH . '/wordbook.json';
+
+        if(!file_exists($filename)) return false;
+
+        // save dictionary by name
+        $this->wordbook = json_decode(
+            file_get_contents($filename),
+            true
+        );
+
+        return true;
+    }
+
+    /**
+     * get answer with property "with_prev_messages" by with_prev_message_id
+     *
      * @param string $with_prev_mess_id id of answer with property with_prev_messages
      * @return mixed answer
      */
-    public function getPrevMessagesById(string $with_prev_mess_id) {
+    public function getPrevMessagesById(string $with_prev_mess_id)
+    {
         // return a ready answer if this answer has already been found
-        if(isset($this->with_prev_messages[$with_prev_mess_id]))
+        if (isset($this->with_prev_messages[$with_prev_mess_id]))
             return $this->with_prev_messages[$with_prev_mess_id];
 
         // get all answers with with_prev_messages

@@ -3,7 +3,7 @@
     "name": "dictionary_test",
     "answers": [
       {
-        "pattern": "you are (@insult)",
+        "pattern": "Ты (@insult)!",
         "priority": 1,
         "type": "text",
         "messages": [
@@ -36,6 +36,14 @@
             "forced": "answer yes or no!",
             "forced_end": "Okay, i understand, you don't want to listen this history"
           }
+        ]
+      },
+      {
+        "pattern": "/^нет$/",
+        "priority": 2,
+        "type": "text",
+        "messages": [
+          "гея ответ"
         ]
       }
     ]
