@@ -16,6 +16,8 @@ interface VkMessageAnswerInterface extends VkMessageInterface
     public function parse();
 
     /**
+     * generate message for answer by variants from $messages
+     *
      * @param string|array $messages array or string, where we need to create answer by template
      *
      * @return string generated answer

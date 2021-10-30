@@ -42,8 +42,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function generateAnswer($messages): string
     {
-
-
-        return 'Проверка паттернов работает |=';
+        if($messages == null) return $this->generateStandardAnswer();
+        else return $this->generateMessage($messages);
     }
 }

@@ -30,10 +30,13 @@ class AnswerContext
         $this->strategy = $strategy;
     }
 
-    public function answer(): bool {
+    public function answer(): bool
+    {
+        // get answer variants by user's message
         $answerVariants = $this->strategy->parse();
-        if ($answerVariants) $message = $this->strategy->generateAnswer($answerVariants);
-        else $message = 'Бот не придумал остроумного ответа';
+
+        // generate message
+        $message = $this->strategy->generateAnswer($answerVariants);
 
         $this->strategy->setMessage($message);
 //        $this->strategy->setSticker(21148);

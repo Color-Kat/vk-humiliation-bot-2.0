@@ -3,6 +3,11 @@
     "name": "dictionary_test",
     "answers": [
       {
+        "pattern": "/оапавопрвардпварпдл/",
+        "priority": 0,
+        "messages": "Ты хрень какую-то написал"
+      },
+      {
         "pattern": "/ты (@insult)!*/",
         "priority": 1,
         "messages": [
@@ -50,6 +55,28 @@
         "type": "text",
         "messages": [
           "гея ответ"
+        ]
+      }
+    ]
+  },
+  "standard": {
+    "name": "standard",
+    "answers": [
+      "Ты (@insult)",
+      "И т.д",
+      {
+        "messages": [
+          "Апчхи!",
+          "АААПячЗзХиИиИ!"
+        ],
+        "with_prev_messages": true,
+        "with_prev_mess_id": "apchhi",
+        "next": [
+          "Хто я?",
+          {
+            "pattern": "/будь/",
+            "messages": "Я-то буду, а ты смотри, чтоб жопа срать не перестала"
+          }
         ]
       }
     ]
