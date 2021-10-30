@@ -5,12 +5,20 @@ namespace humiliationBot\strategies;
 use app\lib\Log;
 use humiliationBot\interfaces\VkMessageAnswerInterface;
 use humiliationBot\traits\DictionaryTrait;
+use humiliationBot\traits\MessageProcessingTrait;
+use humiliationBot\traits\PatternProcessingTrait;
 use humiliationBot\VkMessage;
 
 class AbstractStrategy extends VkMessage
 {
     // methods for work with dictionaries
     use DictionaryTrait;
+
+    // methods for processing pattern
+    use PatternProcessingTrait;
+
+    // methods for processing messages
+    use MessageProcessingTrait;
 
     public function __construct($data)
     {
@@ -54,34 +62,6 @@ class AbstractStrategy extends VkMessage
     }
 
     /**
-     * Substitute variables from $wordbook to $pattern
-     *
-     * @param $pattern
-     * @return array|mixed|string|string[]|null
-     */
-    public function patternVarSubstitution($pattern) {
-        // search all (@var) and save it in $vars
-        if (preg_match_all('/\(@\w+\)/u', $pattern, $vars)) {
-
-            // iterate over $vars and substitute values from the wordbook
-            foreach ($vars[0] as $var) {
-
-                // get var from (@var)
-                $var = preg_replace('/[@\(\)]/', '', $var);
-
-                // and finally substitute values
-                $pattern = preg_replace(
-                    "/\(@$var\)/u",
-                    '(' . implode('|', $this->wordbook[$var]) . ')',
-                    $pattern
-                );
-            }
-        }
-
-        return $pattern;
-    }
-
-    /**
      * generate message by answers variants
      * with using getAnswerAlgorithm()
      *
@@ -94,17 +74,16 @@ class AbstractStrategy extends VkMessage
         $message = 'Бип-боп';
 
         if (gettype($answerTemplate) === "string") {
-            return $this->messageVarSubstitution($answerTemplate);
+            return $this->messageProcessing($answerTemplate);
         } elseif (gettype($answerTemplate) === "array") {
-            Log::info('Нервный тип - array');
-            return 'Array';
+            return $this->generateMessageFromAnswerArray($answerTemplate);
         }
 
-        return 'Какой-то другой тип: ' .gettype($answerTemplate);
+        return $message;
     }
 
     /**
-     * Algorithm to get message from many variants
+     * Algorithm to get message from many variants $messages
      * we can overload this methods in children to change this algorithm
      *
      * by default return random message
@@ -116,37 +95,13 @@ class AbstractStrategy extends VkMessage
         return $messages[array_rand($messages)];
     }
 
-    /**
-     * Substitute variables from $wordbook to $message
-     *
-     * @param string $message string to variables substitution
-     * @param array $replaced_vars array with replaced variables (key: varName, value: varValue)
-     * @return string final message string
-     */
-    public function messageVarSubstitution(string $message, array &$replaced_vars = []): string {
-        // search all (@var) and save it in $vars
-        if (preg_match_all('/\(@\w+\)/u', $message, $vars)) {
-
-            // iterate over $vars and substitute RANDOM value from the wordbook
-            foreach ($vars[0] as $var) {
-
-                // get var name from (@var) and var value from wordbook
-                $var = preg_replace('/[@\(\)]/', '', $var);
-                $val = $this->wordbook[$var];
-
-                // save into $replaced_vars
-                $replaced_vars[$var] = $val;
-
-                // substitute random value
-                $message = preg_replace(
-                    "/\(@$var\)/u",
-                    $val[array_rand($val)],
-                    $message
-                );
-            }
+    public function generateMessageFromAnswerArray(array $answerArr): string {
+        if ($answerArr['with_prev_messages'] | $answerArr['with_prev_mess_id']) {
+            // TODO save $answerArr['with_prev_mess_id'] to db
         }
 
-        return $message;
+        // return recursive generating string message ;)
+        return $this->generateMessage($answerArr['messages']);
     }
 
     /**
@@ -160,8 +115,6 @@ class AbstractStrategy extends VkMessage
         // load dictionary with standards answers for this strategy
         $this->loadDictionary($standardDictionaryName);
 
-        $message = $this->generateMessage($this->dictionary['answers']);
-
-        return $message;
+        return $this->generateMessage($this->dictionary['answers']);
     }
 }
