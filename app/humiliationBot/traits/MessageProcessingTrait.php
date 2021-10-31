@@ -2,8 +2,13 @@
 
 namespace humiliationBot\traits;
 
+use app\lib\Log;
+use humiliationBot\ProcessingFunctions;
+
 trait MessageProcessingTrait
 {
+    private ProcessingFunctions $processingFunctions;
+
     /**
      * processing message - vars substitution, select random part of proposal
      *
@@ -11,9 +16,14 @@ trait MessageProcessingTrait
      * @return string final message string
      */
     public function messageProcessing(string $template, array &$replaced_vars = []): string {
+        $this->processingFunctions = new ProcessingFunctions();
+
+        // substitute variables
         $message = $this->messageVarSubstitution($template);
 
-//        $message = $this->randomPhraseSubstitution($message);
+        // replace rand() construction to one of many variants of phrase
+        // example: rand(variant1, variant2) -> random -> variant1
+        $message = $this->funcSubstitution($message);
 
         // return ready string message
         return $message;
@@ -52,6 +62,24 @@ trait MessageProcessingTrait
         }
 
         // return ready string message
+        return $message;
+    }
+
+    public function funcSubstitution($template) {
+        $message = $template;
+
+        // get function calls - {@funcName(arg1|arg2|arg3)}
+        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*?)\)}/i', function($m){
+            $params = explode('|', $m['params']); // get params as array
+            $funcName = $m['func']; // get func name
+
+            // call function by $funcName with $params from processingFunctions class
+            if(method_exists($this->processingFunctions, $funcName))
+                // and substitute the result of the function instead of calling it
+                return $this->processingFunctions->$funcName($params);
+            else return $params[0];
+        }, $message);
+
         return $message;
     }
 }
