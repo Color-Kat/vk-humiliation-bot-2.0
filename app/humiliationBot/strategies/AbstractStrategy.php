@@ -59,6 +59,8 @@ class AbstractStrategy extends VkMessage
 
         // TODO проверять type
 
+        if(gettype($dictionary[$answersKey]) == "string") return $dictionary[$answersKey];
+
         // iterate over all answers and search pattern match
         foreach ($dictionary[$answersKey] as $answer) {
 

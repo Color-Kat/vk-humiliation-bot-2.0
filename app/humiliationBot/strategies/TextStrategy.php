@@ -23,11 +23,12 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     {
         // TODO get prev message from DB
         // get prev message if from DB and get answer by this id
-        $prevMessageId = 'little_train';
-
+        $prevMessageId = 'little_train_1';
 
         // get ANSWER object from dictionary by prev_message_id
         $answerObj_byPrevMessId = $this->getAnswerByPrevMessId($prevMessageId);
+
+        Log::info('$answerObj_byPrevMessId: ', $answerObj_byPrevMessId);
 
         // get match by user's message and answer with_prev_message
         if ($answerObj_byPrevMessId)
