@@ -78,7 +78,7 @@ trait DictionaryTrait
      * @param string $with_prev_mess_id id of answer with property with_prev_messages
      * @return mixed answer
      */
-    public function getPrevMessagesById(string $with_prev_mess_id)
+    public function getAnswerByPrevMessId(string $with_prev_mess_id)
     {
         // return a ready answer if this answer has already been found
         if (isset($this->with_prev_messages[$with_prev_mess_id]))
@@ -94,6 +94,6 @@ trait DictionaryTrait
         // save answer
         $this->with_prev_messages[$with_prev_mess_id] = $answer;
 
-        return $answer;
+        return $answer ?? false;
     }
 }

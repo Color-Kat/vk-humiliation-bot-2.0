@@ -29,20 +29,38 @@ class AbstractStrategy extends VkMessage
     }
 
     /**
+     * get matches for user's message by answer with prev_mess
+     *
+     * @param string $message user's message (string to check matching)
+     * @param array $answer with_prev_messages answer object
+     */
+    public function getMatchByPrevMess(string $message, array $answerObj)
+    {
+        $match = $this->getMatch($message, $answerObj, 'next');
+
+        if(!$match) {
+            return $answerObj['forced'];
+        }
+
+        return $match;
+    }
+
+    /**
      * get matches for user's message by pattern and return match with higher priority
      *
-     * @param string $message string to check matching
+     * @param string $message user's message (string to check matching)
      * @param array $dictionary dictionary
-     * @return mixed|null found
+     * @param string $answersKey key for get answers
+     * @return string|array|false found
      */
-    public function getMatch(string $message, array $dictionary)
+    public function getMatch(string $message, array $dictionary, string $answersKey = 'answers')
     {
         $match = null;
 
         // TODO проверять type
 
         // iterate over all answers and search pattern match
-        foreach ($dictionary['answers'] as $answer) {
+        foreach ($dictionary[$answersKey] as $answer) {
 
             $pattern = $answer['pattern'];
 
@@ -65,13 +83,11 @@ class AbstractStrategy extends VkMessage
      * generate message by answers variants
      * with using getAnswerAlgorithm()
      *
-     * @param array $messages answer variants
+     * @param array|string $messages answer variants
      * @return string ready message
      */
-    public function generateMessage(array $messages): string{
+    public function generateMessage($messages): string{
         $answerTemplate = $this->getAnswerByAlgorithm($messages);
-
-        $message = 'Бип-боп';
 
         if (gettype($answerTemplate) === "string") {
             return $this->messageProcessing($answerTemplate);
@@ -79,7 +95,7 @@ class AbstractStrategy extends VkMessage
             return $this->generateMessageFromAnswerArray($answerTemplate);
         }
 
-        return $message;
+        return 'Бип-боп';
     }
 
     /**
@@ -88,10 +104,11 @@ class AbstractStrategy extends VkMessage
      *
      * by default return random message
      *
-     * @param array $messages
+     * @param string|array $messages
      * @return mixed
      */
-    public function getAnswerByAlgorithm(array $messages){
+    public function getAnswerByAlgorithm($messages){
+        if(gettype($messages) == "string") return $messages;
         return $messages[array_rand($messages)];
     }
 

@@ -23,18 +23,20 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     {
         // TODO get prev message from DB
         // get prev message if from DB and get answer by this id
-        $prevMessageIdFromDB = 'little_train123';
-        $messageByPrevMessage = $this->getPrevMessagesById($prevMessageIdFromDB);
+        $prevMessageId = 'little_train';
 
-        // return this answers
-        if ($messageByPrevMessage) return $messageByPrevMessage['messages'];
 
-        $match = $this->getMatch($this->getMessage(), $this->dictionary);
+        // get ANSWER object from dictionary by prev_message_id
+        $answerObj_byPrevMessId = $this->getAnswerByPrevMessId($prevMessageId);
 
-//        Log::info('isSub', $this->isSubscribed($this->getUserId()));
-//        Log::info('match', $match);
+        // get match by user's message and answer with_prev_message
+        if ($answerObj_byPrevMessId)
+            // and return $messages
+            return $this->getMatchByPrevMess($this->getMessage(), $answerObj_byPrevMessId);
 
-        return $match;
+        // get messages by match user's message and dictionary
+        $messages = $this->getMatch($this->getMessage(), $this->dictionary);
+        return $messages;
     }
 
     /**
@@ -42,6 +44,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function generateAnswer($messages): string
     {
+        Log::info('generate message: ', $messages);
         if($messages == null) return $this->generateStandardAnswer();
         else return $this->generateMessage($messages);
     }
