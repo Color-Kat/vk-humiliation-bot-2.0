@@ -6,7 +6,6 @@ use humiliationBot\interfaces\VkMessageInterface;
 use humiliationBot\traits\Vk;
 use humiliationBot\traits\VkObjectParserTrait;
 use VK\Client\VKApiClient;
-use app\lib\Log;
 
 class VkMessage implements VkMessageInterface
 {

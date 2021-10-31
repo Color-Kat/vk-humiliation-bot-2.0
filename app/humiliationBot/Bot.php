@@ -2,7 +2,6 @@
 
 namespace humiliationBot;
 
-use app\lib\Log;
 use humiliationBot\strategies\TextStrategy;
 
 class Bot

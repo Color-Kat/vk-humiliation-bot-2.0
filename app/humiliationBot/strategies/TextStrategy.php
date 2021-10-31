@@ -2,7 +2,6 @@
 
 namespace humiliationBot\strategies;
 
-use app\lib\Log;
 use humiliationBot\interfaces\VkMessageAnswerInterface;
 
 class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
@@ -28,8 +27,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
         // get ANSWER object from dictionary by prev_message_id
         $answerObj_byPrevMessId = $this->getAnswerByPrevMessId($prevMessageId);
 
-        Log::info('$answerObj_byPrevMessId: ', $answerObj_byPrevMessId);
-
         // get match by user's message and answer with_prev_message
         if ($answerObj_byPrevMessId)
             // and return $messages
@@ -45,7 +42,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function generateAnswer($messages): string
     {
-        Log::info('generate message: ', $messages);
         if($messages == null) return $this->generateStandardAnswer();
         else return $this->generateMessage($messages);
     }

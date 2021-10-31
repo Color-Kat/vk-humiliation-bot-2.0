@@ -1,0 +1,26 @@
+{
+  "type": "dictionary",
+  "content": {
+    "name": "standard",
+    "answers": [
+      "Ты (@insult)",
+      "Ты{@rand(, я думаю,| скорее всего|, должно быть,)} (@insult)",
+      "Ты участник сказки {@rand(5|6|7|8|9|10|11|12|13)} разбийников. И зовут тебя {@getAliasName()}",
+      {
+        "messages": [
+          "Апчхи!",
+          "АААПячЗзХиИиИ!"
+        ],
+        "with_prev_messages": true,
+        "with_prev_mess_id": "apchhi",
+        "next": [
+          "Хто я?",
+          {
+            "pattern": "/будь/",
+            "messages": "Я-то буду, а ты смотри, чтоб жопа срать не перестала"
+          }
+        ]
+      }
+    ]
+  }
+}

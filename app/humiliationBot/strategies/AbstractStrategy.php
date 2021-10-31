@@ -2,8 +2,6 @@
 
 namespace humiliationBot\strategies;
 
-use app\lib\Log;
-use humiliationBot\interfaces\VkMessageAnswerInterface;
 use humiliationBot\traits\DictionaryTrait;
 use humiliationBot\traits\MessageProcessingTrait;
 use humiliationBot\traits\PatternProcessingTrait;

@@ -2,7 +2,6 @@
 
 namespace humiliationBot\traits;
 
-use app\lib\Log;
 use humiliationBot\ProcessingFunctions;
 
 trait MessageProcessingTrait

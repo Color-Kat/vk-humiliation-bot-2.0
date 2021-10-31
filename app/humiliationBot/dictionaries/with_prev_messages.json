@@ -7,12 +7,12 @@
       {
         "with_prev_messages": true,
         "with_prev_mess_id": "little_train_1",
-        "pattern": "/yes/",
+        "pattern": "\/^yes$\/",
         "messages": "long story...",
         "next": "that's the end of the fairy tales"
       },
       {
-        "pattern": "/no/",
+        "pattern": "\/^no\/",
         "messages": [
           "i hate you",
           "go away, asshole!"
@@ -25,8 +25,23 @@
   "little_train_1": {
     "with_prev_messages": true,
     "with_prev_mess_id": "little_train_1",
-    "pattern": "/yes/",
+    "pattern": "\/^yes$\/",
     "messages": "long story...",
     "next": "that's the end of the fairy tales"
+  },
+  "apchhi": {
+    "messages": [
+      "Апчхи!",
+      "АААПячЗзХиИиИ!"
+    ],
+    "with_prev_messages": true,
+    "with_prev_mess_id": "apchhi",
+    "next": [
+      "Хто я?",
+      {
+        "pattern": "\/будь\/",
+        "messages": "Я-то буду, а ты смотри, чтоб жопа срать не перестала"
+      }
+    ]
   }
 }
