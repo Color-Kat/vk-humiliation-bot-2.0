@@ -14,10 +14,6 @@
           "go away!",
           "no, i aren't! And you are @insult",
           {
-            "pattern": "/^regEgs, you are fool $/",
-            "messages": "you are fool yourself!"
-          },
-          {
             "with_prev_messages": true,
             "with_prev_mess_id": "little_train",
             "messages": "no, but do you want to listen to the tale about the little train?",
