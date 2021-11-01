@@ -44,7 +44,7 @@ foreach ($dictionaries as $filename) {
 
         case 'dictionary':
             // save content to $bigDictionary
-            $bigDictionary[$file['content']['name']] = $file['content'];
+            $bigDictionary['name_' . $file['content']['name']] = $file['content'];
 
             // recursively save answers with property with_prev_message
             get_with_prev_messages($file['content']['answers']);

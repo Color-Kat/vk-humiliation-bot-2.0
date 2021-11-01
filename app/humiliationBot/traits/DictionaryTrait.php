@@ -13,6 +13,9 @@ namespace humiliationBot\traits;
  */
 trait DictionaryTrait
 {
+    // methods to parse json files
+    use JsonParser;
+
     /**
      * @var array current dictionary
      */
@@ -36,23 +39,31 @@ trait DictionaryTrait
      */
     public function loadDictionary(string $name): bool
     {
-        // TODO сделать оптимизированный парсинг JSON
+        $filename = DICTIONARY_PATH . '/bigDictionary.json'; // path to bigDictionary.json
 
-        $filename = DICTIONARY_PATH . '/bigDictionary.json';
+        // get answer by name
+        $dictionary = $this->setReaderPath($filename)->findByObjKey("name_$name");
 
-        if(!file_exists($filename)) return false;
+        if(!$dictionary) return false;
 
-        // load bigDictionary.json (all dictionaries in one file)
-        $bigDictionary = json_decode(
-            file_get_contents($filename),
-            true
-        );
+        $this->dictionary = $dictionary;
 
-        if (!$bigDictionary[$name]) return false;
-
-        // save dictionary by name
-        $this->dictionary = $bigDictionary[$name];
         return true;
+
+        // ==========================================
+
+//        if(!file_exists($filename)) return false;
+//
+//        // load bigDictionary.json (all dictionaries in one file)
+//        $bigDictionary = json_decode(
+//            file_get_contents($filename),
+//            true
+//        );
+//
+//        if (!$bigDictionary[$name]) return false;
+//
+//        // save dictionary by name
+//        $this->dictionary = $bigDictionary[$name];
     }
 
     /**

@@ -32,7 +32,7 @@ class AbstractStrategy extends VkMessage
      *
      * @param string $message user's message (string to check matching)
      * @param array $answerObj with_prev_messages answer object
-     * @return array|string answer variants
+     * @return array|string|false answer variants
      */
     public function getMatchByPrevMess(string $message, array $answerObj)
     {
@@ -52,7 +52,12 @@ class AbstractStrategy extends VkMessage
             // if no match we need to find answer without pattern - simple answer
             $simpleAnswer = findSimpleAnswer($answerObj);
 
-            return $simpleAnswer ?? $answerObj['forced'];
+            // TODO удалять из БД prev_mess
+            // Если нет совпадения - возвращаем simpleAnswer
+            // Если нет этого, то возвращаем forced - сообщение на крайний случай
+            // если нет и forced, то удаляем из БД prev_mess
+            // Если forced отработал более трех раз, то возвращаем forced_end
+            return ($simpleAnswer ?? $answerObj['forced']) ?? false;
         }
 
         return $match;
@@ -68,24 +73,25 @@ class AbstractStrategy extends VkMessage
      */
     public function getMatch(string $message, array $dictionary, string $answersKey = 'answers')
     {
+        if(!$dictionary || !isset($dictionary[$answersKey])) return false;
+
         $match = false;
 
         // TODO проверять type
 
+        // no pattern - no match
         if(gettype($dictionary[$answersKey]) == "string") return $dictionary[$answersKey];
 
         // iterate over all answers and search pattern match
         foreach ($dictionary[$answersKey] as $answer) {
-
+            // continue if is no pattern
             if(!isset($answer['pattern'])) continue;
 
-            $pattern = $answer['pattern'];
-
-            // ----- substitute values from wordbook ----- //
-            $pattern = $this->patternVarSubstitution($pattern);
-
             // add /ui flags to support russian language and case insensitivity
-            $pattern .= 'ui';
+            $pattern = $answer['pattern'] . 'ui';
+
+            // substitute values from wordbook
+            $pattern = $this->patternVarSubstitution($pattern);
 
             // check match and save answer with higher priority
             if (preg_match($pattern, $message) && ($answer['priority'] ?? 0) >= ($match['priority'] ?? 0)) {
@@ -93,7 +99,7 @@ class AbstractStrategy extends VkMessage
             }
         }
 
-        return $match['messages'] ?? null;
+        return $match['messages'] ?? false;
     }
 
     /**
@@ -130,7 +136,7 @@ class AbstractStrategy extends VkMessage
     }
 
     public function generateMessageFromAnswerArray(array $answerArr): string {
-        if ($answerArr['with_prev_messages'] | $answerArr['with_prev_mess_id']) {
+        if ($answerArr['with_prev_messages'] || $answerArr['with_prev_mess_id']) {
             // TODO save $answerArr['with_prev_mess_id'] to db
         }
 
