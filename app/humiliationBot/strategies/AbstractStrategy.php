@@ -2,6 +2,7 @@
 
 namespace humiliationBot\strategies;
 
+use app\lib\Log;
 use humiliationBot\traits\DictionaryTrait;
 use humiliationBot\traits\MessageProcessingTrait;
 use humiliationBot\traits\PatternProcessingTrait;
@@ -30,14 +31,28 @@ class AbstractStrategy extends VkMessage
      * get matches for user's message by answer with prev_mess
      *
      * @param string $message user's message (string to check matching)
-     * @param array $answer with_prev_messages answer object
+     * @param array $answerObj with_prev_messages answer object
+     * @return array|string answer variants
      */
     public function getMatchByPrevMess(string $message, array $answerObj)
     {
         $match = $this->getMatch($message, $answerObj, 'next');
 
+        function findSimpleAnswer(array $answers): array {
+            $simpleAnswers = [];
+
+            foreach ($answers['next'] as $answer) {
+                if(!isset($answer['pattern'])) $simpleAnswers[] = $answer;
+            }
+
+            return $simpleAnswers;
+        }
+
         if(!$match) {
-            return $answerObj['forced'];
+            // if no match we need to find answer without pattern - simple answer
+            $simpleAnswer = findSimpleAnswer($answerObj);
+
+            return $simpleAnswer ?? $answerObj['forced'];
         }
 
         return $match;
@@ -49,11 +64,11 @@ class AbstractStrategy extends VkMessage
      * @param string $message user's message (string to check matching)
      * @param array $dictionary dictionary
      * @param string $answersKey key for get answers
-     * @return string|array|false found
+     * @return string|array|false answer variants
      */
     public function getMatch(string $message, array $dictionary, string $answersKey = 'answers')
     {
-        $match = null;
+        $match = false;
 
         // TODO проверять type
 
@@ -61,6 +76,8 @@ class AbstractStrategy extends VkMessage
 
         // iterate over all answers and search pattern match
         foreach ($dictionary[$answersKey] as $answer) {
+
+            if(!isset($answer['pattern'])) continue;
 
             $pattern = $answer['pattern'];
 
@@ -129,8 +146,14 @@ class AbstractStrategy extends VkMessage
      */
     public function generateStandardAnswer(string $standardDictionaryName = 'standard'): string
     {
+        $errorMessage = 'Гриша не придумал остроумного ответа, возможно произошла ошибка/проблемы с словарём';
+
         // load dictionary with standards answers for this strategy
-        $this->loadDictionary($standardDictionaryName);
+        if(!$this->loadDictionary($standardDictionaryName))
+            return $errorMessage; // show error message if no dictionary
+
+        if(!isset($this->dictionary['answers']))
+            return $errorMessage; // show error message if no answers
 
         return $this->generateMessage($this->dictionary['answers']);
     }

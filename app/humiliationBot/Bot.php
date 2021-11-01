@@ -27,7 +27,6 @@ class Bot
             $this->data->secret !== bot_env('VK_SECRET_TOKEN') &&
             $this->data->type !== 'confirmation'
         ) return false;
-
         return true;
     }
 

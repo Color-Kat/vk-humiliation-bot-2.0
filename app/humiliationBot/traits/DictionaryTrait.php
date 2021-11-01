@@ -16,22 +16,23 @@ trait DictionaryTrait
     /**
      * @var array current dictionary
      */
-    protected array $dictionary;
+    protected array $dictionary = [];
 
     /**
      * @var array array of insults, praises, phrases and other parts of the proposal
      */
-    protected array $wordbook;
+    protected array $wordbook = [];
 
     /**
      * @var array array of answers with property "$with_prev_messages"
      */
-    protected array $with_prev_messages;
+    protected array $with_prev_messages = [];
 
     /**
      * load dictionary by name to property $dictionary
      *
      * @param string $name - name of dictionary
+     * @return bool is success
      */
     public function loadDictionary(string $name): bool
     {
@@ -55,7 +56,9 @@ trait DictionaryTrait
     }
 
     /**
+     * load the whole wordbook to $wordbook
      *
+     * @return bool is success
      */
     public function loadWordbook(): bool
     {
@@ -81,12 +84,15 @@ trait DictionaryTrait
     public function getAnswerByPrevMessId(string $with_prev_mess_id)
     {
         // return a ready answer if this answer has already been found
-        if (isset($this->with_prev_messages[$with_prev_mess_id]))
-            return $this->with_prev_messages[$with_prev_mess_id];
+//        if (isset($this->with_prev_messages[$with_prev_mess_id]))
+//            return $this->with_prev_messages[$with_prev_mess_id];
+        $path = DICTIONARY_PATH . '/with_prev_messages.json';
+
+        if(!file_exists($path)) return false;
 
         // get all answers with with_prev_messages
         $prevMessages = json_decode(
-            file_get_contents(DICTIONARY_PATH . '/with_prev_messages.json'
+            file_get_contents($path
             ), true);
 
         $answer = $prevMessages[$with_prev_mess_id] ?? false;

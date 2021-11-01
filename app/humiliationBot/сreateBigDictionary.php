@@ -49,8 +49,6 @@ foreach ($dictionaries as $filename) {
             // recursively save answers with property with_prev_message
             get_with_prev_messages($file['content']['answers']);
 
-            print_r($with_prev_messages);
-
             break;
     }
 }

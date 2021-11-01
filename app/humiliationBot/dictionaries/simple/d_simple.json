@@ -53,6 +53,23 @@
         "messages": [
           "гея ответ"
         ]
+      },
+      {
+        "pattern": "/Ты (@praise)/",
+        "messages": [
+          "Да, я такой) Ты тоже (@praise)",
+          {
+            "messages": "Ага, пасиб, хочешь сказку про паровозик?",
+            "with_prev_messages": true,
+            "with_prev_mess_id": "little_train_history",
+            "next": [
+              {
+                "pattern": "/(давай|хочу|ну)/",
+                "messages": "Жил как-то паровозик..."
+              }
+            ]
+          }
+        ]
       }
     ]
   }
