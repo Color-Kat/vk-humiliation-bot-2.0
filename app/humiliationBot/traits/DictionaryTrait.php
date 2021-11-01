@@ -51,7 +51,7 @@ trait DictionaryTrait
         return true;
 
         // ==========================================
-
+        // Old version
 //        if(!file_exists($filename)) return false;
 //
 //        // load bigDictionary.json (all dictionaries in one file)
@@ -90,27 +90,38 @@ trait DictionaryTrait
      * get answer with property "with_prev_messages" by with_prev_message_id
      *
      * @param string $with_prev_mess_id id of answer with property with_prev_messages
-     * @return mixed answer
+     * @return array|false answer
      */
     public function getAnswerByPrevMessId(string $with_prev_mess_id)
     {
         // return a ready answer if this answer has already been found
 //        if (isset($this->with_prev_messages[$with_prev_mess_id]))
 //            return $this->with_prev_messages[$with_prev_mess_id];
-        $path = DICTIONARY_PATH . '/with_prev_messages.json';
 
-        if(!file_exists($path)) return false;
+        $filename = DICTIONARY_PATH . '/with_prev_messages.json';
 
-        // get all answers with with_prev_messages
-        $prevMessages = json_decode(
-            file_get_contents($path
-            ), true);
+        // get answer by prev_mess_id
+        $answer = $this->setReaderPath($filename)->findByObjKey("id_$with_prev_mess_id");
 
-        $answer = $prevMessages[$with_prev_mess_id] ?? false;
-
-        // save answer
+        // save to property
         $this->with_prev_messages[$with_prev_mess_id] = $answer;
 
         return $answer ?? false;
+
+        // ================================
+        // Old version
+//        if(!file_exists($path)) return false;
+//
+//        // get all answers with with_prev_messages
+//        $prevMessages = json_decode(
+//            file_get_contents($path
+//            ), true);
+//
+//        $answer = $prevMessages[$with_prev_mess_id] ?? false;
+//
+//        // save answer
+//        $this->with_prev_messages[$with_prev_mess_id] = $answer;
+//
+//        return $answer ?? false;
     }
 }

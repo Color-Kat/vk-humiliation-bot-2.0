@@ -33,7 +33,6 @@ trait JsonParser
         // open file
         try {
             $this->reader->open($path);
-
         } catch (IOException | InvalidArgumentException $e) {
             $this->isReaderSuccess = false;
         }

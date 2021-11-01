@@ -19,7 +19,7 @@ function get_with_prev_messages($answers, $d = 1)
             }
 
             if (isset($answer['with_prev_messages']) || isset($answer['with_prev_mess_id'])) {
-                $with_prev_messages[$answer['with_prev_mess_id']] = $answer;
+                $with_prev_messages['id_'.$answer['with_prev_mess_id']] = $answer;
                 get_with_prev_messages($answer['next']);
             }
         }

@@ -1,1 +1,58 @@
-{"little_train":{"with_prev_messages":true,"with_prev_mess_id":"little_train","messages":"no, but do you want to listen to the tale about the little train?","next":[{"with_prev_messages":true,"with_prev_mess_id":"little_train_1","pattern":"\/^yes$\/","messages":"long story...","next":"that's the end of the fairy tales"},{"pattern":"\/^no\/","messages":["i hate you","go away, asshole!"]}],"forced":"answer yes or no!","forced_end":"Okay, i understand, you don't want to listen this history"},"little_train_1":{"with_prev_messages":true,"with_prev_mess_id":"little_train_1","pattern":"\/^yes$\/","messages":"long story...","next":"that's the end of the fairy tales"},"little_train_history":{"messages":"Ага, пасиб, хочешь сказку про паровозик?","with_prev_messages":true,"with_prev_mess_id":"little_train_history","next":[{"pattern":"\/(давай|хочу|ну)\/","messages":"Жил как-то паровозик..."}]},"apchhi":{"messages":["Апчхи!","АААПячЗзХиИиИ!"],"with_prev_messages":true,"with_prev_mess_id":"apchhi","next":["Хто я?",{"pattern":"\/будь\/","messages":"Я-то буду, а ты смотри, чтоб жопа срать не перестала"}]}}
+{
+  "id_little_train": {
+    "with_prev_messages": true,
+    "with_prev_mess_id": "little_train",
+    "messages": "no, but do you want to listen to the tale about the little train?",
+    "next": [
+      {
+        "with_prev_messages": true,
+        "with_prev_mess_id": "little_train_1",
+        "pattern": "\/^yes$\/",
+        "messages": "long story...",
+        "next": "that's the end of the fairy tales"
+      },
+      {
+        "pattern": "\/^no\/",
+        "messages": [
+          "i hate you",
+          "go away, asshole!"
+        ]
+      }
+    ],
+    "forced": "answer yes or no!",
+    "forced_end": "Okay, i understand, you don't want to listen this history"
+  },
+  "id_little_train_1": {
+    "with_prev_messages": true,
+    "with_prev_mess_id": "little_train_1",
+    "pattern": "\/^yes$\/",
+    "messages": "long story...",
+    "next": "that's the end of the fairy tales"
+  },
+  "id_little_train_history": {
+    "messages": "Ага, пасиб, хочешь сказку про паровозик?",
+    "with_prev_messages": true,
+    "with_prev_mess_id": "little_train_history",
+    "next": [
+      {
+        "pattern": "\/(давай|хочу|ну)\/",
+        "messages": "Жил как-то паровозик..."
+      }
+    ]
+  },
+  "id_apchhi": {
+    "messages": [
+      "Апчхи!",
+      "АААПячЗзХиИиИ!"
+    ],
+    "with_prev_messages": true,
+    "with_prev_mess_id": "apchhi",
+    "next": [
+      "Хто я?",
+      {
+        "pattern": "\/будь\/",
+        "messages": "Я-то буду, а ты смотри, чтоб жопа срать не перестала"
+      }
+    ]
+  }
+}
