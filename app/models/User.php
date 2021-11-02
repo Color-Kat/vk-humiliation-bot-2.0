@@ -16,10 +16,12 @@ class User extends Model
      */
     public function addUser($user_id, $name, $last_name)
     {
-        return $this->db->query(
-            "INSERT INTO users (user_id, name, lastname) VALUES (:user_id, :name, :last_name)",
-            compact('user_id', 'name', 'last_name')
-        );
+        return $this->insert([
+            ['user_id', $user_id],
+            ['name', $name],
+            ['lastname', $last_name]
+        ])
+            ->execute();
     }
 
     /**
@@ -53,6 +55,12 @@ class User extends Model
             ]);
     }
 
+    /**
+     * delete user from db by id
+     *
+     * @param int $user_id vk user's id
+     * @return array|false
+     */
     public function deleteUser(int $user_id) {
         return $this->delete()
             ->where('id = :id')

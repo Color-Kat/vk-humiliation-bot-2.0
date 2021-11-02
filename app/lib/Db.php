@@ -162,7 +162,20 @@ class Db
                     . $where;
 
             case 'INSERT':
-                return 'ins';
+                $insertFields = '';
+                $insertValues = '';
+
+                foreach ($this->fields as $field) {
+                    $insertFields .= $field[0] . ', ';
+                    $insertValues .= "'$field[1]'" . ', ';
+                }
+
+                $insertFields = trim($insertFields, ", ");
+                $insertValues = trim($insertValues, ", ");
+
+                return 'INSERT INTO ' . $this->table
+                    . ' (' . $insertFields . ') '
+                    . 'VALUES (' . $insertValues . ')';
 
             case 'DELETE':
                 return 'DELETE FROM ' . $this->table
