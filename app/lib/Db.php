@@ -10,7 +10,12 @@ class Db
     protected $db;
 
     /**
-     * @var array<string> fields to be found
+     * @var string name of command - SELECT, UPDATE, INSERT, DELETE
+     */
+    private string $command;
+
+    /**
+     * @var array<string> list of fields
      */
     private $fields = [];
 
@@ -53,7 +58,52 @@ class Db
      */
     public function select(string ...$select): self
     {
+        $this->command = 'SELECT';
         $this->fields = $select;
+        return $this;
+    }
+
+    /**
+     * set fields ans values to be updated
+     *
+     * @param array $fields array with array[field, value] to be updated
+     * @return $this
+     */
+    public function update(array $fields): self
+    {
+        $this->command = 'UPDATE';
+
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * set fields to be inserted
+     *
+     * @param array $fields array with array[field, value] to be inserted
+     * @return $this
+     */
+    public function insert(array $fields): self
+    {
+        $this->command = 'INSERT';
+
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+    /**
+     * set DELETE command for sql query
+     *
+     * @return $this
+     */
+    public function delete(): self
+    {
+        $this->command = 'DELETE';
+
+        $this->fields = null;
+
         return $this;
     }
 
@@ -77,7 +127,7 @@ class Db
      * @param string $table table name
      * @return $this
      */
-    public function from(string $table): self
+    public function setTable(string $table): self
     {
         $this->table = $table;
 
@@ -92,9 +142,31 @@ class Db
         // generate WHERE string
         $where = $this->conditions === [] ? '' : ' WHERE ' . implode(' AND ', $this->conditions);
 
-        return 'SELECT ' . implode(', ', $this->fields)
-            . ' FROM ' . $this->table
-            . $where;
+        switch ($this->command){
+            case 'SELECT':
+                return 'SELECT ' . implode(', ', $this->fields)
+                    . ' FROM ' . $this->table
+                    . $where;
+
+            case 'UPDATE':
+                $updateFields = '';
+
+                foreach ($this->fields as $field) {
+                    $updateFields .= $field[0] . ' = '. "'$field[1]'" . ",\n";
+                }
+
+                $updateFields = trim($updateFields, ",\n");
+
+                return 'UPDATE ' . $this->table
+                    . ' SET ' . $updateFields
+                    . $where;
+
+            case 'INSERT':
+                return 'ins';
+
+            case 'DELETE':
+                return 'del';
+        }
     }
 
     /**
@@ -104,6 +176,8 @@ class Db
      */
     public function execute(?array $params = null){
         $sql = $this->getSql();
+
+        echo $sql;
 
         try {
             return $this->query($sql, $params);
@@ -116,12 +190,11 @@ class Db
      * execute sql string
      *
      * @param $sql string sql string to execute
-     * @throws \Exception
      */
     public function query(string $sql, $params = null)
     {
         if (!$this->db) {
-            if(IS_DEV) throw new \Exception('Db connection is failed!');
+//            if(IS_DEV) throw new \Exception('Db connection is failed!');
             return false;
         }
 

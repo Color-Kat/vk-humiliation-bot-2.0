@@ -20,7 +20,17 @@ class BotController extends Controller
         $data = json_decode(file_get_contents('php://input'));
 
 //        $user = $this->model->addUser(12345678, 'Олег', 'Закадычный');
-        $user = $this->model->getUser(15);
+//        $user = $this->model->getUser(15);
+
+        $user = $this->model
+            ->update([
+                ['prev_message_id', 'little_train']
+            ])
+            ->where('id = :id')
+            ->execute([
+                'id' => 15
+            ]);
+
         print_r($user);
 
         echo (new Bot($data))->run();
