@@ -4,8 +4,7 @@ namespace app\core;
 
 use \app\lib\Db;
 
-
-abstract class Model
+abstract class Model extends Db
 {
     /**
      * @var Db instance of Db class
@@ -14,7 +13,9 @@ abstract class Model
 
     public function __construct()
     {
-        $this->connectDb();
+        parent::__construct();
+
+//        $this->connectDb();
     }
 
     private function connectDb()

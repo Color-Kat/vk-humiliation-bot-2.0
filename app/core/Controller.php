@@ -34,10 +34,9 @@ abstract class Controller
         // View instance
         $this->view = new View($route);
 
-        echo $this->modelName;
         // load model
         $modelName = $this->loadModel($this->modelName ?? $route['controller']);
-        echo $modelName;
+
         if ($modelName) $this->model = new $modelName();
     }
 
