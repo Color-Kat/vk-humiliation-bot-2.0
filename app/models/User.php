@@ -9,12 +9,13 @@ class User extends Model
     protected $table = 'users';
 
     /**
-     * @param $user_id  int vk user_id
-     * @param $name string user's name
-     * @param $last_name string user's lastname
+     * @param int $user_id vk user_id
+     * @param string $name user's name
+     * @param string $last_name user's lastname
      * @return array|false
      */
-    public function addUser($user_id, $name, $last_name) {
+    public function addUser($user_id, $name, $last_name)
+    {
         return $this->db->query(
             "INSERT INTO users (user_id, name, lastname) VALUES (:user_id, :name, :last_name)",
             compact('user_id', 'name', 'last_name')
@@ -24,10 +25,11 @@ class User extends Model
     /**
      * get all user's info from db
      *
-     * @param $user_id int vk user_id
+     * @param int $user_id vk user_id
      * @return array|false
      */
-    public function getUser(int $user_id) {
+    public function getUser(int $user_id)
+    {
         return $this->select('*')
             ->where('id = :id')
             ->execute([
@@ -35,5 +37,27 @@ class User extends Model
             ]);
     }
 
+    /**
+     * @param int $user_id vk user_id
+     * @param string $prev_mess_id
+     * @return array|false
+     */
+    public function set_prev_message_id(int $user_id, string $prev_mess_id)
+    {
+        return $this->update([
+            ['prev_message_id', $prev_mess_id]
+        ])
+            ->where('id = :id')
+            ->execute([
+                'id' => $user_id
+            ]);
+    }
 
+    public function deleteUser(int $user_id) {
+        return $this->delete()
+            ->where('id = :id')
+            ->execute([
+                'id' => $user_id
+            ]);
+    }
 }

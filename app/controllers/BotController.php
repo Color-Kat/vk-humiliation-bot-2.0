@@ -21,15 +21,9 @@ class BotController extends Controller
 
 //        $user = $this->model->addUser(12345678, 'Олег', 'Закадычный');
 //        $user = $this->model->getUser(15);
+//        $user = $this->model->set_prev_message_id(15, 'apchhi');
 
-        $user = $this->model
-            ->update([
-                ['prev_message_id', 'little_train']
-            ])
-            ->where('id = :id')
-            ->execute([
-                'id' => 15
-            ]);
+        $user = $this->model->deleteUser(16);
 
         print_r($user);
 

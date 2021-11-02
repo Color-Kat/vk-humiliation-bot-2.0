@@ -165,7 +165,11 @@ class Db
                 return 'ins';
 
             case 'DELETE':
-                return 'del';
+                return 'DELETE FROM ' . $this->table
+                    . $where;
+
+            default:
+                return false;
         }
     }
 
@@ -193,6 +197,7 @@ class Db
      */
     public function query(string $sql, $params = null)
     {
+        if(!$sql) return false;
         if (!$this->db) {
 //            if(IS_DEV) throw new \Exception('Db connection is failed!');
             return false;
