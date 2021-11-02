@@ -17,9 +17,14 @@ abstract class Controller
     protected $view;
 
     /**
-     * @var $model instance of model class 
+     * @var Model instance of model class
      */
     protected $model;
+
+    /**
+     * @var string name of model of this controller
+     */
+    protected $modelName;
 
     public function __construct($route)
     {
@@ -29,16 +34,18 @@ abstract class Controller
         // View instance
         $this->view = new View($route);
 
+        echo $this->modelName;
         // load model
-        $modelMame = $this->loadModel($route['controller']);
-        if ($modelMame) $this->model = new $modelMame();
+        $modelName = $this->loadModel($this->modelName ?? $route['controller']);
+        echo $modelName;
+        if ($modelName) $this->model = new $modelName();
     }
 
     /**
      * @param string $name name of model class
      * @return string|bool class namespace or false
      */
-    public function loadModel($name)
+    public function loadModel(string $name)
     {
         // path to file
         $path = APP . '/models/' .  ucfirst($name) . '.php';
