@@ -135,6 +135,8 @@ class Db
     }
 
     /**
+     * generate sql string by prepared commands
+     *
      * @return string SQL query
      */
     public function getSql(): string
@@ -149,12 +151,13 @@ class Db
                     . $where;
 
             case 'UPDATE':
-                $updateFields = '';
+                $updateFields = ''; // field-value string
 
+                // fill string like - field = 'value'
                 foreach ($this->fields as $field) {
                     $updateFields .= $field[0] . ' = '. "'$field[1]'" . ",\n";
                 }
-
+                // remove last comma
                 $updateFields = trim($updateFields, ",\n");
 
                 return 'UPDATE ' . $this->table
@@ -162,14 +165,16 @@ class Db
                     . $where;
 
             case 'INSERT':
-                $insertFields = '';
-                $insertValues = '';
+                $insertFields = ''; // string with fields to be inserted
+                $insertValues = ''; // string with values to be inserted
 
+                // fill string to get: field1, field2 and 'value1', 'value2'
                 foreach ($this->fields as $field) {
                     $insertFields .= $field[0] . ', ';
                     $insertValues .= "'$field[1]'" . ', ';
                 }
 
+                // remove last comma
                 $insertFields = trim($insertFields, ", ");
                 $insertValues = trim($insertValues, ", ");
 
@@ -192,12 +197,10 @@ class Db
      * @param array|null $params list of parameters to bind
      */
     public function execute(?array $params = null){
-        $sql = $this->getSql();
-
-        echo $sql;
+        $sql = $this->getSql(); // get sql string
 
         try {
-            return $this->query($sql, $params);
+            return $this->query($sql, $params); // exec sql string
         } catch (\Exception $e) {
             return false;
         }
@@ -217,13 +220,6 @@ class Db
         }
 
         $stmt = $this->db->prepare($sql);
-
-//        if (!empty($params)) {
-//            foreach ($params as $key => $val) {
-//                $stmt->bindValue(':' . $key, $val);
-//            }
-//        }
-
         $stmt->execute($params);
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
