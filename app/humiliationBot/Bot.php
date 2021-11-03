@@ -2,18 +2,18 @@
 
 namespace humiliationBot;
 
+use app\models\User;
 use humiliationBot\strategies\TextStrategy;
+use humiliationBot\traits\VkObjectParserTrait;
 
 class Bot
 {
-    /**
-     * @var mixed request data from vk
-     */
-    private $data;
+    // methods to work with vk message object
+    use VkObjectParserTrait;
 
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->setData($data);
     }
 
     /**
@@ -28,14 +28,6 @@ class Bot
             $this->data->type !== 'confirmation'
         ) return false;
         return true;
-    }
-
-    /**
-     * @return string type of vk request
-     */
-    private function type(): string
-    {
-        return $this->data->type;
     }
 
     public function run(): string

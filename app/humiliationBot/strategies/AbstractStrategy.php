@@ -6,6 +6,7 @@ use app\lib\Log;
 use humiliationBot\traits\DictionaryTrait;
 use humiliationBot\traits\MessageProcessingTrait;
 use humiliationBot\traits\PatternProcessingTrait;
+use humiliationBot\traits\UserTrait;
 use humiliationBot\VkMessage;
 
 class AbstractStrategy extends VkMessage
@@ -19,12 +20,18 @@ class AbstractStrategy extends VkMessage
     // methods for processing messages
     use MessageProcessingTrait;
 
+    // trait for get user's data and User model instance
+    use UserTrait;
+
     public function __construct($data)
     {
+        parent::__construct($data);
+
         // load wordbook with insults, praises, phrases and more
         $this->loadWordbook();
 
-        parent::__construct($data);
+        // load user's data
+        $this->initUser($this->getUserId());
     }
 
     /**

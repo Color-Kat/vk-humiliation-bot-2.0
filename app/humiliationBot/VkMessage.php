@@ -21,7 +21,7 @@ class VkMessage implements VkMessageInterface
         $this->setData($data);
 
         // init vk api class
-        $this->setVk(new VKApiClient());
+        $this->setVk(new VKApiClient(), $this->getUserId());
 
         // set standard options
         $this->request_params['user_id'] = $this->getUserId();

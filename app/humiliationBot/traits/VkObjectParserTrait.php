@@ -9,7 +9,8 @@ trait VkObjectParserTrait
 {
     protected \stdClass $data;
 
-    public function setData(\stdClass $data){
+    public function setData(\stdClass $data)
+    {
         $this->data = $data;
     }
 
@@ -56,11 +57,11 @@ trait VkObjectParserTrait
     }
 
     /**
-     * return type
+     * return type of vk request
      *
-     * @return string type
+     * @return string type of vk request
      */
-    public function getType(): string
+    private function type(): string
     {
         return $this->data->type;
     }

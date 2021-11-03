@@ -33,9 +33,9 @@ class User extends Model
     public function getUser(int $user_id)
     {
         return $this->select('*')
-            ->where('id = :id')
+            ->where('user_id = :user_id')
             ->execute([
-                'id' => $user_id
+                'user_id' => $user_id
             ]);
     }
 
@@ -49,9 +49,9 @@ class User extends Model
         return $this->update([
             ['prev_message_id', $prev_mess_id]
         ])
-            ->where('id = :id')
+            ->where('user_id = :user_id')
             ->execute([
-                'id' => $user_id
+                'user_id' => $user_id
             ]);
     }
 
@@ -63,9 +63,9 @@ class User extends Model
      */
     public function deleteUser(int $user_id) {
         return $this->delete()
-            ->where('id = :id')
+            ->where('user_id = :user_id')
             ->execute([
-                'id' => $user_id
+                'user_id' => $user_id
             ]);
     }
 }
