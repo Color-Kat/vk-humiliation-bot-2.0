@@ -4,6 +4,8 @@ namespace humiliationBot\traits;
 
 use VK\Actions\Users;
 use VK\Client\VKApiClient;
+use VK\Exceptions\VKApiException;
+use VK\Exceptions\VKClientException;
 
 /**
  * trait for work with Vk api methods
@@ -52,13 +54,20 @@ trait Vk
      */
     public function init_user_fields()
     {
-        $this->user_fields = $this->vk->users()->get($this->access_token, [
-            'user_ids' => $this->user_id,
-            'fields' => ['first_name', 'first_name_gen', 'first_name_dat',
-                         'first_name_acc', 'first_name_ins', 'first_name_abl', 'last_name',
-                         'bdate', 'country', 'city', 'relation'
+        try {
+            $this->user_fields = $this->vk->users()->get($this->access_token, [
+                'user_ids' => $this->user_id,
+                'fields'   => [
+                    'first_name', 'first_name_gen', 'first_name_dat',
+                    'first_name_acc', 'first_name_ins', 'first_name_abl', 'last_name',
+                    'bdate', 'country', 'city', 'relation'
                 ]
-        ])[0];
+            ])[0];
+        } catch (VKApiException | VKClientException $e) {
+//            $this->user_fields = [
+//
+//            ]
+        }
     }
 
     /**

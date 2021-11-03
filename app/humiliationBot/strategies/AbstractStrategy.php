@@ -38,12 +38,12 @@ class AbstractStrategy extends VkMessage
      * get matches for user's message by answer with prev_mess
      *
      * @param string $message user's message (string to check matching)
-     * @param array $answerObj with_prev_messages answer object
+     * @param array $answerArr with_prev_messages answer assoc array
      * @return array|string|false answer variants
      */
-    public function getMatchByPrevMess(string $message, array $answerObj)
+    public function getMatchByPrevMess(string $message, array $answerArr)
     {
-        $match = $this->getMatch($message, $answerObj, 'next');
+        $match = $this->getMatch($message, $answerArr, 'next');
 
         function findSimpleAnswer(array $answers): array {
             $simpleAnswers = [];
@@ -57,21 +57,34 @@ class AbstractStrategy extends VkMessage
 
         if(!$match) {
             // if no match we need to find answer without pattern - simple answer
-            $simpleAnswer = findSimpleAnswer($answerObj);
+            $simpleAnswer = findSimpleAnswer($answerArr);
 
             if($simpleAnswer) {
                 $this->setPrevMessageId(''); // remove prev_mess_id from db
                 return $simpleAnswer;
             }
 
-//            if($answerObj['forced']) return $answerObj['forced'];
+            // return forced messages
+            if($answerArr['forced'] && $this->userData['forced_left'] > 0) {
+                // return FORCED message if forced_left count is not over yet (usually 3 count)
+                // don't clear prev_message_id because we need to go here again
+
+                // return forced messages
+                return $answerArr['forced'];
+            } else {
+                // clear prev_message_id
+                $this->setPrevMessageId('');
+
+                // return forced_end if is it set
+                return $answerArr['forced_end'] ?? false;
+            }
 
             // TODO удалять из БД prev_mess
             // Если нет совпадения - возвращаем simpleAnswer
             // Если нет этого, то возвращаем forced - сообщение на крайний случай
             // если нет и forced, то удаляем из БД prev_mess
             // Если forced отработал более трех раз, то возвращаем forced_end
-            return ($simpleAnswer ?? $answerObj['forced']) ?? false;
+//            return ($simpleAnswer ?? $answerObj['forced']) ?? false;
         }
 
         return $match;
@@ -94,7 +107,11 @@ class AbstractStrategy extends VkMessage
         // TODO проверять type
 
         // no pattern - no match
-        if(gettype($dictionary[$answersKey]) == "string") return $dictionary[$answersKey];
+        if(gettype($dictionary[$answersKey]) == "string") {
+            // clear prev_message_id because we found answer without 'next'
+            $this->setPrevMessageId('');
+            return $dictionary[$answersKey];
+        }
 
         // iterate over all answers and search pattern match
         foreach ($dictionary[$answersKey] as $answer) {
@@ -112,6 +129,13 @@ class AbstractStrategy extends VkMessage
                 $match = $answer;
             }
         }
+
+        // save prev_mess_id if with_prev_messages is set
+        if(isset($match['with_prev_messages']) || isset($match['with_prev_mess_id']))
+            $this->setPrevMessageId($match['with_prev_mess_id']);
+
+        // clear prev_message_id because we found answer without 'next'
+        if($match) $this->setPrevMessageId('');
 
         return $match['messages'] ?? false;
     }
@@ -149,8 +173,14 @@ class AbstractStrategy extends VkMessage
         return $messages[array_rand($messages)];
     }
 
+    /**
+     * process
+     *
+     * @param array $answerArr answer variants
+     * @return string final string message
+     */
     public function generateMessageFromAnswerArray(array $answerArr): string {
-        print_r($answerArr);
+        // save in DB with_prev_mess_id if is it set
         if ($answerArr['with_prev_messages'] || $answerArr['with_prev_mess_id']) {
             $this->setPrevMessageId($answerArr['with_prev_mess_id']);
         }

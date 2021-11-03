@@ -45,11 +45,35 @@ trait UserTrait
         }
     }
 
-    public function getPrevMessageId(){
+    /**
+     * return current prev_message_id
+     *
+     * @return string prev_message_id
+     */
+    public function getPrevMessageId(): string{
         return $this->userData['prev_message_id'];
     }
 
+    /**
+     * set prev_message_id in DB
+     *
+     * @param string $with_prev_message_id
+     */
     public function setPrevMessageId(string $with_prev_message_id){
         $this->user->set_prev_message_id($this->user_id, $with_prev_message_id);
+    }
+
+    /**
+     * decrease forced_left in DB
+     */
+    public function decreaseForcedLeft(){
+        $this->user->set_forced_left($this->user_id, $this->userData['forced_left'] - 1);
+    }
+
+    /**
+     * decrease forced_left in DB
+     */
+    public function resetForcedLeft(){
+        $this->user->set_forced_left($this->user_id, 3);
     }
 }

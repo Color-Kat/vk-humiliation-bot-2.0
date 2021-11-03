@@ -68,4 +68,14 @@ class User extends Model
                 'user_id' => $user_id
             ]);
     }
+
+    public function set_forced_left(int $user_id, int $forced_left){
+        return $this->update([
+            ['forced_left', $forced_left]
+        ])
+            ->where('user_id = :user_id')
+            ->execute([
+                'user_id' => $user_id
+            ]);
+    }
 }
