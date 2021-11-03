@@ -69,11 +69,17 @@ class AbstractStrategy extends VkMessage
                 // return FORCED message if forced_left count is not over yet (usually 3 count)
                 // don't clear prev_message_id because we need to go here again
 
+                // decrease forced_left to avoid looping
+                $this->decreaseForcedLeft();
+
                 // return forced messages
                 return $answerArr['forced'];
             } else {
                 // clear prev_message_id
                 $this->setPrevMessageId('');
+
+                // reset count forced_left
+                $this->resetForcedLeft();
 
                 // return forced_end if is it set
                 return $answerArr['forced_end'] ?? false;
@@ -130,12 +136,12 @@ class AbstractStrategy extends VkMessage
             }
         }
 
+        // clear prev_message_id because we found answer without 'next'
+        if($match) $this->setPrevMessageId('');
+
         // save prev_mess_id if with_prev_messages is set
         if(isset($match['with_prev_messages']) || isset($match['with_prev_mess_id']))
             $this->setPrevMessageId($match['with_prev_mess_id']);
-
-        // clear prev_message_id because we found answer without 'next'
-        if($match) $this->setPrevMessageId('');
 
         return $match['messages'] ?? false;
     }
