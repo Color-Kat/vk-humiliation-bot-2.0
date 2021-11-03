@@ -10,13 +10,32 @@ use VK\Client\VKApiClient;
  */
 trait Vk
 {
+    /**
+     * @var VKApiClient vk api instance
+     */
     protected VKApiClient $vk;
+
+    /**
+     * @var string access token for vk api
+     */
     protected string $access_token;
     protected string $secure_token;
     protected string $vk_token;
+
+    /**
+     * @var int $user_id user_id for api queries
+     */
     private int $user_id;
+
+    /**
+     * @var array fields received via vk api
+     */
     private array $user_fields;
 
+    /**
+     * @param VKApiClient $vk instance VkApiClient
+     * @param int $user_id user_id for api queries
+     */
     public function setVk(VKApiClient $vk, int $user_id)
     {
         $this->vk = $vk;
@@ -24,10 +43,13 @@ trait Vk
         $this->secure_token = bot_env('VK_SECRET_TOKEN');
         $this->vk_token = bot_env('VK_TOKEN');
 
-        $this->user_id = $user_id;
-        $this->init_user_fields();
+        $this->user_id = $user_id; // save user_id
+        $this->init_user_fields(); // get and save user's info
     }
 
+    /**
+     * save user info
+     */
     public function init_user_fields()
     {
         $this->user_fields = $this->vk->users()->get($this->access_token, [

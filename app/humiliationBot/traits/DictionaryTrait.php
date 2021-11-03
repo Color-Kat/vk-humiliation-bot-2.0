@@ -89,14 +89,16 @@ trait DictionaryTrait
     /**
      * get answer with property "with_prev_messages" by with_prev_message_id
      *
-     * @param string $with_prev_mess_id id of answer with property with_prev_messages
+     * @param string|false $with_prev_mess_id id of answer with property with_prev_messages
      * @return array|false answer
      */
-    public function getAnswerByPrevMessId(string $with_prev_mess_id)
+    public function getAnswerByPrevMessId($with_prev_mess_id)
     {
         // return a ready answer if this answer has already been found
 //        if (isset($this->with_prev_messages[$with_prev_mess_id]))
 //            return $this->with_prev_messages[$with_prev_mess_id];
+
+        if(!$with_prev_mess_id) return false;
 
         $filename = DICTIONARY_PATH . '/with_prev_messages.json';
 

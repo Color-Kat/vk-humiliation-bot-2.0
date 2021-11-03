@@ -11,6 +11,9 @@ use humiliationBot\VkMessage;
 
 class AbstractStrategy extends VkMessage
 {
+    // trait for get user's data and User model instance
+    use UserTrait;
+
     // methods for work with dictionaries
     use DictionaryTrait;
 
@@ -19,9 +22,6 @@ class AbstractStrategy extends VkMessage
 
     // methods for processing messages
     use MessageProcessingTrait;
-
-    // trait for get user's data and User model instance
-    use UserTrait;
 
     public function __construct($data)
     {
@@ -58,6 +58,13 @@ class AbstractStrategy extends VkMessage
         if(!$match) {
             // if no match we need to find answer without pattern - simple answer
             $simpleAnswer = findSimpleAnswer($answerObj);
+
+            if($simpleAnswer) {
+                $this->setPrevMessageId(''); // remove prev_mess_id from db
+                return $simpleAnswer;
+            }
+
+//            if($answerObj['forced']) return $answerObj['forced'];
 
             // TODO удалять из БД prev_mess
             // Если нет совпадения - возвращаем simpleAnswer
@@ -143,8 +150,9 @@ class AbstractStrategy extends VkMessage
     }
 
     public function generateMessageFromAnswerArray(array $answerArr): string {
+        print_r($answerArr);
         if ($answerArr['with_prev_messages'] || $answerArr['with_prev_mess_id']) {
-            // TODO save $answerArr['with_prev_mess_id'] to db
+            $this->setPrevMessageId($answerArr['with_prev_mess_id']);
         }
 
         // return recursive generating string message ;)

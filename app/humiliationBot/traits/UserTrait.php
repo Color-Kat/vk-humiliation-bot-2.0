@@ -9,12 +9,14 @@ trait UserTrait
     /**
      * @var User instance of User model
      */
-    protected $user;
+    private User $user;
+
+    private int $user_id;
 
     /**
      * @var array user's data
      */
-    protected $userData;
+    protected array $userData;
 
     /**
      * @param int $user_id
@@ -24,8 +26,10 @@ trait UserTrait
         // create User instance
         $this->user = new User;
 
+        $this->user_id = $user_id;
+
         // try to get user
-        $this->userData = $this->user->getUser($user_id);
+        $this->userData = $this->user->getUser($user_id)[0];
 
         // add new user if it doesn't exist
         if(!$this->userData) {
@@ -37,7 +41,15 @@ trait UserTrait
             );
 
             // and get user's data
-            $this->userData = $this->user->getUser($user_id);
+            $this->userData = $this->user->getUser($user_id)[0];
         }
+    }
+
+    public function getPrevMessageId(){
+        return $this->userData['prev_message_id'];
+    }
+
+    public function setPrevMessageId(string $with_prev_message_id){
+        $this->user->set_prev_message_id($this->user_id, $with_prev_message_id);
     }
 }
