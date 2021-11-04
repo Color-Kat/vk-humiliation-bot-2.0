@@ -235,6 +235,8 @@ class AbstractStrategy extends VkMessage
     public function getStickerId(string $message){
         preg_match('/\(sticker_(?<str_id>\w+)\)/', $message, $match);
 
+        if(!isset($match['str_id'])) return false;
+
         $ids = $this->loadStickersList();
 
         $this->setSticker($ids[$match['str_id']] ?? false);

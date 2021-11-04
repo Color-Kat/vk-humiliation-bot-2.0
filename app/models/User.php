@@ -69,9 +69,33 @@ class User extends Model
             ]);
     }
 
+    /**
+     * set field forced_left to $forced_left in db
+     *
+     * @param int $user_id
+     * @param int $forced_left
+     * @return array|false
+     */
     public function set_forced_left(int $user_id, int $forced_left){
         return $this->update([
             ['forced_left', $forced_left]
+        ])
+            ->where('user_id = :user_id')
+            ->execute([
+                'user_id' => $user_id
+            ]);
+    }
+
+    /**
+     * set field isSubscribed to $isSubscribed in db
+     *
+     * @param int $user_id
+     * @param bool $isSubscribed
+     * @return array|false
+     */
+    public function set_isSubscribed(int $user_id, bool $isSubscribed){
+        return $this->update([
+            ['isSubscribed', $isSubscribed]
         ])
             ->where('user_id = :user_id')
             ->execute([

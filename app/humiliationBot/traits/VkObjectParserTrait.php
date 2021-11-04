@@ -21,7 +21,7 @@ trait VkObjectParserTrait
      */
     public function getUserId(): int
     {
-        return $this->data->object->message->from_id;
+        return $this->data->object->message->from_id ?? $this->data->object->user_id ?? 1;
     }
 
     /**

@@ -78,4 +78,18 @@ trait UserTrait
     public function resetForcedLeft(){
         $this->user->set_forced_left($this->user_id, 3);
     }
+
+    /**
+     * set isSubscribed field to true in db
+     */
+    public function subscribe(){
+        $this->user->set_isSubscribed($this->user_id, true);
+    }
+
+    /**
+     * set isSubscribed field to false in db
+     */
+    public function unsubscribe(){
+        $this->user->set_isSubscribed($this->user_id, false);
+    }
 }

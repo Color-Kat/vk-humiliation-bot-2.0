@@ -3,6 +3,7 @@
   "name": "insult",
   "use": ["insult_m", "insult_f", "insult_n"],
   "content": [
-
+    "овечий сын",
+    "овечий полушубок"
   ]
 }

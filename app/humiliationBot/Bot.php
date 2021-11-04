@@ -3,6 +3,8 @@
 namespace humiliationBot;
 
 use app\models\User;
+use humiliationBot\strategies\GroupJoinStrategy;
+use humiliationBot\strategies\GroupLeaveStrategy;
 use humiliationBot\strategies\TextStrategy;
 use humiliationBot\traits\VkObjectParserTrait;
 
@@ -26,7 +28,10 @@ class Bot
         if (
             $this->data->secret !== bot_env('VK_SECRET_TOKEN') &&
             $this->data->type !== 'confirmation'
-        ) return false;
+        ) {
+            echo 'security';
+            return false;
+        }
         return true;
     }
 
@@ -77,6 +82,20 @@ class Bot
                 // create AnswerContext and strategy with vk data
                 (new AnswerContext(
                     new TextStrategy($this->data)
+                ))->answer();
+
+                return 'ok';
+
+            case 'group_join':
+                (new AnswerContext(
+                    new GroupJoinStrategy($this->data)
+                ))->answer();
+
+                return 'ok';
+
+            case 'group_leave':
+                (new AnswerContext(
+                    new GroupLeaveStrategy($this->data)
                 ))->answer();
 
                 return 'ok';
