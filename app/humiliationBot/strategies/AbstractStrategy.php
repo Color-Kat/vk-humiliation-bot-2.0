@@ -28,7 +28,21 @@ class AbstractStrategy extends VkMessage
         parent::__construct($data);
 
         // load wordbook with insults, praises, phrases and more
-        $this->loadWordbook();
+        // and add additional variables from code
+        $this->loadWordbook([
+            'u_name' => $this->getName(),
+            'u_name_gen' => $this->getName('gen'),
+            'u_name_dat' => $this->getName('dat'),
+            'u_name_acc' => $this->getName('acc'),
+            'u_name_ins' => $this->getName('ins'),
+            'u_name_abl' => $this->getName('abl'),
+            'u_last_name' => $this->getLast_name(),
+            'u_country' => $this->getCountry(),
+            'u_city' => $this->getCity(),
+            'u_birthday' => $this->getBirth(),
+            'u_age' => $this->getAge(),
+            'u_relation' => $this->getRelation()
+        ]);
 
         // load user's data
         $this->initUser($this->getUserId());
@@ -85,12 +99,10 @@ class AbstractStrategy extends VkMessage
                 return $answerArr['forced_end'] ?? false;
             }
 
-            // TODO удалять из БД prev_mess
             // Если нет совпадения - возвращаем simpleAnswer
             // Если нет этого, то возвращаем forced - сообщение на крайний случай
             // если нет и forced, то удаляем из БД prev_mess
             // Если forced отработал более трех раз, то возвращаем forced_end
-//            return ($simpleAnswer ?? $answerObj['forced']) ?? false;
         }
 
         return $match;

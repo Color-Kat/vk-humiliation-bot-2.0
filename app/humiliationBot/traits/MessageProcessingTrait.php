@@ -14,7 +14,8 @@ trait MessageProcessingTrait
      * @param string $template string to variables substitution
      * @return string final message string
      */
-    public function messageProcessing(string $template, array &$replaced_vars = []): string {
+    public function messageProcessing(string $template, array &$replaced_vars = []): string
+    {
         $this->processingFunctions = new ProcessingFunctions();
 
         // substitute variables
@@ -35,7 +36,8 @@ trait MessageProcessingTrait
      * @param array $replaced_vars array with replaced variables (key: varName, value: varValue)
      * @return string message string with substituted variables
      */
-    public function messageVarSubstitution(string $template, array &$replaced_vars = []): string {
+    public function messageVarSubstitution(string $template, array &$replaced_vars = []): string
+    {
         $message = $template;
 
         // search all (@var) and save it in $vars
@@ -48,14 +50,17 @@ trait MessageProcessingTrait
                 $var = preg_replace('/[@\(\)]/', '', $var);
                 $val = $this->wordbook[$var];
 
+                // find random value if value is array
+                if (gettype($val) == "array") $val = $val[array_rand($val)];
+
                 // save into $replaced_vars
                 $replaced_vars[$var] = $val;
 
                 // substitute random value
                 $message = preg_replace(
                     "/\(@$var\)/u",
-                    $val[array_rand($val)],
-                    $template
+                    $val,
+                    $message
                 );
             }
         }
@@ -64,16 +69,17 @@ trait MessageProcessingTrait
         return $message;
     }
 
-    public function funcSubstitution($template) {
+    public function funcSubstitution($template)
+    {
         $message = $template;
 
         // get function calls - {@funcName(arg1|arg2|arg3)}
-        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*?)\)}/i', function($m){
+        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*?)\)}/i', function ($m) {
             $params = explode('|', $m['params']); // get params as array
             $funcName = $m['func']; // get func name
 
             // call function by $funcName with $params from processingFunctions class
-            if(method_exists($this->processingFunctions, $funcName))
+            if (method_exists($this->processingFunctions, $funcName))
                 // and substitute the result of the function instead of calling it
                 return $this->processingFunctions->$funcName($params);
             else return $params[0];

@@ -31,6 +31,16 @@ class Db
 
     public function __construct()
     {
+        $this->connectDb();
+    }
+
+    private function connectDb()
+    {
+        // if connection is already established do nothing
+        if(isset($this->db)) {
+            return;
+        }
+
         // get config from file
         $config = require APP . '/config/db.php';
 

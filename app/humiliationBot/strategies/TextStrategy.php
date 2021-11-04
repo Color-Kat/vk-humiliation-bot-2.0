@@ -20,7 +20,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function parse()
     {
-        // TODO получать prev message из Базы данных
         // get prev message if from DB and get answer by this id
         $prevMessageId = $this->getPrevMessageId();
         echo $prevMessageId;

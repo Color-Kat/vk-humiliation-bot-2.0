@@ -69,9 +69,10 @@ trait DictionaryTrait
     /**
      * load the whole wordbook to $wordbook
      *
+     * @param array $additional array with additional variables
      * @return bool is success
      */
-    public function loadWordbook(): bool
+    public function loadWordbook(array $additional = []): bool
     {
         $filename = DICTIONARY_PATH . '/wordbook.json';
 
@@ -82,6 +83,10 @@ trait DictionaryTrait
             file_get_contents($filename),
             true
         );
+
+        foreach ($additional as $var => $val) {
+            $this->wordbook[$var] = $val;
+        }
 
         return true;
     }

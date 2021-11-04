@@ -14,12 +14,5 @@ abstract class Model extends Db
     public function __construct()
     {
         parent::__construct();
-
-//        $this->connectDb();
-    }
-
-    private function connectDb()
-    {
-        $this->db = $this->db ?? new Db();
     }
 }

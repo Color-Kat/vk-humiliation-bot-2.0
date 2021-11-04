@@ -54,29 +54,8 @@ class VkMessage implements VkMessageInterface
      */
     public function sendMessage(): bool
     {
-
         $this->vk->messages()->send($this->access_token, $this->request_params);
-
-//        $request_params = [
-//            'user_id'      => $this->request_params['user_id'],
-//            'message'      => 'Я родился!',
-//            'access_token' => bot_env('VK_TOKEN'),
-//            'v'            => '5.81'
-//        ];
-//
-//        // send message
-//        file_get_contents('https://api.vk.com/method/messages.send?' . http_build_query($request_params));
 
         return true;
     }
 }
-
-//$request_params = [
-//'user_id' => $this->data->object->message->from_id,
-//'message' => 'Я родился!',
-//'access_token' => bot_env('VK_TOKEN'),
-//'v' => '5.81'
-//];
-//
-//    // send message
-//file_get_contents('https://api.vk.com/method/messages.send?' . http_build_query($request_params));

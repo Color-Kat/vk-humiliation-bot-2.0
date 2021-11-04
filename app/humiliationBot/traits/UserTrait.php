@@ -29,10 +29,10 @@ trait UserTrait
         $this->user_id = $user_id;
 
         // try to get user
-        $this->userData = $this->user->getUser($user_id)[0];
+        $userData = $this->user->getUser($user_id);
 
         // add new user if it doesn't exist
-        if(!$this->userData) {
+        if(!$userData) {
             // add new user to db
             $this->user->addUser(
                 $user_id,
@@ -41,17 +41,19 @@ trait UserTrait
             );
 
             // and get user's data
-            $this->userData = $this->user->getUser($user_id)[0];
+            $userData = $this->user->getUser($user_id);
         }
+
+        $this->userData = $userData;
     }
 
     /**
      * return current prev_message_id
      *
-     * @return string prev_message_id
+     * @return string | false prev_message_id
      */
-    public function getPrevMessageId(): string{
-        return $this->userData['prev_message_id'];
+    public function getPrevMessageId(){
+        return $this->userData['prev_message_id'] ?? false;
     }
 
     /**

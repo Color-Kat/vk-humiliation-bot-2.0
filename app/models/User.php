@@ -36,7 +36,7 @@ class User extends Model
             ->where('user_id = :user_id')
             ->execute([
                 'user_id' => $user_id
-            ]);
+            ])[0] ?? false;
     }
 
     /**
@@ -72,6 +72,24 @@ class User extends Model
     public function set_forced_left(int $user_id, int $forced_left){
         return $this->update([
             ['forced_left', $forced_left]
+        ])
+            ->where('user_id = :user_id')
+            ->execute([
+                'user_id' => $user_id
+            ]);
+    }
+
+    /**
+     * set user_info field in bd
+     *
+     * @param int $user_id vk user_id
+     * @param string $user_info json data of user
+     * @return array|false
+     */
+    public function set_user_info(int $user_id, string $user_info)
+    {
+        return $this->update([
+            ['user_info', $user_info]
         ])
             ->where('user_id = :user_id')
             ->execute([
