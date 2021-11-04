@@ -226,4 +226,17 @@ class AbstractStrategy extends VkMessage
 
         return $this->generateMessage($this->dictionary['answers']);
     }
+
+    /**
+     * get sticker_id from message string by template (sticker_123)
+     *
+     * @param string $message message
+     */
+    public function getStickerId(string $message){
+        preg_match('/\(sticker_(?<str_id>\w+)\)/', $message, $match);
+
+        $ids = $this->loadStickersList();
+
+        $this->setSticker($ids[$match['str_id']] ?? false);
+    }
 }

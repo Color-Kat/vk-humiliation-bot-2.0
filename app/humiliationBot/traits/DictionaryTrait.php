@@ -32,6 +32,11 @@ trait DictionaryTrait
     protected array $with_prev_messages = [];
 
     /**
+     * @var array list of sticker_ids [str_id => sticker_id]
+     */
+    protected array $stickerList = [];
+
+    /**
      * load dictionary by name to property $dictionary
      *
      * @param string $name - name of dictionary
@@ -131,4 +136,23 @@ trait DictionaryTrait
 //
 //        return $answer ?? false;
     }
+
+    /**
+     * load the stickers list ('str_id' => sticker_id)
+     *
+     * @return array list of sticker_ids
+     */
+    public function loadStickersList(): array
+    {
+        $filename = DICTIONARY_PATH . '/sticker_list.json';
+
+        if(!file_exists($filename)) return false;
+
+        // save dictionary by name
+        return json_decode(
+            file_get_contents($filename),
+            true
+        ) ?? false;
+    }
+
 }

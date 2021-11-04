@@ -43,7 +43,8 @@
         "pattern": "/ты (@insult)!/",
         "priority": 2,
         "messages": [
-          "не повышай на меня голос!"
+          "не повышай на меня голос!",
+          "(sticker_bang_bang)"
         ]
       },
       {

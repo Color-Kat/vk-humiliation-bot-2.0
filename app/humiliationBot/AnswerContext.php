@@ -39,7 +39,8 @@ class AnswerContext
         $message = $this->strategy->generateAnswer($answerVariants);
 
         $this->strategy->setMessage($message);
-//        $this->strategy->setSticker(21148);
+        $this->strategy->getStickerId($message);
+
         $this->strategy->sendMessage();
 
         return true;

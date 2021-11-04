@@ -22,7 +22,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     {
         // get prev message if from DB and get answer by this id
         $prevMessageId = $this->getPrevMessageId();
-        echo $prevMessageId;
 
         // get ANSWER object from dictionary by prev_message_id
         $answerObj_byPrevMessId = $this->getAnswerByPrevMessId($prevMessageId);
