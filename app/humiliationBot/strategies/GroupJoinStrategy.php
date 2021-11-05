@@ -32,8 +32,6 @@ class GroupJoinStrategy extends AbstractStrategy implements VkMessageAnswerInter
     {
         $this->subscribe();
 
-        // we can't send messages when user joins or leaves
-        // but i am trying;)
-        return 'Спасибо за подписку)';
+        return $this->generateStandardAnswer('group_join');
     }
 }

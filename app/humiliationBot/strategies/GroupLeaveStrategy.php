@@ -32,8 +32,6 @@ class GroupLeaveStrategy extends AbstractStrategy implements VkMessageAnswerInte
     {
         $this->unsubscribe();
 
-        // we can't send messages when user joins or leaves
-        // but i am trying;)
-        return 'Спасибо за подписку)';
+        return $this->generateStandardAnswer('group_leave');
     }
 }
