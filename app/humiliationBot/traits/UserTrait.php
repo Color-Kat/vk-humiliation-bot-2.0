@@ -92,4 +92,18 @@ trait UserTrait
     public function unsubscribe(){
         $this->user->set_isSubscribed($this->user_id, false);
     }
+
+    /**
+     * @return false|string user's alias name
+     */
+    public function getAliasName(){
+        return $this->userData['aliasName'] ?? false;
+    }
+
+    /**
+     * set isSubscribed field to false in db
+     */
+    public function setAliasName(string $aliasName){
+        $this->user->set_aliasName($this->user_id, $aliasName);
+    }
 }

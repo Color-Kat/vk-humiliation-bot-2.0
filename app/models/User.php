@@ -120,4 +120,22 @@ class User extends Model
                 'user_id' => $user_id
             ]);
     }
+
+    /**
+     * set alias
+     *
+     * @param int $user_id vk user id
+     * @param string $aliasName string with user's new alias name
+     * @return array|false
+     */
+    public function set_aliasName(int $user_id, string $aliasName){
+        echo $aliasName;
+        return $this->update([
+            ['aliasName', $aliasName]
+        ])
+            ->where('user_id = :user_id')
+            ->execute([
+                'user_id' => $user_id
+            ]);
+    }
 }

@@ -2,11 +2,11 @@
 
 namespace humiliationBot\traits;
 
-use humiliationBot\ProcessingFunctions;
+use humiliationBot\DictionaryFunctions;
 
 trait MessageProcessingTrait
 {
-    private ProcessingFunctions $processingFunctions;
+    private DictionaryFunctions $processingFunctions;
 
     /**
      * processing message - vars substitution, select random part of proposal
@@ -16,7 +16,7 @@ trait MessageProcessingTrait
      */
     public function messageProcessing(string $template, array &$replaced_vars = []): string
     {
-        $this->processingFunctions = new ProcessingFunctions();
+        $this->processingFunctions = new DictionaryFunctions();
 
         // substitute variables
         $message = $this->messageVarSubstitution($template);

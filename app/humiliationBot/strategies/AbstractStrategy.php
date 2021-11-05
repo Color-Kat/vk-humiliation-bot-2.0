@@ -4,6 +4,7 @@ namespace humiliationBot\strategies;
 
 use app\lib\Log;
 use humiliationBot\traits\DictionaryTrait;
+use humiliationBot\traits\ExecFunctionsTrait;
 use humiliationBot\traits\MessageProcessingTrait;
 use humiliationBot\traits\PatternProcessingTrait;
 use humiliationBot\traits\UserTrait;
@@ -23,9 +24,15 @@ class AbstractStrategy extends VkMessage
     // methods for processing messages
     use MessageProcessingTrait;
 
+    // methods that uses in dictionaries in "execFunc"
+    use ExecFunctionsTrait;
+
     public function __construct($data)
     {
         parent::__construct($data);
+
+        // load user's data
+        $this->initUser($this->getUserId());
 
         // load wordbook with insults, praises, phrases and more
         // and add additional variables from code
@@ -41,11 +48,9 @@ class AbstractStrategy extends VkMessage
             'u_city' => $this->getCity(),
             'u_birthday' => $this->getBirth(),
             'u_age' => $this->getAge(),
-            'u_relation' => $this->getRelation()
+            'u_relation' => $this->getRelation(),
+            'aliasName' => $this->getAliasName()
         ]);
-
-        // load user's data
-        $this->initUser($this->getUserId());
     }
 
     /**
@@ -59,22 +64,41 @@ class AbstractStrategy extends VkMessage
     {
         $match = $this->getMatch($message, $answerArr, 'next');
 
-        function findSimpleAnswer(array $answers): array {
+        /**
+         * get "simple" answers from "next" field
+         * simple answer - answer without "pattern" field
+         *
+         * @param array $answersArr - array with "next" field
+         * @return array
+         */
+        function findSimpleAnswer(array $answersArr): array {
             $simpleAnswers = [];
 
-            foreach ($answers['next'] as $answer) {
+            foreach ($answersArr['next'] as $answer) {
                 if(!isset($answer['pattern'])) $simpleAnswers[] = $answer;
             }
 
             return $simpleAnswers;
         }
 
+        // no match by pattern
         if(!$match) {
+            // Если нет совпадения - возвращаем simpleAnswer
+            // Если нет этого, то возвращаем forced - сообщение на крайний случай
+            // если нет и forced, то удаляем из БД prev_mess
+            // Если forced отработал более трех раз, то возвращаем forced_end
+
             // if no match we need to find answer without pattern - simple answer
             $simpleAnswer = findSimpleAnswer($answerArr);
 
             if($simpleAnswer) {
-                $this->setPrevMessageId(''); // remove prev_mess_id from db
+                // remove prev_mess_id from db
+                $this->setPrevMessageId('');
+
+                // execute function from field "execFunc"
+                if(isset($simpleAnswer['execFunc']))
+                    $this->execFunc($simpleAnswer['execFunc']);
+
                 return $simpleAnswer;
             }
 
@@ -86,6 +110,10 @@ class AbstractStrategy extends VkMessage
                 // decrease forced_left to avoid looping
                 $this->decreaseForcedLeft();
 
+                // execute function from field "execFunc"
+                if(isset($answerArr['forced']['execFunc']))
+                    $this->execFunc($answerArr['forced']['execFunc']);
+
                 // return forced messages
                 return $answerArr['forced'];
             } else {
@@ -95,14 +123,13 @@ class AbstractStrategy extends VkMessage
                 // reset count forced_left
                 $this->resetForcedLeft();
 
+                // execute function from field "execFunc"
+                if(isset($answerArr['forced_end']['execFunc']))
+                    $this->execFunc($answerArr['forced_end']['execFunc']);
+
                 // return forced_end if is it set
                 return $answerArr['forced_end'] ?? false;
             }
-
-            // Если нет совпадения - возвращаем simpleAnswer
-            // Если нет этого, то возвращаем forced - сообщение на крайний случай
-            // если нет и forced, то удаляем из БД prev_mess
-            // Если forced отработал более трех раз, то возвращаем forced_end
         }
 
         return $match;
@@ -155,6 +182,10 @@ class AbstractStrategy extends VkMessage
         if(isset($match['with_prev_messages']) || isset($match['with_prev_mess_id']))
             $this->setPrevMessageId($match['with_prev_mess_id']);
 
+        // execute function from field "execFunc"
+        if(isset($match['execFunc']))
+            $this->execFunc($match['execFunc']);
+
         return $match['messages'] ?? false;
     }
 
@@ -199,9 +230,13 @@ class AbstractStrategy extends VkMessage
      */
     public function generateMessageFromAnswerArray(array $answerArr): string {
         // save in DB with_prev_mess_id if is it set
-        if ($answerArr['with_prev_messages'] || $answerArr['with_prev_mess_id']) {
+        if (isset($answerArr['with_prev_messages']) || isset($answerArr['with_prev_mess_id'])) {
             $this->setPrevMessageId($answerArr['with_prev_mess_id']);
         }
+
+        // execute function from "execFunc"
+        if(isset($answerArr['execFunc']))
+            $this->execFunc($answerArr['execFunc']);
 
         // return recursive generating string message ;)
         return $this->generateMessage($answerArr['messages']);
@@ -240,5 +275,17 @@ class AbstractStrategy extends VkMessage
         $ids = $this->loadStickersList();
 
         $this->setSticker($ids[$match['str_id']] ?? false);
+    }
+
+    /**
+     * try to execute frunctions from array
+     *
+     * @param array $execList array with function names
+     */
+    public function execFunc(array $execList){
+        foreach ($execList as $funcName){
+            if(method_exists($this, $funcName))
+                $this->$funcName();
+        }
     }
 }
