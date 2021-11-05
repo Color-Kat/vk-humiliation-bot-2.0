@@ -102,10 +102,22 @@ class AbstractStrategy extends VkMessage
                 return $simpleAnswer;
             }
 
+            // goto "forced"
+            forced:
+
             // return forced messages
-            if($answerArr['forced'] && $this->userData['forced_left'] > 0) {
+            if(isset($answerArr['forced']) && $this->userData['forced_left'] > 0) {
                 // return FORCED message if forced_left count is not over yet (usually 3 count)
                 // don't clear prev_message_id because we need to go here again
+
+                // go to next block if condition return false
+                if(
+                    isset($answerArr['forced']['condition']) &&
+                    $this->checkCondition($answerArr['forced']['condition'])
+                ) {
+                    echo 'goto forced_end;';
+                    goto forced_end;
+                }
 
                 // decrease forced_left to avoid looping
                 $this->decreaseForcedLeft();
@@ -117,11 +129,24 @@ class AbstractStrategy extends VkMessage
                 // return forced messages
                 return $answerArr['forced'];
             } else {
+
+                // goto "forced_end"
+                forced_end:
+
                 // clear prev_message_id
                 $this->setPrevMessageId('');
 
                 // reset count forced_left
                 $this->resetForcedLeft();
+
+                // return $match (false) if condition return false
+                if(
+                    isset($answerArr['forced']['condition']) &&
+                    $this->checkCondition($answerArr['forced_end']['condition'])
+                ){
+                    echo 'return $match;';
+                    return $match;
+                }
 
                 // execute function from field "execFunc"
                 if(isset($answerArr['forced_end']['execFunc']))
@@ -162,6 +187,10 @@ class AbstractStrategy extends VkMessage
         foreach ($dictionary[$answersKey] as $answer) {
             // continue if is no pattern
             if(!isset($answer['pattern'])) continue;
+            if(!$this->checkCondition($answer['condition'] ?? false)) {
+                echo 'continue;';
+                continue;
+            }
 
             // add /ui flags to support russian language and case insensitivity
             $pattern = $answer['pattern'] . 'ui';
@@ -219,7 +248,16 @@ class AbstractStrategy extends VkMessage
      */
     public function getAnswerByAlgorithm($messages){
         if(gettype($messages) == "string") return $messages;
-        return $messages[array_rand($messages)];
+
+        $answer = $messages[array_rand($messages)];
+
+        // go to next block if condition return false
+        if(isset($answer['condition']) && $this->checkCondition($answer['condition']))
+        {
+            return false;
+        }
+
+        return $answer;
     }
 
     /**
@@ -232,6 +270,12 @@ class AbstractStrategy extends VkMessage
         // save in DB with_prev_mess_id if is it set
         if (isset($answerArr['with_prev_messages']) || isset($answerArr['with_prev_mess_id'])) {
             $this->setPrevMessageId($answerArr['with_prev_mess_id']);
+        }
+
+        // go to next block if condition return false
+        if(isset($answerArr['condition']) && $this->checkCondition($answerArr['condition']))
+        {
+            return 'Бип-боп';
         }
 
         // execute function from "execFunc"
@@ -287,5 +331,32 @@ class AbstractStrategy extends VkMessage
             if(method_exists($this, $funcName))
                 $this->$funcName();
         }
+    }
+
+    /**
+     * check condition block in answer:
+     *  - isset : check is variables set in wordbook
+     *
+     *
+     * @param array|false $conditions
+     * @return bool is condition true
+     */
+    public function checkCondition($conditions): bool{
+        // no condition - no problem
+        if(!$conditions) return false;
+
+        foreach ($conditions as $condition){
+            // check is var set in wordbook
+            if(isset($condition['isset'])) {
+                foreach ($condition['isset'] as $var){
+                    echo $var;
+                    echo !isset($this->wordbook[$var]) ? 'НЕТУ!': 'ЕСТЬ';
+                    if(!isset($this->wordbook[$var])) return true;
+                }
+            }
+        }
+
+        // return true if every condition didn't return false
+        return false;
     }
 }

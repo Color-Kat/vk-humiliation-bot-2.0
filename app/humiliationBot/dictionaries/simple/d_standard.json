@@ -33,6 +33,9 @@
         "next": "Ты правда думаешь, что меня можно напугать?"
       },
       {
+        "condition": [
+          {"isset" : ["aliasName123"]}
+        ],
         "messages": [
           "Я придумаю тебе кличку",
           "Надо тебе кличку придумать",
@@ -44,7 +47,9 @@
         "execFunc" : ["createAliasName"],
         "next": [
           {
-            "statement": ["aliasName"],
+            "condition": [
+              {"isset" : ["aliasName123"]}
+            ],
             "messages" : [
               "Буду называть тебя (@aliasName)",
               {

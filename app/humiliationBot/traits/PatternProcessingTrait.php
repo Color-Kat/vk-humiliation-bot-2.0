@@ -5,12 +5,20 @@ namespace humiliationBot\traits;
 trait PatternProcessingTrait
 {
     /**
+     * @param string $pattern
+     * @return string
+     */
+    public function patternProcessing(string $pattern): string{
+        return $this->patternVarSubstitution($pattern);
+    }
+
+    /**
      * Substitute variables from $wordbook to $pattern
      *
-     * @param $pattern
-     * @return array|mixed|string|string[]|null
+     * @param string $pattern
+     * @return string pattern with substituted variables
      */
-    public function patternVarSubstitution($pattern) {
+    private function patternVarSubstitution(string $pattern): string {
         // search all (@var) and save it in $vars
         if (preg_match_all('/\(@\w+\)/u', $pattern, $vars)) {
 
