@@ -81,7 +81,10 @@ class AnswerObject
             ? $this->patternProcessing($answerArrOriginal['pattern'])
             : false;
         $this->priority = $answerArrOriginal['priority'] ?? 0;
-        $this->messages = new AnswerFacade($answerArrOriginal['messages'], $this->wordbook);
+        $this->messages = new AnswerFacade([
+            "original" => $answerArrOriginal,
+            "messages" => $answerArrOriginal['messages']
+        ], $this->wordbook);
         $this->with_prev_messages = $answerArrOriginal['with_prev_messages'] ?? false;
         $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'] ?? false;
         $this->execFunc = $answerArrOriginal['execFunc'] ?? false;
@@ -116,6 +119,11 @@ class AnswerObject
         return false; // don't match
     }
 
+    /**
+     * check condition for this AnswerObject
+     *
+     * @return bool return true if all conditions return true
+     */
     public function checkCondition(): bool
     {
         // no condition - no problem
@@ -125,7 +133,7 @@ class AnswerObject
             // check is var set in wordbook
             if (isset($condition['isset'])) {
                 foreach ($condition['isset'] as $var) {
-                    if (!isset($this->wordbook[$var])) return true;
+                    if (!isset($this->wordbook[$var])) return false;
                 }
             }
         }
