@@ -9,9 +9,9 @@ namespace humiliationBot\traits;
 // тогда отправлять другой ответ
 
 /**
- * work with dictionaries
+ * loading dictionaries, workbooks and other
  */
-trait DictionaryTrait
+trait DictionaryLoader
 {
     // methods to parse json files
     use JsonParser;
@@ -54,21 +54,6 @@ trait DictionaryTrait
         $this->dictionary = $dictionary;
 
         return true;
-
-        // ==========================================
-        // Old version
-//        if(!file_exists($filename)) return false;
-//
-//        // load bigDictionary.json (all dictionaries in one file)
-//        $bigDictionary = json_decode(
-//            file_get_contents($filename),
-//            true
-//        );
-//
-//        if (!$bigDictionary[$name]) return false;
-//
-//        // save dictionary by name
-//        $this->dictionary = $bigDictionary[$name];
     }
 
     /**
@@ -79,6 +64,9 @@ trait DictionaryTrait
      */
     public function loadWordbook(array $additional = []): bool
     {
+        // wordbook is already loaded
+        if(!empty($this->wordbook)) return true;
+
         $filename = DICTIONARY_PATH . '/wordbook.json';
 
         if(!file_exists($filename)) return false;
@@ -105,8 +93,8 @@ trait DictionaryTrait
     public function getAnswerByPrevMessId($with_prev_mess_id)
     {
         // return a ready answer if this answer has already been found
-//        if (isset($this->with_prev_messages[$with_prev_mess_id]))
-//            return $this->with_prev_messages[$with_prev_mess_id];
+        if (isset($this->with_prev_messages[$with_prev_mess_id]))
+            return $this->with_prev_messages[$with_prev_mess_id];
 
         if(!$with_prev_mess_id) return false;
 
@@ -119,30 +107,14 @@ trait DictionaryTrait
         $this->with_prev_messages[$with_prev_mess_id] = $answer;
 
         return $answer ?? false;
-
-        // ================================
-        // Old version
-//        if(!file_exists($path)) return false;
-//
-//        // get all answers with with_prev_messages
-//        $prevMessages = json_decode(
-//            file_get_contents($path
-//            ), true);
-//
-//        $answer = $prevMessages[$with_prev_mess_id] ?? false;
-//
-//        // save answer
-//        $this->with_prev_messages[$with_prev_mess_id] = $answer;
-//
-//        return $answer ?? false;
     }
 
     /**
      * load the stickers list ('str_id' => sticker_id)
      *
-     * @return array list of sticker_ids
+     * @return array|false list of sticker_ids
      */
-    public function loadStickersList(): array
+    public function loadStickersList()
     {
         $filename = DICTIONARY_PATH . '/sticker_list.json';
 

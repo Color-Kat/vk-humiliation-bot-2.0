@@ -33,7 +33,7 @@
         "next": "Ты правда думаешь, что меня можно напугать?"
       },
       {
-        "condition": [
+        "conditions": [
           {"isset" : ["aliasName123"]}
         ],
         "messages": [
@@ -47,7 +47,7 @@
         "execFunc" : ["createAliasName"],
         "next": [
           {
-            "condition": [
+            "conditions": [
               {"isset" : ["aliasName123"]}
             ],
             "messages" : [

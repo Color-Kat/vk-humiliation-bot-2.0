@@ -5,11 +5,18 @@ namespace humiliationBot\traits;
 trait PatternProcessingTrait
 {
     /**
-     * @param string $pattern
-     * @return string
+     * substitute variables in pattern string by template
+     *
+     * @param string $patternTemplate template of pattern string
+     * @return string final pattern string
      */
-    public function patternProcessing(string $pattern): string{
-        return $this->patternVarSubstitution($pattern);
+    public function patternProcessing(string $patternTemplate): string{
+        $pattern = $this->patternVarSubstitution($patternTemplate);
+
+        // add /ui flags to support russian language and case insensitivity
+        $pattern .= 'ui';
+
+        return $pattern;
     }
 
     /**

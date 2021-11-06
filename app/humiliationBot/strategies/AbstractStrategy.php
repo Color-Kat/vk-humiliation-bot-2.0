@@ -3,7 +3,7 @@
 namespace humiliationBot\strategies;
 
 use app\lib\Log;
-use humiliationBot\traits\DictionaryTrait;
+use humiliationBot\traits\DictionaryLoader;
 use humiliationBot\traits\ExecFunctionsTrait;
 use humiliationBot\traits\MessageProcessingTrait;
 use humiliationBot\traits\PatternProcessingTrait;
@@ -16,7 +16,7 @@ class AbstractStrategy extends VkMessage
     use UserTrait;
 
     // methods for work with dictionaries
-    use DictionaryTrait;
+    use DictionaryLoader;
 
     // methods for processing pattern
     use PatternProcessingTrait;

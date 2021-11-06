@@ -18,6 +18,11 @@ class AnswerObject
     private array $answerArrOriginal;
 
     /**
+     * @var array array with variables to be substituted into a string
+     */
+    private array $wordbook = [];
+
+    /**
      * @var string original answer type (string or array)
      */
     public string $answerType = "array";
@@ -27,10 +32,13 @@ class AnswerObject
      */
     private string $pattern;
 
-
-    //TODO !!! ANSWER !!!
     /**
-     * @var string|AnswerObject[] answer options
+     * @var int priority of this answer (answer is taken from Answer with the highest priority)
+     */
+    private int $priority;
+
+    /**
+     * @var AnswerMessage|AnswerMessage[]|AnswerObject[] answer options
      */
     private $messages;
 
@@ -52,30 +60,77 @@ class AnswerObject
     /**
      * @var array array with condition to check when answer matching
      */
-    private array $condition;
+    private array $conditions;
 
-    //TODO !!! ANSWER !!!
     /**
-     * @var string|AnswerObject[] answer option when replying to a prev message
+     * @var  AnswerMessage|AnswerMessage[]|AnswerObject[] answer option when replying to a prev message
      */
     private $next;
 
-    public function __construct($answerArr){
-        $this->answerArrOriginal = $answerArr;
+    public function __construct(array $answerArr, array $wordbook)
+    {
+        $this->answerArrOriginal = $answerArr; // set original answer array
+        $this->wordbook = $wordbook; // set wordbook
 
         $this->initAnswerObj($answerArr);
     }
 
-    private function initAnswerObj(array $answerArrOriginal){
-        $this->pattern = $this->patternProcessing($answerArrOriginal['pattern']);
-        $this->message = new \stdClass($answerArrOriginal['messages']); // TODO Answer[] class
-        $this->with_prev_messages = $answerArrOriginal['with_prev_messages'];
-        $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'];
-        $this->execFunc = $answerArrOriginal['execFunc'];
-        $this->condition = $answerArrOriginal['condition'];
+    private function initAnswerObj(array $answerArrOriginal)
+    {
+        $this->pattern = $answerArrOriginal['pattern']
+            ? $this->patternProcessing($answerArrOriginal['pattern'])
+            : false;
+        $this->priority = $answerArrOriginal['priority'] ?? 0;
+        $this->messages = new AnswerFacade($answerArrOriginal['messages'], $this->wordbook);
+        $this->with_prev_messages = $answerArrOriginal['with_prev_messages'] ?? false;
+        $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'] ?? false;
+        $this->execFunc = $answerArrOriginal['execFunc'] ?? false;
+        $this->conditions = $answerArrOriginal['conditions'] ?? false;
     }
 
-    public function getMatch(){
+    /**
+     * check does user's message strict match PATTERN this AnswerObject
+     *
+     * @param string $u_message user's message
+     * @param int $minPriority minimal priority to match
+     * @return array|false return false if it doesn't match, return answerArr if it matches
+     */
+    public function getMatch(string $u_message, int &$minPriority)
+    {
+//        if (!$this->pattern) {
+//            return $this->answerArrOriginal; // no pattern - return original answer arr
+//        }
+        if(!$this->pattern) return false;
+        if (!$this->checkCondition()) return false; // return false if condition return false
 
+        // processing pattern string (substitution wordbook vars, add flags)
+        $pattern = $this->patternProcessing($this->pattern);
+
+        // check match and
+        // return original answer arr if priority is higher that minPriority
+        if (preg_match($pattern, $u_message) && $this->priority >= ($minPriority ?? 0)) {
+            $minPriority = $this->priority; // update global priority
+            return $this->answerArrOriginal;
+        }
+
+        return false; // don't match
+    }
+
+    public function checkCondition(): bool
+    {
+        // no condition - no problem
+        if (!$this->conditions) return true;
+
+        foreach ($this->conditions as $condition) {
+            // check is var set in wordbook
+            if (isset($condition['isset'])) {
+                foreach ($condition['isset'] as $var) {
+                    if (!isset($this->wordbook[$var])) return true;
+                }
+            }
+        }
+
+        // return true if every condition didn't return false
+        return true;
     }
 }

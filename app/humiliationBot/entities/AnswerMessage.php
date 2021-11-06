@@ -19,12 +19,18 @@ class AnswerMessage
     private string $answerMessage;
 
     /**
+     * @var array array with variables to be substituted into a string
+     */
+    private array $wordbook = [];
+
+    /**
      * @var string original answer type (string or array)
      */
     public string $answerType = "string";
 
-    public function __construct($answerArr){
-        $this->answerMessage = $answerArr;
+    public function __construct($answerStr, array $wordbook){
+        $this->answerMessage = $answerStr;
+        $this->wordbook = $wordbook; // set wordbook
     }
 
     /**

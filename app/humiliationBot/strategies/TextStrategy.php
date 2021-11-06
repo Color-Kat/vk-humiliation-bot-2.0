@@ -26,13 +26,13 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
         // get ANSWER object from dictionary by prev_message_id
         $answerObj_byPrevMessId = $this->getAnswerByPrevMessId($prevMessageId);
 
-        // get match by user's message and answer with_prev_message
-        if ($answerObj_byPrevMessId)
-            // and return $messages
-            return $this->getMatchByPrevMess($this->getMessage(), $answerObj_byPrevMessId);
-
-        // get messages by match user's message and dictionary
-        return $this->getMatch($this->getMessage(), $this->dictionary);
+//        // get match by user's message and answer with_prev_message
+//        if ($answerObj_byPrevMessId)
+//            // and return $messages
+//            return $this->getMatchByPrevMess($this->getMessage(), $answerObj_byPrevMessId);
+//
+//        // get messages by match user's message and dictionary
+//        return $this->getMatch($this->getMessage(), $this->dictionary);
     }
 
     /**
@@ -40,7 +40,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function generateAnswer($messages): string
     {
-        if (!$messages) return $this->generateStandardAnswer();
-        else return $this->generateMessage($messages);
+//        if (!$messages) return $this->generateStandardAnswer();
+//        else return $this->generateMessage($messages);
     }
 }
