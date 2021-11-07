@@ -15,23 +15,22 @@ interface VkMessageAnswerInterface extends VkMessageInterface
      */
     public function parse();
 
-//    /**
-//     * do other logic in answerArray like:
-//     *  - execute logic from $answerArr["doAction"] if parser return "doActions"
-//     *  - update prev_mess_id in db
-//     *  - exec functions
-//     *
-//     * @param array $answerArr
-//     * @return mixed
-//     */
-//    public function doActions(array $answerArr);
-
+    /**
+     * do other logic in answer ARRAY like:
+     *  - execute logic from $answerArr["doAction"] if parser return "doActions"
+     *  - update prev_mess_id in db
+     *  - exec functions
+     *
+     * @param array $answerArr
+     * @return void
+     */
+    public function doActions(array $answerArr);
     /**
      * generate message from $answerArr
      *
-     * @param array $messages array with messages to create message
+     * @param array|false $messages array with messages to create message
      *
      * @return string generated answer
      */
-    public function generateAnswer(array $messages): string;
+    public function generateAnswer($messages): string;
 }

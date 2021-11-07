@@ -81,9 +81,9 @@ class AnswerObject
 
     private function initAnswerObj(array $answerArrOriginal)
     {
-        $this->pattern = $answerArrOriginal['pattern']
+        $this->pattern = isset($answerArrOriginal['pattern'])
             ? $this->patternProcessing($answerArrOriginal['pattern'])
-            : false;
+            : '';
         $this->priority = $answerArrOriginal['priority'] ?? 0;
 //        $this->messages = new Answers([
 //            "original" => $answerArrOriginal,
@@ -92,8 +92,8 @@ class AnswerObject
         $this->messages = new Answers($answerArrOriginal, $this->wordbook);
         $this->with_prev_messages = $answerArrOriginal['with_prev_messages'] ?? false;
         $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'] ?? false;
-        $this->execFunc = $answerArrOriginal['execFunc'] ?? false;
-        $this->conditions = $answerArrOriginal['conditions'] ?? false;
+        $this->execFunc = $answerArrOriginal['execFunc'] ?? [];
+        $this->conditions = $answerArrOriginal['conditions'] ?? [];
     }
 
     /**
@@ -135,14 +135,16 @@ class AnswerObject
         // no condition - no problem
         if (!$this->conditions) return true;
 
-        foreach ($this->conditions as $condition) {
+        $condition = $this->conditions;
+
+//        foreach ($this->conditions as $condition) {
             // check is var set in wordbook
             if (isset($condition['isset'])) {
                 foreach ($condition['isset'] as $var) {
                     if (!isset($this->wordbook[$var])) return false;
                 }
             }
-        }
+//        }
 
         // return true if every condition didn't return false
         return true;

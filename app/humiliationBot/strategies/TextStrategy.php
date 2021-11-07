@@ -23,11 +23,12 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     {
         // get match by user's message and answer with_prev_mess_id
         $answerById = $this->getAnswer_by_prev_mess_id();
+
         if ($answerById)
             return (new Answers($answerById, $this->wordbook))
                 ->getAnswerByPrevMess(
                     $this->getMessage(),
-                    ["humiliationBot\\strategies\\AbstractStrategy", "forcedCounter"]
+                    [$this, "forcedCounter"]
                 );
 
         // get messages by match user's message and dictionary

@@ -32,7 +32,7 @@ class Answers
         if (gettype($dictionary) == "array") $this->type = "array";
 
         $this->dictionary = gettype($dictionary) == "string"
-            ? ["messages" => $dictionary]
+            ? ["messages" => (array) $dictionary]
             : $dictionary;
 
         // set wordbook
@@ -71,15 +71,15 @@ class Answers
      */
     public function getAnswer(string $u_message, string $messagesKey = "messages")
     {
-        // if we have one string in answer - return answer
-        if($this->type == "string") return ['messages' => $this->dictionary['messages']];
+        // if we have one string in answer - return answer array with messages -> str
+        if($this->type == "string") return ['messages' => (array) $this->dictionary['messages']];
 
         $answers = $this->dictionary[$messagesKey] ?? false;
 
         if (!$answers) return false;
 
         // no pattern in string - return string
-        if (gettype($answers) == "string") return ["messages" => $answers];
+        if (gettype($answers) == "string") return ["messages" => (array) $answers];
 
         $match = false;
         $priority = 0;
@@ -88,7 +88,7 @@ class Answers
             // iterate all answers and check matching and priority
             foreach ($answers as $answer) {
                 // create AnswerObject from $answer
-                $answer = new AnswerObject($answer, $this->wordbook);
+                $answer = new AnswerObject((array) $answer, $this->wordbook);
 
                 // check match
                 $m = $answer->getMatch($u_message, $priority);
@@ -191,7 +191,7 @@ class Answers
      */
     private function getSimpleAnswer(string $messagesKey = "next"): array
     {
-        $answers = $this->dictionary[$messagesKey];
+        $answers = (array) $this->dictionary[$messagesKey];
 
         $simpleAnswers = [];
 

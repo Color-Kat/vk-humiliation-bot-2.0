@@ -115,7 +115,7 @@ class AbstractStrategy extends VkMessage
         // ================================ //
 
         // ========== ExecFunc ========== //
-        $this->execFunc($answerArr['execFunc']);
+        $this->execFunc($answerArr['execFunc'] ?? []);
         // ============================== //
     }
 
@@ -126,106 +126,106 @@ class AbstractStrategy extends VkMessage
      * @param array $answerArr with_prev_messages answer assoc array
      * @return array|string|false answer variants
      */
-    public function getMatchByPrevMess(string $message, array $answerArr)
-    {
-        $match = $this->getMatch($message, $answerArr, 'next');
-
-        /**
-         * get "simple" answers from "next" field
-         * simple answer - answer without "pattern" field
-         *
-         * @param array $answersArr - array with "next" field
-         * @return array
-         */
-        function findSimpleAnswer(array $answersArr): array
-        {
-            $simpleAnswers = [];
-
-            foreach ($answersArr['next'] as $answer) {
-                if (!isset($answer['pattern'])) $simpleAnswers[] = $answer;
-            }
-
-            return $simpleAnswers;
-        }
-
-        // no match by pattern
-        if (!$match) {
-            // Если нет совпадения - возвращаем simpleAnswer
-            // Если нет этого, то возвращаем forced - сообщение на крайний случай
-            // если нет и forced, то удаляем из БД prev_mess
-            // Если forced отработал более трех раз, то возвращаем forced_end
-
-            // if no match we need to find answer without pattern - simple answer
-            $simpleAnswer = findSimpleAnswer($answerArr);
-
-            if ($simpleAnswer) {
-                // remove prev_mess_id from db
-                $this->setPrevMessageId('');
-
-                // execute function from field "execFunc"
-                if (isset($simpleAnswer['execFunc']))
-                    $this->execFunc($simpleAnswer['execFunc']);
-
-                return $simpleAnswer;
-            }
-
-            // goto "forced"
-            forced:
-
-            // return forced messages
-            if (isset($answerArr['forced']) && $this->userData['forced_left'] > 0) {
-                // return FORCED message if forced_left count is not over yet (usually 3 count)
-                // don't clear prev_message_id because we need to go here again
-
-                // go to next block if condition return false
-                if (
-                    isset($answerArr['forced']['condition']) &&
-                    $this->checkCondition($answerArr['forced']['condition'])
-                ) {
-                    echo 'goto forced_end;';
-                    goto forced_end;
-                }
-
-                // decrease forced_left to avoid looping
-                $this->decreaseForcedLeft();
-
-                // execute function from field "execFunc"
-                if (isset($answerArr['forced']['execFunc']))
-                    $this->execFunc($answerArr['forced']['execFunc']);
-
-                // return forced messages
-                return $answerArr['forced'];
-            } else {
-
-                // goto "forced_end"
-                forced_end:
-
-                // clear prev_message_id
-                $this->setPrevMessageId('');
-
-                // reset count forced_left
-                $this->resetForcedLeft();
-
-                // return $match (false) if condition return false
-                if (
-                    isset($answerArr['forced']['condition']) &&
-                    $this->checkCondition($answerArr['forced_end']['condition'])
-                ) {
-                    echo 'return $match;';
-                    return $match;
-                }
-
-                // execute function from field "execFunc"
-                if (isset($answerArr['forced_end']['execFunc']))
-                    $this->execFunc($answerArr['forced_end']['execFunc']);
-
-                // return forced_end if is it set
-                return $answerArr['forced_end'] ?? false;
-            }
-        }
-
-        return $match;
-    }
+//    public function getMatchByPrevMess(string $message, array $answerArr)
+//    {
+//        $match = $this->getMatch($message, $answerArr, 'next');
+//
+//        /**
+//         * get "simple" answers from "next" field
+//         * simple answer - answer without "pattern" field
+//         *
+//         * @param array $answersArr - array with "next" field
+//         * @return array
+//         */
+//        function findSimpleAnswer(array $answersArr): array
+//        {
+//            $simpleAnswers = [];
+//
+//            foreach ($answersArr['next'] as $answer) {
+//                if (!isset($answer['pattern'])) $simpleAnswers[] = $answer;
+//            }
+//
+//            return $simpleAnswers;
+//        }
+//
+//        // no match by pattern
+//        if (!$match) {
+//            // Если нет совпадения - возвращаем simpleAnswer
+//            // Если нет этого, то возвращаем forced - сообщение на крайний случай
+//            // если нет и forced, то удаляем из БД prev_mess
+//            // Если forced отработал более трех раз, то возвращаем forced_end
+//
+//            // if no match we need to find answer without pattern - simple answer
+//            $simpleAnswer = findSimpleAnswer($answerArr);
+//
+//            if ($simpleAnswer) {
+//                // remove prev_mess_id from db
+//                $this->setPrevMessageId('');
+//
+//                // execute function from field "execFunc"
+//                if (isset($simpleAnswer['execFunc']))
+//                    $this->execFunc($simpleAnswer['execFunc']);
+//
+//                return $simpleAnswer;
+//            }
+//
+//            // goto "forced"
+//            forced:
+//
+//            // return forced messages
+//            if (isset($answerArr['forced']) && $this->userData['forced_left'] > 0) {
+//                // return FORCED message if forced_left count is not over yet (usually 3 count)
+//                // don't clear prev_message_id because we need to go here again
+//
+//                // go to next block if condition return false
+//                if (
+//                    isset($answerArr['forced']['condition']) &&
+//                    $this->checkCondition($answerArr['forced']['condition'])
+//                ) {
+//                    echo 'goto forced_end;';
+//                    goto forced_end;
+//                }
+//
+//                // decrease forced_left to avoid looping
+//                $this->decreaseForcedLeft();
+//
+//                // execute function from field "execFunc"
+//                if (isset($answerArr['forced']['execFunc']))
+//                    $this->execFunc($answerArr['forced']['execFunc']);
+//
+//                // return forced messages
+//                return $answerArr['forced'];
+//            } else {
+//
+//                // goto "forced_end"
+//                forced_end:
+//
+//                // clear prev_message_id
+//                $this->setPrevMessageId('');
+//
+//                // reset count forced_left
+//                $this->resetForcedLeft();
+//
+//                // return $match (false) if condition return false
+//                if (
+//                    isset($answerArr['forced']['condition']) &&
+//                    $this->checkCondition($answerArr['forced_end']['condition'])
+//                ) {
+//                    echo 'return $match;';
+//                    return $match;
+//                }
+//
+//                // execute function from field "execFunc"
+//                if (isset($answerArr['forced_end']['execFunc']))
+//                    $this->execFunc($answerArr['forced_end']['execFunc']);
+//
+//                // return forced_end if is it set
+//                return $answerArr['forced_end'] ?? false;
+//            }
+//        }
+//
+//        return $match;
+//    }
 
     /**
      * get matches for user's message by pattern and return match with higher priority
@@ -235,55 +235,55 @@ class AbstractStrategy extends VkMessage
      * @param string $answersKey key for get answers
      * @return string|array|false answer variants
      */
-    public function getMatch(string $message, array $dictionary, string $answersKey = 'answers')
-    {
-        if (!$dictionary || !isset($dictionary[$answersKey])) return false;
-
-        $match = false;
-
-        // TODO проверять type
-
-        // no pattern - no match
-        if (gettype($dictionary[$answersKey]) == "string") {
-            // clear prev_message_id because we found answer without 'next'
-            $this->setPrevMessageId('');
-            return $dictionary[$answersKey];
-        }
-
-        // iterate over all answers and search pattern match
-        foreach ($dictionary[$answersKey] as $answer) {
-            // continue if is no pattern
-            if (!isset($answer['pattern'])) continue;
-            if (!$this->checkCondition($answer['condition'] ?? false)) {
-                echo 'continue;';
-                continue;
-            }
-
-            // add /ui flags to support russian language and case insensitivity
-            $pattern = $answer['pattern'] . 'ui';
-
-            // substitute values from wordbook
-            $pattern = $this->patternVarSubstitution($pattern);
-
-            // check match and save answer with higher priority
-            if (preg_match($pattern, $message) && ($answer['priority'] ?? 0) >= ($match['priority'] ?? 0)) {
-                $match = $answer;
-            }
-        }
-
-        // clear prev_message_id because we found answer without 'next'
-        if ($match) $this->setPrevMessageId('');
-
-        // save prev_mess_id if with_prev_messages is set
-        if (isset($match['with_prev_messages']) || isset($match['with_prev_mess_id']))
-            $this->setPrevMessageId($match['with_prev_mess_id']);
-
-        // execute function from field "execFunc"
-        if (isset($match['execFunc']))
-            $this->execFunc($match['execFunc']);
-
-        return $match['messages'] ?? false;
-    }
+//    public function getMatch(string $message, array $dictionary, string $answersKey = 'answers')
+//    {
+//        if (!$dictionary || !isset($dictionary[$answersKey])) return false;
+//
+//        $match = false;
+//
+//        // TODO проверять type
+//
+//        // no pattern - no match
+//        if (gettype($dictionary[$answersKey]) == "string") {
+//            // clear prev_message_id because we found answer without 'next'
+//            $this->setPrevMessageId('');
+//            return $dictionary[$answersKey];
+//        }
+//
+//        // iterate over all answers and search pattern match
+//        foreach ($dictionary[$answersKey] as $answer) {
+//            // continue if is no pattern
+//            if (!isset($answer['pattern'])) continue;
+//            if (!$this->checkCondition($answer['condition'] ?? false)) {
+//                echo 'continue;';
+//                continue;
+//            }
+//
+//            // add /ui flags to support russian language and case insensitivity
+//            $pattern = $answer['pattern'] . 'ui';
+//
+//            // substitute values from wordbook
+//            $pattern = $this->patternVarSubstitution($pattern);
+//
+//            // check match and save answer with higher priority
+//            if (preg_match($pattern, $message) && ($answer['priority'] ?? 0) >= ($match['priority'] ?? 0)) {
+//                $match = $answer;
+//            }
+//        }
+//
+//        // clear prev_message_id because we found answer without 'next'
+//        if ($match) $this->setPrevMessageId('');
+//
+//        // save prev_mess_id if with_prev_messages is set
+//        if (isset($match['with_prev_messages']) || isset($match['with_prev_mess_id']))
+//            $this->setPrevMessageId($match['with_prev_mess_id']);
+//
+//        // execute function from field "execFunc"
+//        if (isset($match['execFunc']))
+//            $this->execFunc($match['execFunc']);
+//
+//        return $match['messages'] ?? false;
+//    }
 
     /**
      * generate message by answers variants
@@ -300,10 +300,35 @@ class AbstractStrategy extends VkMessage
         if (gettype($answer) === "string") {
             return (new AnswerMessage($answer, $this->wordbook))->getMessage();
         } elseif (gettype($answer) === "array") {
+            if(empty($answer)) return 'Бип-боп';
             return $this->generateMessageFromAnswerArray($answer);
         }
 
         return 'Бип-боп';
+    }
+
+    /**
+     * Algorithm to get message from many variants $messages
+     * we can overload this methods in children to change this algorithm
+     *
+     * by default return random message
+     *
+     * @param array $messages array of messages (array of strings and answerArrs)
+     * @return string|array
+     */
+    public function getAnswerByAlgorithm(array $messages)
+    {
+        $answer = $messages[array_rand($messages)];
+
+        // return string because answer is string and there is no condition in string
+        if(gettype($answer) == "string") return $answer;
+
+        // go to next block if condition return false
+        if (!(new AnswerObject($answer, $this->wordbook))->checkCondition()) {
+            return [];
+        }
+
+        return $answer;
     }
 
     /**
@@ -323,30 +348,7 @@ class AbstractStrategy extends VkMessage
         if (!isset($this->dictionary['answers']))
             return $errorMessage; // show error message if no answers
 
-        return $this->generateMessage($this->dictionary['answers']);
-    }
-
-    /**
-     * Algorithm to get message from many variants $messages
-     * we can overload this methods in children to change this algorithm
-     *
-     * by default return random message
-     *
-     * @param string|array $messages
-     * @return string|array
-     */
-    public function getAnswerByAlgorithm($messages)
-    {
-        if (gettype($messages) == "string") return $messages;
-
-        $answer = $messages[array_rand($messages)];
-
-        // go to next block if condition return false
-        if (isset($answer['condition']) && $this->checkCondition($answer['condition'])) {
-            return false;
-        }
-
-        return $answer;
+        return $this->generateMessage((array) $this->dictionary['answers']);
     }
 
     /**
@@ -360,14 +362,14 @@ class AbstractStrategy extends VkMessage
      */
     public function generateMessageFromAnswerArray(array $answerArr): string
     {
-        if(!(new AnswerObject($answerArr))->checkCondition())
+        if(!(new AnswerObject($answerArr, $this->wordbook))->checkCondition())
             return 'Бип-боп';
 
         // do actions
         $this->doActions($answerArr);
 
         // recursively generate message from messages of this answer
-        return $this->generateMessage($answerArr['messages']);
+        return $this->generateMessage((array) $answerArr['messages']);
 
 //        // save in DB with_prev_mess_id if is it set
 //        if (

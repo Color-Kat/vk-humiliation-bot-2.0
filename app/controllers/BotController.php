@@ -16,7 +16,6 @@ class BotController extends Controller
 
     public function indexAction()
     {
-        // TODO сделать контроллер для автоматического создания bigDictionary
         $data = json_decode(file_get_contents('php://input'));
 
 //        $user = $this->model->addUser(12345678, 'Олег', 'Закадычный');
@@ -24,7 +23,6 @@ class BotController extends Controller
 //        $user = $this->model->set_prev_message_id(15, 'apchhi');
 //        $user = $this->model->deleteUser(16);
 //        $user = $this->model->addUser(41846124, 'Густов', 'Ган Христиан');
-
 
         echo (new Bot($data))->run();
     }

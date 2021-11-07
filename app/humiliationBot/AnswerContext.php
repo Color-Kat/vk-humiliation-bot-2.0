@@ -36,14 +36,16 @@ class AnswerContext
         $answerArr = $this->strategy->parse();
 
         // do other action
-        $this->strategy->doActions($answerArr);
+        if($answerArr) $this->strategy->doActions($answerArr);
 
         // generate message
-        $message = $this->strategy->generateAnswer($answerArr['messages']);
+        $message = $this->strategy->generateAnswer($answerArr['messages'] ?? false);
+
+        echo $message;
 
         $this->strategy->setMessage($message);
         $this->strategy->getStickerId($message);
-
+//
         $this->strategy->sendMessage();
 
         return true;

@@ -2,6 +2,7 @@
 
 namespace humiliationBot;
 
+use app\lib\Log;
 use app\models\User;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
@@ -86,19 +87,19 @@ class Bot
 
                 return 'ok';
 
-            case 'group_join':
-                (new AnswerContext(
-                    new GroupJoinStrategy($this->data)
-                ))->answer();
-
-                return 'ok';
-
-            case 'group_leave':
-                (new AnswerContext(
-                    new GroupLeaveStrategy($this->data)
-                ))->answer();
-
-                return 'ok';
+//            case 'group_join':
+//                (new AnswerContext(
+//                    new GroupJoinStrategy($this->data)
+//                ))->answer();
+//
+//                return 'ok';
+//
+//            case 'group_leave':
+//                (new AnswerContext(
+//                    new GroupLeaveStrategy($this->data)
+//                ))->answer();
+//
+//                return 'ok';
 
 //            case 'message_reply':
 //                return 'ok';

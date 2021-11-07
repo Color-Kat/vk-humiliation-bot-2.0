@@ -53,11 +53,11 @@ class Router
         $url = $this->getUrl();
 
         foreach ($this->routes as $route) {
-            $routMethod = strtolower($route['method']);
+            $routeMethod = strtolower($route['method']);
             $method = strtolower($_SERVER['REQUEST_METHOD']);
 
             // check are methods equal
-            if ($routMethod != $method) continue;
+            if ($routeMethod != $method) continue;
 
             if (preg_match(
                 '/^' . $route['route'] . '$/',
