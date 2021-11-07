@@ -90,7 +90,7 @@ trait DictionaryLoader
      * @param string|false $with_prev_mess_id id of answer with property with_prev_messages
      * @return array|false answer
      */
-    public function getAnswerByPrevMessId($with_prev_mess_id)
+    public function loadAnswerByPrevMessId($with_prev_mess_id)
     {
         // return a ready answer if this answer has already been found
         if (isset($this->with_prev_messages[$with_prev_mess_id]))

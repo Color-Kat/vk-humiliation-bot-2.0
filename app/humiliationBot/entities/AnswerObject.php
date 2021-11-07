@@ -2,6 +2,7 @@
 
 namespace humiliationBot\entities;
 
+use humiliationBot\traits\ExecFunctionsTrait;
 use humiliationBot\traits\PatternProcessingTrait;
 
 /**
@@ -11,6 +12,9 @@ class AnswerObject
 {
     // methods to processing answer pattern
     use PatternProcessingTrait;
+
+    // methods that uses in dictionaries in "execFunc"
+    use ExecFunctionsTrait;
 
     /**
      * @var array original answer array
@@ -81,10 +85,11 @@ class AnswerObject
             ? $this->patternProcessing($answerArrOriginal['pattern'])
             : false;
         $this->priority = $answerArrOriginal['priority'] ?? 0;
-        $this->messages = new AnswerFacade([
-            "original" => $answerArrOriginal,
-            "messages" => $answerArrOriginal['messages']
-        ], $this->wordbook);
+//        $this->messages = new Answers([
+//            "original" => $answerArrOriginal,
+//            "messages" => $answerArrOriginal['messages']
+//        ], $this->wordbook);
+        $this->messages = new Answers($answerArrOriginal, $this->wordbook);
         $this->with_prev_messages = $answerArrOriginal['with_prev_messages'] ?? false;
         $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'] ?? false;
         $this->execFunc = $answerArrOriginal['execFunc'] ?? false;
@@ -95,15 +100,16 @@ class AnswerObject
      * check does user's message strict match PATTERN this AnswerObject
      *
      * @param string $u_message user's message
-     * @param int $minPriority minimal priority to match
+     * @param ?int $minPriority minimal priority to match
      * @return array|false return false if it doesn't match, return answerArr if it matches
      */
-    public function getMatch(string $u_message, int &$minPriority)
+    public function getMatch(string $u_message, ?int &$minPriority = 0, bool $isStrict = true)
     {
-//        if (!$this->pattern) {
-//            return $this->answerArrOriginal; // no pattern - return original answer arr
-//        }
-        if(!$this->pattern) return false;
+        if(!$this->pattern) {
+            if ($isStrict) return false;
+            else return $this->answerArrOriginal;
+        }
+
         if (!$this->checkCondition()) return false; // return false if condition return false
 
         // processing pattern string (substitution wordbook vars, add flags)
@@ -111,7 +117,7 @@ class AnswerObject
 
         // check match and
         // return original answer arr if priority is higher that minPriority
-        if (preg_match($pattern, $u_message) && $this->priority >= ($minPriority ?? 0)) {
+        if (preg_match($pattern, $u_message) && $this->priority >= $minPriority) {
             $minPriority = $this->priority; // update global priority
             return $this->answerArrOriginal;
         }

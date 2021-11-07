@@ -5,11 +5,15 @@ namespace humiliationBot\entities;
 /**
  * class to work with any answers
  */
-class AnswerFacade
+class Answers
 {
 
-    private $dictionary;
+    /**
+     * @var array
+     */
+    private array $dictionary;
 
+    private string $type;
 
     private $answerTree;
 
@@ -19,17 +23,20 @@ class AnswerFacade
     private array $wordbook = [];
 
     /**
-     * @param array[]|string[] $dictionary array [type => answer (array or string)]
+     * @param array|string $dictionary array [type => answer (array or string)]
      * @param array $wordbook
      */
-    public function __construct(array $dictionary, array $wordbook)
+    public function __construct($dictionary, array $wordbook)
     {
-        $this->dictionary = $dictionary;
+        if (gettype($dictionary) == "string") $this->type = "string";
+        if (gettype($dictionary) == "array") $this->type = "array";
+
+        $this->dictionary = gettype($dictionary) == "string"
+            ? ["messages" => $dictionary]
+            : $dictionary;
 
         // set wordbook
         $this->wordbook = $wordbook;
-
-//        $this->answerTree = $this->buildTree($answers);
     }
 
     /**
@@ -64,7 +71,10 @@ class AnswerFacade
      */
     public function getAnswer(string $u_message, string $messagesKey = "messages")
     {
-        $answers = $this->dictionary[$messagesKey];
+        // if we have one string in answer - return answer
+        if($this->type == "string") return ['messages' => $this->dictionary['messages']];
+
+        $answers = $this->dictionary[$messagesKey] ?? false;
 
         if (!$answers) return false;
 
@@ -91,23 +101,30 @@ class AnswerFacade
     }
 
     /**
-     * @return array|string
+     * get answer array by prev_mess_id
+     *
+     * - at first try to get answer from "next" by pattern
+     * - secondly try to get answer from "forced" if forced_left != 0
+     * - third try to get answer from "forced_end"
+     * - and return false if no answer is found
+     *
+     * @return array|false array with "messages" key
      */
-    public function getAnswerByPrevMess(string $u_message, int $forced_left)
+    public function getAnswerByPrevMess(string $u_message, callable $forcedCounter)
     {
         // get strict match BY PATTERN
         $strictMatch = $this->getAnswer($u_message, 'next');
         if ($strictMatch) return $strictMatch;
 
         // create dictionary copy to change it and return
-        $dictionaryCopy = $this->dictionary['next'];
+        $dictionaryCopy = $this->dictionary;
 
         // ========== SIMPLE ANSWERS ========== //
         // no answer by pattern
         // search answers without pattern
         $simpleAnswer = $this->getSimpleAnswer('next');
         if ($simpleAnswer) {
-            $dictionaryCopy['messages'] = $simpleAnswer;
+            $dictionaryCopy['messages'] = (array) $simpleAnswer;
             return $dictionaryCopy;
         }
         // ------------------------------------ //
@@ -115,14 +132,15 @@ class AnswerFacade
         // ========== FORCED ANSWERS ========== //
         // if no simple answers - return forced messages
         if(
-            $this->dictionary['forced'] &&
-            $forced_left > 0 &&
+            isset($this->dictionary['forced']) &&
+            call_user_func($forcedCounter, 'get') > 0 &&
             $this->checkCondition($this->dictionary['forced']) // check is condition met in forced
         ){
-            // TODO reduce forced_left
+            call_user_func($forcedCounter, 'decrease');
 
             // change messages in answer array
-            $dictionaryCopy['messages'] = $this->dictionary['forced'];
+            $dictionaryCopy['messages'] = (array) $this->dictionary['forced'];
+            $dictionaryCopy['doAction'] = ["savePrevMessId" => true]; // set action to don't reset prev_mess_id in db
             return $dictionaryCopy;
         }
         // ----------------------------------- //
@@ -130,13 +148,13 @@ class AnswerFacade
         //  ========== FORCED_END ANSWERS ========== //
         // if forced doesn't match condition or forced_left count is 0
         if(
-            $this->dictionary['forced_end'] &&
+            isset($this->dictionary['forced_end']) &&
             $this->checkCondition($this->dictionary['forced_end']) // check is condition met in forced
         ){
-            // TODO clear forced_left
+            call_user_func($forcedCounter, 'reset');
 
             // change messages in answer array
-            $dictionaryCopy['messages'] = $this->dictionary['forced_end'];
+            $dictionaryCopy['messages'] = (array) $this->dictionary['forced_end'];
             return $dictionaryCopy;
         }
         // ----------------------------------------- //

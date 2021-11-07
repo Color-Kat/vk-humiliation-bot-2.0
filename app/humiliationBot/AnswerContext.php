@@ -32,11 +32,14 @@ class AnswerContext
 
     public function answer(): bool
     {
-        // get answer variants by user's message
-        $answerVariants = $this->strategy->parse();
+        // get answer array by user's message, prev_mess_id and other
+        $answerArr = $this->strategy->parse();
+
+        // do other action
+        $this->strategy->doActions($answerArr);
 
         // generate message
-        $message = $this->strategy->generateAnswer($answerVariants);
+        $message = $this->strategy->generateAnswer($answerArr['messages']);
 
         $this->strategy->setMessage($message);
         $this->strategy->getStickerId($message);
