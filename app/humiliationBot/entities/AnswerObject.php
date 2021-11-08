@@ -85,10 +85,6 @@ class AnswerObject
             ? $this->patternProcessing($answerArrOriginal['pattern'])
             : '';
         $this->priority = $answerArrOriginal['priority'] ?? 0;
-//        $this->messages = new Answers([
-//            "original" => $answerArrOriginal,
-//            "messages" => $answerArrOriginal['messages']
-//        ], $this->wordbook);
         $this->messages = new Answers($answerArrOriginal, $this->wordbook);
         $this->with_prev_messages = $answerArrOriginal['with_prev_messages'] ?? false;
         $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'] ?? false;
@@ -105,7 +101,7 @@ class AnswerObject
      */
     public function getMatch(string $u_message, ?int &$minPriority = 0, bool $isStrict = true)
     {
-        if(!$this->pattern) {
+        if (!$this->pattern) {
             if ($isStrict) return false;
             else return $this->answerArrOriginal;
         }
@@ -137,14 +133,13 @@ class AnswerObject
 
         $condition = $this->conditions;
 
-//        foreach ($this->conditions as $condition) {
-            // check is var set in wordbook
-            if (isset($condition['isset'])) {
-                foreach ($condition['isset'] as $var) {
-                    if (!isset($this->wordbook[$var])) return false;
-                }
+        // check is var set in wordbook
+        if (isset($condition['isset'])) {
+            foreach ($condition['isset'] as $var) {
+                if (!isset($this->wordbook[$var]) || !$this->wordbook[$var])
+                    return false;
             }
-//        }
+        }
 
         // return true if every condition didn't return false
         return true;

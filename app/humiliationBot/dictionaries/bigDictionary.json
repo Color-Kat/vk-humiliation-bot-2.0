@@ -31,9 +31,9 @@
     "answers":  [
       {
         "conditions": {
-          "isset": ["insult123"]
+          "isset": ["aliasName"]
         },
-        "messages": "123"
+        "messages": "Твоя кличка - (@aliasName)"
       }
     ]
   }
