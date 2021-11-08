@@ -87,19 +87,19 @@ class Bot
 
                 return 'ok';
 
-//            case 'group_join':
-//                (new AnswerContext(
-//                    new GroupJoinStrategy($this->data)
-//                ))->answer();
-//
-//                return 'ok';
-//
-//            case 'group_leave':
-//                (new AnswerContext(
-//                    new GroupLeaveStrategy($this->data)
-//                ))->answer();
-//
-//                return 'ok';
+            case 'group_join':
+                (new AnswerContext(
+                    new GroupJoinStrategy($this->data)
+                ))->answer();
+
+                return 'ok';
+
+            case 'group_leave':
+                (new AnswerContext(
+                    new GroupLeaveStrategy($this->data)
+                ))->answer();
+
+                return 'ok';
 
 //            case 'message_reply':
 //                return 'ok';

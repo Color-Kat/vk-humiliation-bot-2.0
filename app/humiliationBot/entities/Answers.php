@@ -114,7 +114,7 @@ class Answers
     {
         // get strict match BY PATTERN
         $strictMatch = $this->getAnswer($u_message, 'next');
-        if ($strictMatch) return $strictMatch;
+        if ($strictMatch) return (array) $strictMatch;
 
         // create dictionary copy to change it and return
         $dictionaryCopy = $this->dictionary;
@@ -192,6 +192,8 @@ class Answers
     private function getSimpleAnswer(string $messagesKey = "next"): array
     {
         $answers = (array) $this->dictionary[$messagesKey];
+
+        echo '$answers'; print_r($answers);
 
         $simpleAnswers = [];
 

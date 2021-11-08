@@ -62,8 +62,6 @@ trait Vk
         $user_info = $user->getUser($this->user_id);
 
         if (!$user_info || !$user_info['user_info']) {
-            echo 'VK API';
-
             // get data from vk api
             $this->user_fields = $this->vk->users()->get($this->access_token, [
                 'user_ids' => $this->user_id,
@@ -121,7 +119,7 @@ trait Vk
      */
     public function getBirth(): string
     {
-        return $this->user_fields['bdate'];
+        return $this->user_fields['bdate'] ?? '01.01.2004';
     }
 
     /**

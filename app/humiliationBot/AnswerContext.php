@@ -39,14 +39,14 @@ class AnswerContext
         if($answerArr) $this->strategy->doActions($answerArr);
 
         // generate message
-        $message = $this->strategy->generateAnswer($answerArr['messages'] ?? false);
+        $message = $this->strategy->getAnswerMessage($answerArr['messages'] ?? false);
 
         echo $message;
 
-        $this->strategy->setMessage($message);
-        $this->strategy->getStickerId($message);
-//
-        $this->strategy->sendMessage();
+//        $this->strategy->setMessage($message);
+//        $this->strategy->getStickerId($message);
+
+//        $this->strategy->sendMessage();
 
         return true;
     }

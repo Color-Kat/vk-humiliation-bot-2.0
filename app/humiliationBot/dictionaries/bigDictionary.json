@@ -24,127 +24,17 @@
   },
   "name_simple": {
     "name": "simple",
-    "answers": [
-      {
-        "pattern": "\/оапавопрвардпварпдл\/",
-        "priority": 0,
-        "messages": "Ты хрень какую-то написал"
-      },
-      {
-        "pattern": "\/ты (@insult)!*\/",
-        "priority": 1,
-        "messages": [
-          "Уходи отсюда!",
-          "Нет, я не такой, а ты (@insult)",
-          {
-            "with_prev_messages": true,
-            "with_prev_mess_id": "little_train",
-            "messages": "Нет, но хочешь я расскажу тебе историю о паровозике??",
-            "next": [
-              {
-                "with_prev_messages": true,
-                "with_prev_mess_id": "little_train_1",
-                "pattern": "\/да\/",
-                "messages": "Долгая история...",
-                "next": "Вот и сказочки конец"
-              },
-              {
-                "pattern": "\/нет\/",
-                "messages": [
-                  "я ненавижу тебя",
-                  "уходи отсюда, (@insult), здесь тебе больше не рады!"
-                ]
-              }
-            ],
-            "forced": "ответь да или нет!",
-            "forced_end": "Окей, я понял, что тебе это не интересно"
-          }
-        ]
-      },
-      {
-        "pattern": "\/ты (@insult)!\/",
-        "priority": 2,
-        "messages": [
-          "не повышай на меня голос!",
-          "(sticker_bang_bang)"
-        ]
-      },
-      {
-        "pattern": "\/^нет$\/",
-        "priority": 2,
-        "type": "text",
-        "messages": [
-          "гея ответ"
-        ]
-      },
-      {
-        "pattern": "\/Ты (@praise)\/",
-        "messages": [
-          "Да, я такой) Ты тоже (@praise)",
-          {
-            "messages": "Ага, пасиб, хочешь сказку про паровозик?",
-            "with_prev_messages": true,
-            "with_prev_mess_id": "little_train_history",
-            "next": [
-              {
-                "pattern": "\/(давай|хочу|ну)\/",
-                "messages": "Жил как-то паровозик..."
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    "answers": []
   },
   "name_standard": {
     "name": "standard",
-    "answers": [
+    "answers":  [
       {
-        "conditions": [
-          {
-            "isset": [
-              "aliasName123"
-            ]
-          }
-        ],
-        "messages": [
-          "Я придумаю тебе кличку",
-          "Надо тебе кличку придумать",
-          "Может тебе кличку нужно придумать?",
-          "Хехехе, щас тебе кличку придумаю)))"
-        ],
-        "with_prev_messages": true,
-        "with_prev_mess_id": "need_to_create_alias_name",
-        "execFunc": [
-          "createAliasName"
-        ],
-        "next": [
-          {
-            "conditions": [
-              {
-                "isset": [
-                  "aliasName123"
-                ]
-              }
-            ],
-            "messages": [
-              "Буду называть тебя (@aliasName)",
-              {
-                "with_prev_messages": true,
-                "with_prev_mess_id": "need_to_create_alias_name_1",
-                "messages": [
-                  "Хм, в голову чет ничего не приходит..."
-                ],
-                "execFunc": [
-                  "createAliasName"
-                ],
-                "next": "Придумал! Буду называть тебя (@aliasName)! Апхапх"
-              }
-            ]
-          }
-        ]
-      },
-      "Это ты создатель сервиса доставки удовольствия яндекс.елда?"
+        "conditions": {
+          "isset": ["insult123"]
+        },
+        "messages": "123"
+      }
     ]
   }
 }

@@ -39,9 +39,9 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     /**
      * @inheritdoc
      */
-    public function generateAnswer($messages): string
+    public function getAnswerMessage($messages): string
     {
         if (!$messages) return $this->generateStandardAnswer();
-        else return $this->generateMessage($messages);
+        else return $this->generateAnswerMessage($messages);
     }
 }

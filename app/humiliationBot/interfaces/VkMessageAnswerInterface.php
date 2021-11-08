@@ -26,11 +26,11 @@ interface VkMessageAnswerInterface extends VkMessageInterface
      */
     public function doActions(array $answerArr);
     /**
-     * generate message from $answerArr
+     * get and process one string message from $messages
      *
      * @param array|false $messages array with messages to create message
      *
      * @return string generated answer
      */
-    public function generateAnswer($messages): string;
+    public function getAnswerMessage($messages): string;
 }

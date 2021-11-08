@@ -286,13 +286,43 @@ class AbstractStrategy extends VkMessage
 //    }
 
     /**
-     * generate message by answers variants
-     * with using getAnswerAlgorithm()
+     * generate message by array $messages
+     * with using getAnswerAlgorithm().
+     * getAnswerAlgorithm() can be overloaded in strategy
      *
      * @param array $messages answer variants
-     * @return string ready message
+     * @return string ready string message
      */
-    public function generateMessage(array $messages): string
+    public function generateAnswerMessage(array $messages): string
+    {
+        // try to generate message
+        $message = $this->generateMessage($messages);
+
+        if ($message) return $message; // message is created, return it
+        else {
+            // ===== failed to create message ===== //
+
+            // try to create a new message if it was not possible to create this message
+            // we have 10 attempts to create new answer
+            // this is to avoid the loop
+            for ($attempts = 10; $attempts > 0; $attempts--) {
+                $message = $this->generateMessage($messages);
+                if ($message) return $message;
+            }
+
+            // failed to create message
+            return 'Бип-боп';
+        }
+    }
+
+    /**
+     * try to generate message by array $messages
+     * return false if can't
+     *
+     * @param array $messages answer variants
+     * @return string|false ready message if success
+     */
+    public function generateMessage(array $messages)
     {
         // select one concrete answer array
         $answer = $this->getAnswerByAlgorithm($messages);
@@ -300,11 +330,11 @@ class AbstractStrategy extends VkMessage
         if (gettype($answer) === "string") {
             return (new AnswerMessage($answer, $this->wordbook))->getMessage();
         } elseif (gettype($answer) === "array") {
-            if(empty($answer)) return 'Бип-боп';
+            if (empty($answer)) return false;
             return $this->generateMessageFromAnswerArray($answer);
         }
 
-        return 'Бип-боп';
+        return false;
     }
 
     /**
@@ -321,7 +351,7 @@ class AbstractStrategy extends VkMessage
         $answer = $messages[array_rand($messages)];
 
         // return string because answer is string and there is no condition in string
-        if(gettype($answer) == "string") return $answer;
+        if (gettype($answer) == "string") return $answer;
 
         // go to next block if condition return false
         if (!(new AnswerObject($answer, $this->wordbook))->checkCondition()) {
@@ -348,7 +378,7 @@ class AbstractStrategy extends VkMessage
         if (!isset($this->dictionary['answers']))
             return $errorMessage; // show error message if no answers
 
-        return $this->generateMessage((array) $this->dictionary['answers']);
+        return $this->generateAnswerMessage((array)$this->dictionary['answers']);
     }
 
     /**
@@ -358,18 +388,18 @@ class AbstractStrategy extends VkMessage
      *  - execute functions
      *
      * @param array $answerArr answer variants
-     * @return string final string message
+     * @return string|false final string message if success
      */
-    public function generateMessageFromAnswerArray(array $answerArr): string
+    public function generateMessageFromAnswerArray(array $answerArr)
     {
-        if(!(new AnswerObject($answerArr, $this->wordbook))->checkCondition())
-            return 'Бип-боп';
+        if (!(new AnswerObject($answerArr, $this->wordbook))->checkCondition())
+            return false;
 
         // do actions
         $this->doActions($answerArr);
 
         // recursively generate message from messages of this answer
-        return $this->generateMessage((array) $answerArr['messages']);
+        return $this->generateMessage((array)$answerArr['messages']);
 
 //        // save in DB with_prev_mess_id if is it set
 //        if (
@@ -409,7 +439,7 @@ class AbstractStrategy extends VkMessage
     }
 
     /**
-     * try to execute frunctions from array
+     * try to execute functions from array
      *
      * @param array $execList array with function names
      */
@@ -419,33 +449,5 @@ class AbstractStrategy extends VkMessage
             if (method_exists($this, $funcName))
                 $this->$funcName();
         }
-    }
-
-    /**
-     * check condition block in answer:
-     *  - isset : check is variables set in wordbook
-     *
-     *
-     * @param array|false $conditions
-     * @return bool is condition true
-     */
-    public function checkCondition($conditions): bool
-    {
-        // no condition - no problem
-        if (!$conditions) return false;
-
-        foreach ($conditions as $condition) {
-            // check is var set in wordbook
-            if (isset($condition['isset'])) {
-                foreach ($condition['isset'] as $var) {
-                    echo $var;
-                    echo !isset($this->wordbook[$var]) ? 'НЕТУ!' : 'ЕСТЬ';
-                    if (!isset($this->wordbook[$var])) return true;
-                }
-            }
-        }
-
-        // return true if every condition didn't return false
-        return false;
     }
 }
