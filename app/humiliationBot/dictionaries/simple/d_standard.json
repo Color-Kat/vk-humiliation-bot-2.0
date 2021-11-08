@@ -34,7 +34,7 @@
       },
       {
         "conditions": [
-          {"isset" : ["aliasName123"]}
+          {"isset" : ["aliasName"]}
         ],
         "messages": [
           "Я придумаю тебе кличку",
@@ -48,7 +48,7 @@
         "next": [
           {
             "conditions": [
-              {"isset" : ["aliasName123"]}
+              {"isset" : ["aliasName"]}
             ],
             "messages" : [
               "Буду называть тебя (@aliasName)",

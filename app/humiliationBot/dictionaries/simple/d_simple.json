@@ -12,6 +12,7 @@
         "pattern": "/ты (@insult)!*/",
         "priority": 1,
         "messages": [
+          "(sticker_bang_bang)",
           "Уходи отсюда!",
           "Нет, я не такой, а ты (@insult)",
           {

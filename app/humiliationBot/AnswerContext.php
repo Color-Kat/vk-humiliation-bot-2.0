@@ -41,12 +41,10 @@ class AnswerContext
         // generate message
         $message = $this->strategy->getAnswerMessage($answerArr['messages'] ?? false);
 
-        echo $message;
+        $this->strategy->setMessage($message);
+        $this->strategy->sticker($message);
 
-//        $this->strategy->setMessage($message);
-//        $this->strategy->getStickerId($message);
-
-//        $this->strategy->sendMessage();
+        $this->strategy->sendMessage();
 
         return true;
     }
