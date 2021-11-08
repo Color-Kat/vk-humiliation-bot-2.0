@@ -1,4 +1,24 @@
 {
+  "id_first" : {
+    "with_prev_messages": true,
+    "with_prev_mess_id": "first",
+    "messages": "первое сообщение",
+    "next": [
+      {
+        "pattern": "/второе/",
+        "messages":[
+          "А вот и оно",
+          {
+            "execFunc": "createAliasName",
+            "messages" : "А вот и оно и кличка!"
+          }
+        ]
+      }
+    ],
+    "forced": "спроси про второе!",
+    "forced_end": "Да иди ты в жопу!"
+  },
+
   "id_little_train": {
     "with_prev_messages": true,
     "with_prev_mess_id": "little_train",

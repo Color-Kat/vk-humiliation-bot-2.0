@@ -105,18 +105,22 @@ class AbstractStrategy extends VkMessage
     public function doActions(array $answerArr)
     {
         // ======== PREV_MESS_ID ========== //
-        // update prev_mess_id in db if we have an answer with "prev_mess_id"
-        if (isset($answerArr['with_prev_messages']) || isset($answerArr['with_prev_mess_id'])) {
+        // update prev_mess_id in db if we have an answer with NEW "prev_mess_id"
+        if (
+            (isset($answerArr['with_prev_messages']) ||
+                isset($answerArr['with_prev_mess_id'])) &&
+            $answerArr['with_prev_mess_id'] != $this->getPrevMessageId()
+        ) {
             $this->setPrevMessageId($answerArr['with_prev_mess_id']);
         } // reset prev_mess_id ONLY if is savePrevMessId not set
-        else if (!isset($answerArr['doLogic']['savePrevMessId'])) {
+        else if (!isset($answerArr['doAction']['savePrevMessId'])) {
             // clear prev_mess_id
             $this->setPrevMessageId('');
         }
         // ================================ //
 
         // ========== ExecFunc ========== //
-        $this->execFunc($answerArr['execFunc'] ?? []);
+        $this->execFunc((array) ($answerArr['execFunc'] ?? []));
         // ============================== //
     }
 
@@ -311,8 +315,16 @@ class AbstractStrategy extends VkMessage
                 if ($message) return $message;
             }
 
+            $failedMessages = [
+                'Бип-боп',
+                '*Искрится*',
+                'жжжжжжжжжж',
+                'пип-пиип',
+                'вииииииии-вшш'
+            ];
+
             // failed to create message
-            return 'Бип-боп';
+            return $failedMessages[array_rand($failedMessages)];
         }
     }
 
@@ -401,26 +413,6 @@ class AbstractStrategy extends VkMessage
 
         // recursively generate message from messages of this answer
         return $this->generateMessage((array)$answerArr['messages']);
-
-//        // save in DB with_prev_mess_id if is it set
-//        if (
-//            isset($answerArr['with_prev_messages']) ||
-//            isset($answerArr['with_prev_mess_id'])
-//        ) {
-//            $this->setPrevMessageId($answerArr['with_prev_mess_id']);
-//        }
-//
-//        // go to next block if condition return false
-//        if (isset($answerArr['condition']) && $this->checkCondition($answerArr['condition'])) {
-//            return 'Бип-боп';
-//        }
-//
-//        // execute function from "execFunc"
-//        if (isset($answerArr['execFunc']))
-//            $this->execFunc($answerArr['execFunc']);
-//
-//        // return recursive generating string message ;)
-//        return $this->generateMessage($answerArr['messages']);
     }
 
     /**

@@ -15,8 +15,6 @@ class Answers
 
     private string $type;
 
-    private $answerTree;
-
     /**
      * @var array array with variables to be substituted into a string
      */
@@ -114,7 +112,10 @@ class Answers
     {
         // get strict match BY PATTERN
         $strictMatch = $this->getAnswer($u_message, 'next');
-        if ($strictMatch) return (array) $strictMatch;
+        if ($strictMatch) {
+            call_user_func($forcedCounter, 'reset'); // recet forced_end counter
+            return (array)$strictMatch;
+        }
 
         // create dictionary copy to change it and return
         $dictionaryCopy = $this->dictionary;
@@ -123,7 +124,9 @@ class Answers
         // no answer by pattern
         // search answers without pattern
         $simpleAnswer = $this->getSimpleAnswer('next');
+
         if ($simpleAnswer) {
+            call_user_func($forcedCounter, 'reset'); // recet forced_end counter
             $dictionaryCopy['messages'] = (array) $simpleAnswer;
             return $dictionaryCopy;
         }
@@ -133,20 +136,30 @@ class Answers
         // if no simple answers - return forced messages
         if(
             isset($this->dictionary['forced']) &&
-            call_user_func($forcedCounter, 'get') > 0 &&
+            call_user_func($forcedCounter, 'get') > 0 && // check forced_left to avoid loop
             $this->checkCondition($this->dictionary['forced']) // check is condition met in forced
         ){
-            call_user_func($forcedCounter, 'decrease');
-
             // change messages in answer array
             $dictionaryCopy['messages'] = (array) $this->dictionary['forced'];
-            $dictionaryCopy['doAction'] = ["savePrevMessId" => true]; // set action to don't reset prev_mess_id in db
+
+            // decrease forced-left or reset
+            call_user_func($forcedCounter, 'decrease');
+            $dictionaryCopy['doAction'] = ["savePrevMessId" => true];
+//            if(call_user_func($forcedCounter, 'get') - 1 > 0){
+//                call_user_func($forcedCounter, 'decrease');
+//
+//                // set action to don't reset prev_mess_id in db
+//                $dictionaryCopy['doAction'] = ["savePrevMessId" => true];
+//            }
+//            else call_user_func($forcedCounter, 'reset');
+
             return $dictionaryCopy;
         }
         // ----------------------------------- //
 
         //  ========== FORCED_END ANSWERS ========== //
         // if forced doesn't match condition or forced_left count is 0
+        echo isset($this->dictionary['forced_end']) ? 'forced_end is set': 'forced_end isnt set';
         if(
             isset($this->dictionary['forced_end']) &&
             $this->checkCondition($this->dictionary['forced_end']) // check is condition met in forced
@@ -193,20 +206,11 @@ class Answers
     {
         $answers = (array) $this->dictionary[$messagesKey];
 
-        echo '$answers'; print_r($answers);
-
         $simpleAnswers = [];
 
         foreach ($answers as $answer) {
             if (!isset($answer['pattern'])) {
                 // check condition if answer is array
-//                if (isset($answer['condition'])) {
-//                    $answerObj = new AnswerObject($answer, $this->wordbook);
-//
-//                    // continue because condition is not met
-//                    if(!$answerObj->checkCondition()) continue;
-//                }
-
                 if(!$this->checkCondition($answer)) continue;
 
                 $simpleAnswers[] = $answer;

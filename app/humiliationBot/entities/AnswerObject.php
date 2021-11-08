@@ -88,8 +88,8 @@ class AnswerObject
         $this->messages = new Answers($answerArrOriginal, $this->wordbook);
         $this->with_prev_messages = $answerArrOriginal['with_prev_messages'] ?? false;
         $this->with_prev_mess_id = $answerArrOriginal['with_prev_mess_id'] ?? false;
-        $this->execFunc = $answerArrOriginal['execFunc'] ?? [];
-        $this->conditions = $answerArrOriginal['conditions'] ?? [];
+        $this->execFunc = (array) ($answerArrOriginal['execFunc'] ?? []);
+        $this->conditions = (array) ($answerArrOriginal['conditions'] ?? []);
     }
 
     /**
@@ -115,6 +115,11 @@ class AnswerObject
         // return original answer arr if priority is higher that minPriority
         if (preg_match($pattern, $u_message) && $this->priority >= $minPriority) {
             $minPriority = $this->priority; // update global priority
+
+            // typing messages to array
+            $this->answerArrOriginal['messages'] = (array) $this->answerArrOriginal['messages'];
+
+            // return original answer ARRAY
             return $this->answerArrOriginal;
         }
 
@@ -135,8 +140,6 @@ class AnswerObject
         // WE RETURN FALSE ;)
 
         $condition = $this->conditions;
-
-        print_r($condition);
 
         // check is var set in wordbook
         if (isset($condition['isset'])) {

@@ -24,7 +24,12 @@
   },
   "name_simple": {
     "name": "simple",
-    "answers": []
+    "answers": [
+      {
+        "pattern": "/ты (@insult)/",
+        "messages": "сам!"
+      }
+    ]
   },
   "name_standard": {
     "name": "standard",
@@ -34,20 +39,13 @@
           "true": "isSubscribed"
         },
         "messages": [
-          "Ты меня даже подписан! Круто",
           {
-            "conditions": {
-              "isset": "aliasName"
-            },
-            "messages": "Я горжусь собой! (@aliasName) подписан на меня!"
+            "with_prev_messages": true,
+            "with_prev_mess_id": "first",
+            "messages": "первое сообщение",
+            "next": "второе сообщение"
           }
         ]
-      },
-      {
-        "conditions": {
-          "false": "isSubscribed"
-        },
-        "messages": "Ты не подписан!"
       }
     ]
   }
