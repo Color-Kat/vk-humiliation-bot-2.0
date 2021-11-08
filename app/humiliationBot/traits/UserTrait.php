@@ -80,6 +80,13 @@ trait UserTrait
     }
 
     /**
+     * return current isSubscribed field
+     */
+    public function isSubscribed(){
+        return $this->userData['isSubscribed'] ?? false;
+    }
+
+    /**
      * set isSubscribed field to true in db
      */
     public function subscribe(){

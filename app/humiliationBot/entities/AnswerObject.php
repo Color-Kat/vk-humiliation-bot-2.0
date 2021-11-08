@@ -131,13 +131,36 @@ class AnswerObject
         // no condition - no problem
         if (!$this->conditions) return true;
 
+        // IF ONLY ONE CONDITION RETURN FALSE
+        // WE RETURN FALSE ;)
+
         $condition = $this->conditions;
+
+        print_r($condition);
 
         // check is var set in wordbook
         if (isset($condition['isset'])) {
-            foreach ($condition['isset'] as $var) {
+            foreach ((array) $condition['isset'] as $var) {
                 if (!isset($this->wordbook[$var]) || !$this->wordbook[$var])
                     return false;
+            }
+        }
+
+        // check is some variable is TRUE
+        if (isset($condition['true'])) {
+            foreach ((array) $condition['true'] as $var) {
+                if (isset($this->wordbook[$var])){
+                    if ($this->wordbook[$var] != true) return false;
+                } else return false;
+            }
+        }
+
+        // check is some variable is FALSE
+        if (isset($condition['false'])) {
+            foreach ((array) $condition['false'] as $var) {
+                if (isset($this->wordbook[$var])){
+                    if ($this->wordbook[$var] != false) return false;
+                } else return false;
             }
         }
 

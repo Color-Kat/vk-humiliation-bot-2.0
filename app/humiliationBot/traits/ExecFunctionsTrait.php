@@ -15,8 +15,7 @@ trait ExecFunctionsTrait
 
         $aliasList = $this->wordbook['aliasNames'];
 
-        echo $aliasList[array_rand($aliasList)];
-
+        // set random aliasName in db
         $this->setAliasName($aliasList[array_rand($aliasList)]);
     }
 }

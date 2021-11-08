@@ -28,12 +28,26 @@
   },
   "name_standard": {
     "name": "standard",
-    "answers":  [
+    "answers": [
       {
         "conditions": {
-          "isset": ["aliasName"]
+          "true": "isSubscribed"
         },
-        "messages": "Твоя кличка - (@aliasName)"
+        "messages": [
+          "Ты меня даже подписан! Круто",
+          {
+            "conditions": {
+              "isset": "aliasName"
+            },
+            "messages": "Я горжусь собой! (@aliasName) подписан на меня!"
+          }
+        ]
+      },
+      {
+        "conditions": {
+          "false": "isSubscribed"
+        },
+        "messages": "Ты не подписан!"
       }
     ]
   }
