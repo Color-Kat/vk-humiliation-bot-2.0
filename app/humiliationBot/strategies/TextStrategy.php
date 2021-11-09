@@ -11,7 +11,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     public function __construct($data)
     {
         // load dictionary by name
-        $this->loadDictionary('parts');
+        $this->loadDictionary('simple');
 
         parent::__construct($data);
     }
@@ -43,7 +43,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function getAnswerMessage($messages): string
     {
-
         if (!$messages) return $this->generateStandardAnswer();
         else return $this->generateAnswerMessage($messages);
     }

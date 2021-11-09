@@ -1,0 +1,9 @@
+{
+  "type": "dictionary",
+  "content": {
+    "name": "message_edit",
+    "answers": [
+      "Хрен ли ты там редактируешь??"
+    ]
+  }
+}

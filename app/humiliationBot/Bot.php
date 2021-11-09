@@ -4,6 +4,7 @@ namespace humiliationBot;
 
 use app\lib\Log;
 use app\models\User;
+use humiliationBot\strategies\EditStrategy;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
 use humiliationBot\strategies\TextStrategy;
@@ -83,6 +84,14 @@ class Bot
                 // create AnswerContext and strategy with vk data
                 (new AnswerContext(
                     new TextStrategy($this->data)
+                ))->answer();
+
+                return 'ok';
+
+            case 'message_edit':
+                // create AnswerContext and strategy with vk data
+                (new AnswerContext(
+                    new EditStrategy($this->data)
                 ))->answer();
 
                 return 'ok';

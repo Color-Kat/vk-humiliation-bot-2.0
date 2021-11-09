@@ -59,8 +59,6 @@ class AbstractStrategy extends VkMessage
      * @return array|false
      */
     public function chance(){
-        echo 'chance';
-
         // ===== by CHANCE ===== //
         $dictionaryChance = $this->getChanceAnswer();
         if ($dictionaryChance)
