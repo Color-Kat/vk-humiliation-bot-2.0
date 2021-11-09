@@ -1,0 +1,13 @@
+{
+  "type": "dictionary",
+  "content": {
+    "name": "chance_1000000",
+    "answers": [
+      {
+        "with_prev_mess_id" : "one_in_million",
+        "messages" : "Шанс выпадения этого сообщения - 1 к 1000000! Ты счастливчик ;)",
+        "next": "Мои искренние поздравления!"
+      }
+    ]
+  }
+}

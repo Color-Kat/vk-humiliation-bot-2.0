@@ -54,6 +54,29 @@ class AbstractStrategy extends VkMessage
     }
 
     /**
+     * try to get answer marked as "change"
+     * that is, it means that this answer can be selected with a certain chance
+     *
+     * @return array|false dictionary with "answers" or false
+     */
+    public function getChanceAnswer(){
+        $chanceList = [1000000, 100, 50, 25];
+
+        // iterate chances
+        foreach ($chanceList as $chance) {
+            // by random check chance
+            if(rand(0, $chance) == $chance) {
+                // try to load dictionary by chance name
+                $dict = $this->loadDictionary("chance_$chance", true);
+
+                if ($dict) return $dict;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * get prev message id from DB and get answer by this id
      *
      * @return array|false
@@ -177,16 +200,18 @@ class AbstractStrategy extends VkMessage
      *
      * @param string $message message
      */
-    public function sticker(string $message)
+    public function sticker(string $message): void
     {
         preg_match('/\(sticker_(?<str_id>\w+)\)/', $message, $match);
 
-        if (!isset($match['str_id'])) return false;
+        if (!isset($match['str_id'])) return;
 
         $ids = $this->loadStickersList();
 
-        print_r(($ids));
-
         $this->setSticker($ids[$match['str_id']] ?? false);
+    }
+
+    public function photo(string $message): void{
+        $this->setPhoto();
     }
 }

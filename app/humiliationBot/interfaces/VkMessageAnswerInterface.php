@@ -25,6 +25,7 @@ interface VkMessageAnswerInterface extends VkMessageInterface
      * @return void
      */
     public function doActions(array $answerArr);
+
     /**
      * get and process one string message from $messages
      *
@@ -33,4 +34,19 @@ interface VkMessageAnswerInterface extends VkMessageInterface
      * @return string generated answer
      */
     public function getAnswerMessage($messages): string;
+
+    // ===== METHODS TO SEND OTHER TYPES OF MESSAGES ===== //
+
+    /**
+     * try to send sticker
+     *  - get sticker id by pattern from messages - (sticker_strId)
+     *  - get sticker id by strId from sticker_list.json
+     *  - send sticker
+     *
+     * @param string $message
+     */
+    public function sticker(string $message): void;
+
+
+    public function photo(string $message): void;
 }

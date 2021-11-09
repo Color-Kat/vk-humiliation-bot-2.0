@@ -7,9 +7,8 @@ namespace humiliationBot\entities;
  */
 class Answers
 {
-
     /**
-     * @var array
+     * @var array array with answer variants - answerArr or string
      */
     private array $dictionary;
 
@@ -133,7 +132,7 @@ class Answers
         // ------------------------------------ //
 
         // ========== FORCED ANSWERS ========== //
-        // if no simple answers - return forced messages
+        // if no parts answers - return forced messages
         if(
             isset($this->dictionary['forced']) &&
             call_user_func($forcedCounter, 'get') > 0 && // check forced_left to avoid loop
@@ -145,13 +144,6 @@ class Answers
             // decrease forced-left or reset
             call_user_func($forcedCounter, 'decrease');
             $dictionaryCopy['doAction'] = ["savePrevMessId" => true];
-//            if(call_user_func($forcedCounter, 'get') - 1 > 0){
-//                call_user_func($forcedCounter, 'decrease');
-//
-//                // set action to don't reset prev_mess_id in db
-//                $dictionaryCopy['doAction'] = ["savePrevMessId" => true];
-//            }
-//            else call_user_func($forcedCounter, 'reset');
 
             return $dictionaryCopy;
         }
@@ -196,11 +188,11 @@ class Answers
     }
 
     /**
-     * get "simple" answers from $answers
-     * simple answer - answer without "pattern" field
+     * get "parts" answers from $answers
+     * parts answer - answer without "pattern" field
      *
-     * @param string $messagesKey string with key of field with messages where we need to find simple answers
-     * @return array simple answers without pattern
+     * @param string $messagesKey string with key of field with messages where we need to find parts answers
+     * @return array parts answers without pattern
      */
     private function getSimpleAnswer(string $messagesKey = "next"): array
     {

@@ -40,9 +40,9 @@ trait DictionaryLoader
      * load dictionary by name to property $dictionary
      *
      * @param string $name - name of dictionary
-     * @return bool is success
+     * @return mixed return is success or return this dictionary if $return is true
      */
-    public function loadDictionary(string $name): bool
+    public function loadDictionary(string $name, bool $return = false)
     {
         $filename = DICTIONARY_PATH . '/bigDictionary.json'; // path to bigDictionary.json
 
@@ -51,7 +51,9 @@ trait DictionaryLoader
 
         if(!$dictionary) return false;
 
-        $this->dictionary = $dictionary;
+        if($return) return (array) $dictionary;
+
+        $this->dictionary = (array) $dictionary;
 
         return true;
     }

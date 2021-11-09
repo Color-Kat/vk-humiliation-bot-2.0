@@ -24,7 +24,7 @@ trait Vk
      * @var string access token for vk api
      */
     protected string $access_token;
-    protected string $secure_token;
+    protected string $secret_token;
     protected string $vk_token;
 
     /**
@@ -45,7 +45,7 @@ trait Vk
     {
         $this->vk = $vk;
         $this->access_token = bot_env('VK_TOKEN');
-        $this->secure_token = bot_env('VK_SECRET_TOKEN');
+        $this->secret_token = bot_env('VK_SECRET_TOKEN');
         $this->vk_token = bot_env('VK_TOKEN');
 
         $this->user_id = $user_id; // save user_id

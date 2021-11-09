@@ -11,7 +11,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
     public function __construct($data)
     {
         // load dictionary by name
-        $this->loadDictionary('simple');
+        $this->loadDictionary('parts');
 
         parent::__construct($data);
     }
@@ -21,6 +21,13 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function parse()
     {
+        // ===== by CHANCE ===== //
+        $dictionaryChance = $this->getChanceAnswer();
+        if ($dictionaryChance)
+            return ['messages' => $dictionaryChance['answers']];
+
+
+        // ===== by PREV_MESS_ID ===== //
         // get match by user's message and answer with_prev_mess_id
         $answerById = $this->getAnswer_by_prev_mess_id();
 
@@ -31,6 +38,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
                     [$this, "forcedCounter"]
                 );
 
+        // ===== by MESSAGE MATCH ===== //
         // get messages by match user's message and dictionary
         return (new Answers($this->dictionary, $this->wordbook))
             ->getAnswer($this->getMessage(), 'answers');
@@ -41,6 +49,7 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function getAnswerMessage($messages): string
     {
+
         if (!$messages) return $this->generateStandardAnswer();
         else return $this->generateAnswerMessage($messages);
     }

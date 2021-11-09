@@ -34,19 +34,25 @@ class VkMessage implements VkMessageInterface
         $this->request_params['message'] = $message;
     }
 
-    public function setUserId(float $user_id): void
+    public function setUserId(int $user_id): void
     {
         $this->request_params['user_id'] = $user_id;
     }
 
-    public function setReplyTo(float $reply_to): void
+    public function setReplyTo(int $reply_to): void
     {
         $this->request_params['reply_to'] = $reply_to;
     }
 
-    public function setSticker(float $stickerId): void
+    public function setSticker(int $stickerId): void
     {
         $this->request_params['sticker_id'] = $stickerId;
+    }
+
+    public function setPhoto(){
+        $server = $this->vk->photos()->getMessagesUploadServer($this->access_token, ['group_id' => 208240387]);
+
+        print_r($server);
     }
 
     /**

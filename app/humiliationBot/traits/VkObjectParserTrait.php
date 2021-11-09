@@ -2,6 +2,8 @@
 
 namespace humiliationBot\traits;
 
+use humiliationBot\Attachment;
+
 /**
  * trait for convenient work with the Vk request object
  */
@@ -41,8 +43,11 @@ trait VkObjectParserTrait
      */
     public function getAttachment()
     {
+        print_r($this->data->object->message);
+        echo 'HERE';
         // TODO сделать класс для работы с attachment
-        return $this->data->object->message->attachment ?? false;
+//        return $this->data->object->message->attachments ?? false;
+        return new Attachment($this->data->object->message->attachments[0]);
     }
 
     /**

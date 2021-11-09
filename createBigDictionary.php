@@ -1,7 +1,7 @@
 <?php
 
 $dictionariesDir = './app/humiliationBot/dictionaries';
-$dirPath = $dictionariesDir . '/simple';
+$dirPath = $dictionariesDir . '/parts';
 $dictionaries = scandir($dirPath);
 
 $bigDictionary = [];

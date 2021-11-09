@@ -43,6 +43,7 @@ class AnswerContext
 
         $this->strategy->setMessage($message);
         $this->strategy->sticker($message);
+//        $this->strategy->photo($message);
 
         $this->strategy->sendMessage();
 
