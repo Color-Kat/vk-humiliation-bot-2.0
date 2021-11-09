@@ -4,6 +4,7 @@ namespace humiliationBot;
 
 use app\lib\Log;
 use app\models\User;
+use humiliationBot\strategies\AudioMessageStrategy;
 use humiliationBot\strategies\EditStrategy;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
@@ -109,7 +110,12 @@ class Bot
                         ))->answer();
                         break;
 
-
+                    case 'audio_message':
+                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        (new AnswerContext(
+                            new AudioMessageStrategy($this->data)
+                        ))->answer();
+                        break;
                 }
 
 
