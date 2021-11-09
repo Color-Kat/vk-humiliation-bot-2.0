@@ -20,8 +20,6 @@ class VkMessage implements VkMessageInterface
         // save data via trait method
         $this->setData($data);
 
-        echo $this->getUserId();
-
         // init vk api class
         $this->setVk(new VKApiClient(), $this->getUserId());
 

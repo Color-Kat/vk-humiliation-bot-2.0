@@ -10,6 +10,7 @@ use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
 use humiliationBot\strategies\PhotoStrategy;
 use humiliationBot\strategies\ReplyMessageStrategy;
+use humiliationBot\strategies\StickerStrategy;
 use humiliationBot\strategies\TextStrategy;
 use humiliationBot\traits\VkObjectParserTrait;
 
@@ -86,8 +87,6 @@ class Bot
             case 'message_new':
                 $messageType = $this->getAttachmentType();
 
-                echo $messageType;
-
                 switch ($messageType) {
                     case 'text':
                         // create AnswerContext and strategy with vk data
@@ -116,9 +115,14 @@ class Bot
                             new AudioMessageStrategy($this->data)
                         ))->answer();
                         break;
+
+                    case 'sticker':
+                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        (new AnswerContext(
+                            new StickerStrategy($this->data)
+                        ))->answer();
+                        break;
                 }
-
-
 
                 return 'ok';
 
