@@ -43,12 +43,12 @@ trait VkObjectParserTrait
     /**
      * return type of attachment
      *
-     * @return string type of attachment - photo, audio_message
+     * @return string type of attachment - photo, audio_message, reply_message, text
      */
     public function getAttachmentType(): string{
-        return $this->data->object->message->attachments[0]->type ??
-            ($this->data->object->message->reply_message ?? false ? "reply_message" : "") ??
-            'text';
+        if (isset($this->data->object->message->reply_message)) return 'reply_message';
+
+        return $this->data->object->message->attachments[0]->type ?? 'text';
     }
 
     /**

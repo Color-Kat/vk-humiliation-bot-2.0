@@ -8,6 +8,7 @@ use humiliationBot\strategies\EditStrategy;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
 use humiliationBot\strategies\PhotoStrategy;
+use humiliationBot\strategies\ReplyMessageStrategy;
 use humiliationBot\strategies\TextStrategy;
 use humiliationBot\traits\VkObjectParserTrait;
 
@@ -98,6 +99,13 @@ class Bot
                         // create AnswerContext and strategy with vk data to reply to PHOTO
                         (new AnswerContext(
                             new PhotoStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'reply_message':
+                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        (new AnswerContext(
+                            new ReplyMessageStrategy($this->data)
                         ))->answer();
                         break;
 
