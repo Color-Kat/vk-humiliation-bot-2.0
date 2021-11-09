@@ -41,14 +41,25 @@ trait VkObjectParserTrait
     }
 
     /**
+     * return type of attachment
+     *
+     * @return string type of attachment - photo, audio_message
+     */
+    public function getAttachmentType(): string{
+        return $this->data->object->message->attachments[0]->type ??
+            ($this->data->object->message->reply_message ?? false ? "reply_message" : "") ??
+            'text';
+    }
+
+    /**
      * return user's attachment
      *
      * @return mixed attachment
      */
     public function getAttachment()
     {
-        print_r($this->data->object->message);
-        echo 'HERE';
+//        print_r($this->data->object->message);
+//        echo 'HERE';
         // TODO сделать класс для работы с attachment
 //        return $this->data->object->message->attachments ?? false;
         return new Attachment($this->data->object->message->attachments[0]);

@@ -1,0 +1,13 @@
+{
+  "type": "dictionary",
+  "content": {
+    "name": "photo",
+    "answers": [
+      {
+        "with_prev_mess_id" : "photo_what_shit_is_this",
+        "messages": "Ну и что это за хрень?",
+        "next": "Может это котик?)"
+      }
+    ]
+  }
+}

@@ -7,6 +7,7 @@ use app\models\User;
 use humiliationBot\strategies\EditStrategy;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
+use humiliationBot\strategies\PhotoStrategy;
 use humiliationBot\strategies\TextStrategy;
 use humiliationBot\traits\VkObjectParserTrait;
 
@@ -81,10 +82,29 @@ class Bot
                 return bot_env('VK_CONFIRMATION_CODE');
 
             case 'message_new':
-                // create AnswerContext and strategy with vk data
-                (new AnswerContext(
-                    new TextStrategy($this->data)
-                ))->answer();
+                $messageType = $this->getAttachmentType();
+
+                echo $messageType;
+
+                switch ($messageType) {
+                    case 'text':
+                        // create AnswerContext and strategy with vk data
+                        (new AnswerContext(
+                            new TextStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'photo':
+                        // create AnswerContext and strategy with vk data to reply to PHOTO
+                        (new AnswerContext(
+                            new PhotoStrategy($this->data)
+                        ))->answer();
+                        break;
+
+
+                }
+
+
 
                 return 'ok';
 
@@ -109,9 +129,6 @@ class Bot
                 ))->answer();
 
                 return 'ok';
-
-//            case 'message_reply':
-//                return 'ok';
 //
 //            case 'message_edit':
 //                return 'ok';
