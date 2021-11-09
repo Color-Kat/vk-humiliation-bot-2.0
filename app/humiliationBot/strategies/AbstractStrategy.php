@@ -54,13 +54,28 @@ class AbstractStrategy extends VkMessage
     }
 
     /**
+     * return answer array by chance or false
+     *
+     * @return array|false
+     */
+    public function chance(){
+        echo 'chance';
+
+        // ===== by CHANCE ===== //
+        $dictionaryChance = $this->getChanceAnswer();
+        if ($dictionaryChance)
+            return ['messages' => $dictionaryChance['answers']];
+        return false;
+    }
+
+    /**
      * try to get answer marked as "change"
      * that is, it means that this answer can be selected with a certain chance
      *
      * @return array|false dictionary with "answers" or false
      */
     public function getChanceAnswer(){
-        $chanceList = [1000000, 100, 50, 25];
+        $chanceList = [1000000, 100, 50, 25, 0];
 
         // iterate chances
         foreach ($chanceList as $chance) {

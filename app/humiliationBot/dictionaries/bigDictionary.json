@@ -1,1 +1,206 @@
-{"name_chance_1000000":{"name":"chance_1000000","answers":[{"with_prev_mess_id":"one_in_million","messages":"Шанс выпадения этого сообщения - 1 к 1000000! Ты счастливчик ;)","next":"Мои искренние поздравления!"}]},"name_chance_25":{"name":"chance_25","answers":[{"with_prev_mess_id":"one_in_million","messages":"Шанс выпадения этого сообщения - 1 к 1000000! Ты счастливчик ;)","next":"Мои искренние поздравления!"}]},"name_group_join":{"name":"group_join","answers":["Привет, спасибо, что подписался)","Спасибо за подписку, брат","Святой Густов наградил меня твоей подпиской!","Подписался всё-таки)","Ну ты (@praise)! А я думал: подпишется или всё-таки нет?)"]},"name_group_leave":{"name":"group_leave","answers":["Э, брат, нормально же общались, ты куда??","Э, брат, вернись! Не отписывайся!","Ну ты куда??? Не отписывайся!","Что случилось? Почему он отписался??","Ты отписался? Ах, ты (@insult), чтоб ты описался!","(@insult)!!! Живо подписался обратно, (@insult)!","Нормально же общались...","Ну всё, прощай, друг..."]},"name_simple":{"name":"simple","answers":[{"pattern":"\/оапавопрвардпварпдл\/","priority":0,"messages":"Ты хрень какую-то написал"},{"pattern":"\/ты (@insult)!*\/","priority":1,"messages":["(sticker_bang_bang)","Уходи отсюда!","Нет, я не такой, а ты (@insult)",{"with_prev_messages":true,"with_prev_mess_id":"little_train","messages":"Нет, но хочешь я расскажу тебе историю о паровозике??","next":[{"with_prev_messages":true,"with_prev_mess_id":"little_train_1","pattern":"\/да\/","messages":"Долгая история...","next":"Вот и сказочки конец"},{"pattern":"\/нет\/","messages":["я ненавижу тебя","уходи отсюда, (@insult), здесь тебе больше не рады!"]}],"forced":"ответь да или нет!","forced_end":"Окей, я понял, что тебе это не интересно"}]},{"pattern":"\/ты (@insult)!\/","priority":2,"messages":["не повышай на меня голос!","(sticker_bang_bang)"]},{"pattern":"\/^нет$\/","priority":2,"type":"text","messages":["гея ответ"]},{"pattern":"\/Ты (@praise)\/","messages":["Да, я такой) Ты тоже (@praise)",{"messages":"Ага, пасиб, хочешь сказку про паровозик?","with_prev_messages":true,"with_prev_mess_id":"little_train_history","next":[{"pattern":"\/(давай|хочу|ну)\/","messages":"Жил как-то паровозик..."}]}]}]},"name_standard":{"name":"standard","answers":["Ты (@insult)","Ты{@rand(, я думаю,| скорее всего|, должно быть,)} (@insult)","Ты участник сказки {@rand(5|6|7|8|9|10|11|12|13)} разбийников. И зовут тебя {@getAliasName()}",{"messages":["Апчхи!","АААПячЗзХиИиИ!"],"with_prev_messages":true,"with_prev_mess_id":"apchhi","next":["Хто я?",{"pattern":"\/будь\/","messages":"Я-то буду, а ты смотри, чтоб жопа срать не перестала"}]},"Девки! Прячьтесь!!! (@u_name) идёт!","Лысый, беззубый, глаза косые, нос картошкой, а мальчики всё за тобой бегают","Я бандитов вечерами чаем угощаю","My live - my rules","Ты (@adjective_m) (@insult_m)",{"messages":"Я без любимого ножа не выхожу гулять","with_prev_messages":true,"with_prev_mess_id":"without_favorite_knife","next":"Ты правда думаешь, что меня можно напугать?"},{"conditions":[{"isset":["aliasName"]}],"messages":["Я придумаю тебе кличку","Надо тебе кличку придумать","Может тебе кличку нужно придумать?","Хехехе, щас тебе кличку придумаю)))"],"with_prev_messages":true,"with_prev_mess_id":"need_to_create_alias_name","execFunc":["createAliasName"],"next":[{"conditions":[{"isset":["aliasName"]}],"messages":["Буду называть тебя (@aliasName)",{"with_prev_messages":true,"with_prev_mess_id":"need_to_create_alias_name_1","messages":["Хм, в голову чет ничего не приходит..."],"execFunc":["createAliasName"],"next":"Придумал! Буду называть тебя (@aliasName)! Апхапх"}]}]},"Это ты создатель сервиса доставки удовольствия яндекс.елда?"]}}
+{
+  "name_chance_1000000": {
+    "name": "chance_1000000",
+    "answers": [
+      {
+        "with_prev_mess_id": "one_in_million",
+        "messages": "Шанс выпадения этого сообщения - 1 к 1000000! Ты счастливчик ;)",
+        "next": "Мои искренние поздравления!"
+      }
+    ]
+  },
+  "name_chance_25": {
+    "name": "chance_25",
+    "answers": [
+      {
+        "with_prev_mess_id": "one_in_million",
+        "messages": "Шанс выпадения этого сообщения - 1 к 1000000! Ты счастливчик ;)",
+        "next": "Мои искренние поздравления!"
+      }
+    ]
+  },
+  "name_chance_0": {
+    "name": "chance_0",
+    "answers": [
+      "0 к 0"
+    ]
+  },
+  "name_group_join": {
+    "name": "group_join",
+    "answers": [
+      "Привет, спасибо, что подписался)",
+      "Спасибо за подписку, брат",
+      "Святой Густов наградил меня твоей подпиской!",
+      "Подписался всё-таки)",
+      "Ну ты (@praise)! А я думал: подпишется или всё-таки нет?)"
+    ]
+  },
+  "name_group_leave": {
+    "name": "group_leave",
+    "answers": [
+      "Э, брат, нормально же общались, ты куда??",
+      "Э, брат, вернись! Не отписывайся!",
+      "Ну ты куда??? Не отписывайся!",
+      "Что случилось? Почему он отписался??",
+      "Ты отписался? Ах, ты (@insult), чтоб ты описался!",
+      "(@insult)!!! Живо подписался обратно, (@insult)!",
+      "Нормально же общались...",
+      "Ну всё, прощай, друг..."
+    ]
+  },
+  "name_simple": {
+    "name": "simple",
+    "answers": [
+      {
+        "pattern": "\/оапавопрвардпварпдл\/",
+        "priority": 0,
+        "messages": "Ты хрень какую-то написал"
+      },
+      {
+        "pattern": "\/ты (@insult)!*\/",
+        "priority": 1,
+        "messages": [
+          "(sticker_bang_bang)",
+          "Уходи отсюда!",
+          "Нет, я не такой, а ты (@insult)",
+          {
+            "with_prev_messages": true,
+            "with_prev_mess_id": "little_train",
+            "messages": "Нет, но хочешь я расскажу тебе историю о паровозике??",
+            "next": [
+              {
+                "with_prev_messages": true,
+                "with_prev_mess_id": "little_train_1",
+                "pattern": "\/да\/",
+                "messages": "Долгая история...",
+                "next": "Вот и сказочки конец"
+              },
+              {
+                "pattern": "\/нет\/",
+                "messages": [
+                  "я ненавижу тебя",
+                  "уходи отсюда, (@insult), здесь тебе больше не рады!"
+                ]
+              }
+            ],
+            "forced": "ответь да или нет!",
+            "forced_end": "Окей, я понял, что тебе это не интересно"
+          }
+        ]
+      },
+      {
+        "pattern": "\/ты (@insult)!\/",
+        "priority": 2,
+        "messages": [
+          "не повышай на меня голос!",
+          "(sticker_bang_bang)"
+        ]
+      },
+      {
+        "pattern": "\/^нет$\/",
+        "priority": 2,
+        "type": "text",
+        "messages": [
+          "гея ответ"
+        ]
+      },
+      {
+        "pattern": "\/Ты (@praise)\/",
+        "messages": [
+          "Да, я такой) Ты тоже (@praise)",
+          {
+            "messages": "Ага, пасиб, хочешь сказку про паровозик?",
+            "with_prev_messages": true,
+            "with_prev_mess_id": "little_train_history",
+            "next": [
+              {
+                "pattern": "\/(давай|хочу|ну)\/",
+                "messages": "Жил как-то паровозик..."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "name_standard": {
+    "name": "standard",
+    "answers": [
+      "Ты (@insult)",
+      "Ты{@rand(, я думаю,| скорее всего|, должно быть,)} (@insult)",
+      "Ты участник сказки {@rand(5|6|7|8|9|10|11|12|13)} разбийников. И зовут тебя {@getAliasName()}",
+      {
+        "messages": [
+          "Апчхи!",
+          "АААПячЗзХиИиИ!"
+        ],
+        "with_prev_messages": true,
+        "with_prev_mess_id": "apchhi",
+        "next": [
+          "Хто я?",
+          {
+            "pattern": "\/будь\/",
+            "messages": "Я-то буду, а ты смотри, чтоб жопа срать не перестала"
+          }
+        ]
+      },
+      "Девки! Прячьтесь!!! (@u_name) идёт!",
+      "Лысый, беззубый, глаза косые, нос картошкой, а мальчики всё за тобой бегают",
+      "Я бандитов вечерами чаем угощаю",
+      "My live - my rules",
+      "Ты (@adjective_m) (@insult_m)",
+      {
+        "messages": "Я без любимого ножа не выхожу гулять",
+        "with_prev_messages": true,
+        "with_prev_mess_id": "without_favorite_knife",
+        "next": "Ты правда думаешь, что меня можно напугать?"
+      },
+      {
+        "conditions": [
+          {
+            "isset": [
+              "aliasName"
+            ]
+          }
+        ],
+        "messages": [
+          "Я придумаю тебе кличку",
+          "Надо тебе кличку придумать",
+          "Может тебе кличку нужно придумать?",
+          "Хехехе, щас тебе кличку придумаю)))"
+        ],
+        "with_prev_messages": true,
+        "with_prev_mess_id": "need_to_create_alias_name",
+        "execFunc": [
+          "createAliasName"
+        ],
+        "next": [
+          {
+            "conditions": [
+              {
+                "isset": [
+                  "aliasName"
+                ]
+              }
+            ],
+            "messages": [
+              "Буду называть тебя (@aliasName)",
+              {
+                "with_prev_messages": true,
+                "with_prev_mess_id": "need_to_create_alias_name_1",
+                "messages": [
+                  "Хм, в голову чет ничего не приходит..."
+                ],
+                "execFunc": [
+                  "createAliasName"
+                ],
+                "next": "Придумал! Буду называть тебя (@aliasName)! Апхапх"
+              }
+            ]
+          }
+        ]
+      },
+      "Это ты создатель сервиса доставки удовольствия яндекс.елда?"
+    ]
+  }
+}

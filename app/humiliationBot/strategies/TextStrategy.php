@@ -21,12 +21,6 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
      */
     public function parse()
     {
-        // ===== by CHANCE ===== //
-        $dictionaryChance = $this->getChanceAnswer();
-        if ($dictionaryChance)
-            return ['messages' => $dictionaryChance['answers']];
-
-
         // ===== by PREV_MESS_ID ===== //
         // get match by user's message and answer with_prev_mess_id
         $answerById = $this->getAnswer_by_prev_mess_id();
