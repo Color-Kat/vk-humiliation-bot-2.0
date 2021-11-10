@@ -5,6 +5,8 @@ namespace humiliationBot;
 use app\lib\Log;
 use app\models\User;
 use humiliationBot\strategies\AudioMessageStrategy;
+use humiliationBot\strategies\AudioStrategy;
+use humiliationBot\strategies\DocStrategy;
 use humiliationBot\strategies\EditStrategy;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
@@ -12,6 +14,7 @@ use humiliationBot\strategies\PhotoStrategy;
 use humiliationBot\strategies\ReplyMessageStrategy;
 use humiliationBot\strategies\StickerStrategy;
 use humiliationBot\strategies\TextStrategy;
+use humiliationBot\strategies\VideoStrategy;
 use humiliationBot\strategies\WallPostStrategy;
 use humiliationBot\traits\VkObjectParserTrait;
 
@@ -110,23 +113,51 @@ class Bot
                         break;
 
                     case 'audio_message':
-                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        // reply to VOICE MESSAGE
                         (new AnswerContext(
                             new AudioMessageStrategy($this->data)
                         ))->answer();
                         break;
 
                     case 'sticker':
-                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        // reply to STICKERS
                         (new AnswerContext(
                             new StickerStrategy($this->data)
                         ))->answer();
                         break;
 
                     case 'wall':
-                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        // reply to WALL POST
                         (new AnswerContext(
                             new WallPostStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'video':
+                        // reply to VIDEO
+                        (new AnswerContext(
+                            new VideoStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'audio':
+                        // reply to AUDIO song
+                        (new AnswerContext(
+                            new AudioStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'doc':
+                        // reply to Documents
+                        (new AnswerContext(
+                            new DocStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    default:
+                        // reply to standard answer if we can't define message type
+                        (new AnswerContext(
+                            new TextStrategy($this->data)
                         ))->answer();
                         break;
                 }
