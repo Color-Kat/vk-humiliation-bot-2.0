@@ -6,10 +6,13 @@ use app\lib\Log;
 use app\models\User;
 use humiliationBot\strategies\AudioMessageStrategy;
 use humiliationBot\strategies\AudioStrategy;
+use humiliationBot\strategies\BigTextStrategy;
 use humiliationBot\strategies\DocStrategy;
 use humiliationBot\strategies\EditStrategy;
 use humiliationBot\strategies\GroupJoinStrategy;
 use humiliationBot\strategies\GroupLeaveStrategy;
+use humiliationBot\strategies\LongTextStrategy;
+use humiliationBot\strategies\MediumTextStrategy;
 use humiliationBot\strategies\PhotoStrategy;
 use humiliationBot\strategies\ReplyMessageStrategy;
 use humiliationBot\strategies\StickerStrategy;
@@ -151,6 +154,27 @@ class Bot
                         // reply to Documents
                         (new AnswerContext(
                             new DocStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'medium_text':
+                        // reply to text message with size > 130
+                        (new AnswerContext(
+                            new MediumTextStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'long_text':
+                        // reply to text message with size > 300
+                        (new AnswerContext(
+                            new LongTextStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'big_text':
+                        // reply to text message with size > 1000
+                        (new AnswerContext(
+                            new BigTextStrategy($this->data)
                         ))->answer();
                         break;
 

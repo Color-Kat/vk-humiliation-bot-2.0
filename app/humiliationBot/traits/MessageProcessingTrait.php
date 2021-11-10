@@ -25,6 +25,9 @@ trait MessageProcessingTrait
         // example: rand(variant1, variant2) -> random -> variant1
         $message = $this->funcSubstitution($message);
 
+        // capital letters after a period, etc.
+        $message = $this->autoRegister($message);
+
         // return ready string message
         return $message;
     }
@@ -36,7 +39,7 @@ trait MessageProcessingTrait
      * @param array $replaced_vars array with replaced variables (key: varName, value: varValue)
      * @return string message string with substituted variables
      */
-    public function messageVarSubstitution(string $template, array &$replaced_vars = []): string
+    private function messageVarSubstitution(string $template, array &$replaced_vars = []): string
     {
         $message = $template;
 
@@ -69,7 +72,7 @@ trait MessageProcessingTrait
         return $message;
     }
 
-    public function funcSubstitution($template)
+    private function funcSubstitution($template)
     {
         $message = $template;
 
@@ -86,5 +89,23 @@ trait MessageProcessingTrait
         }, $message);
 
         return $message;
+    }
+
+    /**
+     * capitalizes at the beginning of a sentence
+     *
+     * @param string $message
+     * @return string
+     */
+    public function autoRegister(string $message): string{
+        $suggestions = $pieces = preg_split("/\.|\!|\?/", $message);;
+
+        // search letters after .!?  and replace it to upper case
+        $message = preg_replace_callback('/(\.|\!|\?)\s(?<first>\w?)/ui', function ($m) {
+            return mb_strtoupper($m[0]);
+        }, $message);
+
+        // return message with first letter upper case
+        return mb_ucfirst($message);
     }
 }

@@ -48,6 +48,10 @@ trait VkObjectParserTrait
     public function getAttachmentType(): string{
         if (isset($this->data->object->message->reply_message)) return 'reply_message';
 
+        if (mb_strlen($this->getMessage()) > 1000) return 'biggest_text';
+        if (mb_strlen($this->getMessage()) > 300) return 'long_text';
+        if (mb_strlen($this->getMessage()) > 130) return 'medium_text';
+
         return $this->data->object->message->attachments[0]->type ?? 'text';
     }
 

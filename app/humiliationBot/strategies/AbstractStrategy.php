@@ -9,6 +9,7 @@ use humiliationBot\entities\Answers;
 use humiliationBot\traits\DictionaryLoader;
 use humiliationBot\traits\ExecFunctionsTrait;
 use humiliationBot\traits\MessageGenerator;
+use humiliationBot\traits\MessageProcessingTrait;
 use humiliationBot\traits\UserTrait;
 use humiliationBot\VkMessage;
 
@@ -22,6 +23,9 @@ class AbstractStrategy extends VkMessage
 
     // methods to generate answer from $answerArr
     use MessageGenerator;
+
+    // auto register function
+    use MessageProcessingTrait;
 
     // methods that uses in dictionaries in "execFunc"
     use ExecFunctionsTrait;
@@ -182,7 +186,7 @@ class AbstractStrategy extends VkMessage
         // try to generate message
         $message = $this->generateMessage($messages);
 
-        if ($message) return $message; // message is created, return it
+        if ($message) return $this->autoRegister($message); // message is created, return it
         else {
             // ===== failed to create message ===== //
 
@@ -191,7 +195,7 @@ class AbstractStrategy extends VkMessage
             // this is to avoid the loop
             for ($attempts = 10; $attempts > 0; $attempts--) {
                 $message = $this->generateMessage($messages);
-                if ($message) return $message;
+                if ($message) return $this->autoRegister($message);
             }
 
             $failedMessages = [
@@ -204,7 +208,7 @@ class AbstractStrategy extends VkMessage
             ];
 
             // failed to create message
-            return $failedMessages[array_rand($failedMessages)];
+            return $this->autoRegister($failedMessages[array_rand($failedMessages)]);
         }
     }
 

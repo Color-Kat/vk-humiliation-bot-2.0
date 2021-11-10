@@ -7,8 +7,6 @@ use humiliationBot\entities\AnswerObject;
 
 trait MessageGenerator
 {
-
-
     /**
      * try to generate message by array $messages
      * return false if can't
