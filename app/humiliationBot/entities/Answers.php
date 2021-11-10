@@ -151,7 +151,6 @@ class Answers
 
         //  ========== FORCED_END ANSWERS ========== //
         // if forced doesn't match condition or forced_left count is 0
-        echo isset($this->dictionary['forced_end']) ? 'forced_end is set': 'forced_end isnt set';
         if(
             isset($this->dictionary['forced_end']) &&
             $this->checkCondition($this->dictionary['forced_end']) // check is condition met in forced

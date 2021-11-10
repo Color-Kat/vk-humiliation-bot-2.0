@@ -12,6 +12,7 @@ use humiliationBot\strategies\PhotoStrategy;
 use humiliationBot\strategies\ReplyMessageStrategy;
 use humiliationBot\strategies\StickerStrategy;
 use humiliationBot\strategies\TextStrategy;
+use humiliationBot\strategies\WallPostStrategy;
 use humiliationBot\traits\VkObjectParserTrait;
 
 class Bot
@@ -35,7 +36,6 @@ class Bot
             $this->data->secret !== bot_env('VK_SECRET_TOKEN') &&
             $this->data->type !== 'confirmation'
         ) {
-            echo 'security';
             return false;
         }
         return true;
@@ -120,6 +120,13 @@ class Bot
                         // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
                         (new AnswerContext(
                             new StickerStrategy($this->data)
+                        ))->answer();
+                        break;
+
+                    case 'wall':
+                        // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
+                        (new AnswerContext(
+                            new WallPostStrategy($this->data)
                         ))->answer();
                         break;
                 }

@@ -1,14 +1,15 @@
 <?php
 
 $dictionariesDir = './app/humiliationBot/dictionaries';
-$dirPath = $dictionariesDir . '/parts';
-$dictionaries = scandir($dirPath);
+$dirPathDictionaries = $dictionariesDir . '/parts/dictionaries';
+$dirPathWordbooks = $dictionariesDir . '/parts/wordbooks';
+$dictionaries = array_merge(scandir($dirPathDictionaries), scandir($dirPathWordbooks));
 
 $bigDictionary = [];
 $wordbook = [];
 $with_prev_messages = [];
 
-function get_with_prev_messages($answers, $d = 1)
+function get_with_prev_messages($answers)
 {
     global $with_prev_messages;
 
@@ -31,8 +32,15 @@ foreach ($dictionaries as $filename) {
     // skip . and .. directories
     if ($filename == '.' || $filename == '..') continue;
 
+    // check filename to get folder (dictionaries/wordbooks)
+    $dirPath = $dictionariesDir . '/parts';
+    if(preg_match('/^d_/', $filename)) $dirPath .= '/dictionaries';
+    elseif (preg_match('/^w_/', $filename)) $dirPath .= '/wordbooks';
+
     // get file content
-    $file = json_decode(file_get_contents($dirPath . DIRECTORY_SEPARATOR . $filename), true);
+    $file = json_decode(
+        file_get_contents($dirPath . DIRECTORY_SEPARATOR . $filename),
+        true);
 
     switch ($file['type']) {
         // processing wordbook
@@ -44,7 +52,7 @@ foreach ($dictionaries as $filename) {
                 foreach ($uses as $use) {
                     // get file content of included wordbook
                     $usedWordbook = json_decode(file_get_contents(
-                        $dirPath . DIRECTORY_SEPARATOR . 'w_' . $use . '.json'
+                        $dirPathWordbooks . DIRECTORY_SEPARATOR . 'w_' . $use . '.json'
                     ), true);
 
                     $file['content'] += array_merge($file['content'], $usedWordbook['content']);
