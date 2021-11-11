@@ -42,6 +42,11 @@ foreach ($dictionaries as $filename) {
         file_get_contents($dirPath . DIRECTORY_SEPARATOR . $filename),
         true);
 
+    if (!isset($file['type'])){
+        echo 'файл без type';
+        continue;
+    }
+
     switch ($file['type']) {
         // processing wordbook
         case 'wordbook':

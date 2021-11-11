@@ -63,7 +63,8 @@ trait MessageProcessingTrait
                 $message = preg_replace(
                     "/\(@$var\)/u",
                     $val,
-                    $message
+                    $message,
+                    1
                 );
             }
         }
