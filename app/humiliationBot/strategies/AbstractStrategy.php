@@ -193,10 +193,15 @@ class AbstractStrategy extends VkMessage
             // try to create a new message if it was not possible to create this message
             // we have 10 attempts to create new answer
             // this is to avoid the loop
-            for ($attempts = 10; $attempts > 0; $attempts--) {
+            for ($attempts = 5; $attempts > 0; $attempts--) {
                 $message = $this->generateMessage($messages);
+
+                print_r($messages);
+
                 if ($message) return $this->autoRegister($message);
             }
+
+            echo 'FAILED';
 
             $failedMessages = [
                 'Бип-боп',
