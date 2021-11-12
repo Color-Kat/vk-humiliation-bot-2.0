@@ -103,7 +103,7 @@ trait MessageProcessingTrait
         $message = preg_replace('/(\s+,)/ui', ',' , $message);
 
         // remove , after ! and ?
-        $message = preg_replace_callback('/(?|!),/ui', function ($m) {
+        $message = preg_replace_callback('/(\?|\!|\)|\(),/ui', function ($m) {
             return trim($m[0], ',');
         }, $message);
 
