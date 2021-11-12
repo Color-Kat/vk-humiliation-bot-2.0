@@ -19,8 +19,6 @@ trait MessageGenerator
         // select one concrete answer array
         $answer = $this->getAnswerByAlgorithm($messages);
 
-        print_r($answer);
-
         if (gettype($answer) === "string") {
             return (new AnswerMessage($answer, $this->wordbook))->getMessage();
         } elseif (gettype($answer) === "array") {

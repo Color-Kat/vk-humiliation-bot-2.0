@@ -1,0 +1,21 @@
+{
+  "type": "dictionary",
+  "content": {
+    "name": "chance_100",
+    "answers": [
+      {
+        "with_prev_mess_id": "do_you_sell_slav_cupboard",
+        "messages" : "У вас продаётся славянский шкаф?",
+        "next" : [
+          {
+            "with_prev_mess_id": "do_you_sell_slav_cupboard_1",
+            "pattern": "/(Шкаф продан).+(кровать|кравать)/",
+            "messages" : "Я тебя узнал, пойдём со мной)",
+            "next" : "Тут не далеко! На расстрел."
+          }
+        ]
+      },
+      "Иди ты на праздник El Día de Muertos"
+    ]
+  }
+}

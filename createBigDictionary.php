@@ -16,6 +16,7 @@ function get_with_prev_messages($answers)
     if (gettype($answers) != "string") {
         foreach ($answers as $answer) {
             if (is_array($answer)) {
+                if(!isset($answer['messages'])) print_r($answer);
                 get_with_prev_messages($answer['messages']);
             }
 

@@ -196,12 +196,8 @@ class AbstractStrategy extends VkMessage
             for ($attempts = 5; $attempts > 0; $attempts--) {
                 $message = $this->generateMessage($messages);
 
-                print_r($messages);
-
                 if ($message) return $this->autoRegister($message);
             }
-
-            echo 'FAILED';
 
             $failedMessages = [
                 'Бип-боп',
