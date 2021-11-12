@@ -99,7 +99,13 @@ trait MessageProcessingTrait
      * @return string
      */
     public function autoRegister(string $message): string{
-        $suggestions = $pieces = preg_split("/\.|\!|\?/", $message);;
+        // remove space before ,
+        $message = preg_replace('/(\s+,)/ui', ',' , $message);
+
+        // remove , after ! and ?
+        $message = preg_replace_callback('/(?|!),/ui', function ($m) {
+            return trim($m[0], ',');
+        }, $message);
 
         // search letters after .!?  and replace it to upper case
         $message = preg_replace_callback('/(\.|\!|\?)\s(?<first>\w?)/ui', function ($m) {
