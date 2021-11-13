@@ -29,9 +29,9 @@ trait MessageProcessingTrait
 
 //        preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message, $m);
 //        print_r($m);
-//        if ($attempts > 0 && preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message)) {
-//            return $this->messageProcessing($message, $attempts - 1);
-//        }
+        if ($attempts > 0 && preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message)) {
+            return $this->messageProcessing($message, $attempts - 1);
+        }
 
         // capital letters after a period, etc.
         $message = $this->autoRegister($message);
