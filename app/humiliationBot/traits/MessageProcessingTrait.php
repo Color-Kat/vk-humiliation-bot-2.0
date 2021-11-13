@@ -14,7 +14,7 @@ trait MessageProcessingTrait
      * @param string $template string to variables substitution
      * @return string final message string
      */
-    public function messageProcessing(string $template, array &$replaced_vars = []): string
+    public function messageProcessing(string $template, int $attempts = 10, array &$replaced_vars = []): string
     {
         $this->processingFunctions = new DictionaryFunctions();
 
@@ -24,6 +24,14 @@ trait MessageProcessingTrait
         // replace rand() construction to one of many variants of phrase
         // example: rand(variant1, variant2) -> random -> variant1
         $message = $this->funcSubstitution($message);
+
+        // exec functions recursively if there is a function in the string yet
+
+//        preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message, $m);
+//        print_r($m);
+//        if ($attempts > 0 && preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message)) {
+//            return $this->messageProcessing($message, $attempts - 1);
+//        }
 
         // capital letters after a period, etc.
         $message = $this->autoRegister($message);
@@ -78,7 +86,7 @@ trait MessageProcessingTrait
         $message = $template;
 
         // get function calls - {@funcName(arg1|arg2|arg3)}
-        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*?)\)}/i', function ($m) {
+        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*?)\)}/ui', function ($m) {
             $params = explode('|', $m['params']); // get params as array
             $funcName = $m['func']; // get func name
 
@@ -87,7 +95,7 @@ trait MessageProcessingTrait
                 // and substitute the result of the function instead of calling it
                 return $this->processingFunctions->$funcName($params);
             else return $params[0];
-        }, $message);
+        }, $message, 1);
 
         return $message;
     }
