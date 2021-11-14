@@ -45,6 +45,14 @@ trait MessageGenerator
         // return string because answer is string and there is no condition in string
         if (gettype($answer) == "string") return $answer;
 
+        // check pattern if it is set
+        if(isset($answer['pattern'])){
+            if(
+                !(new AnswerObject($answer, []))
+                    ->getMatch($this->getMessage())
+            ) return [];
+        }
+
         // go to next block if condition return false
         if (!(new AnswerObject($answer, $this->wordbook))->checkCondition()) {
             return [];
