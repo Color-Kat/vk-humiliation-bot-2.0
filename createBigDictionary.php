@@ -44,6 +44,7 @@ foreach ($dictionaries as $filename) {
         true);
 
     if (!isset($file['type'])){
+        print_r($filename);
         echo 'файл без type';
         continue;
     }

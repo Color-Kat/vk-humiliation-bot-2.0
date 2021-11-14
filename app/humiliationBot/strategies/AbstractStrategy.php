@@ -2,10 +2,6 @@
 
 namespace humiliationBot\strategies;
 
-use app\lib\Log;
-use humiliationBot\entities\AnswerMessage;
-use humiliationBot\entities\AnswerObject;
-use humiliationBot\entities\Answers;
 use humiliationBot\traits\DictionaryLoader;
 use humiliationBot\traits\ExecFunctionsTrait;
 use humiliationBot\traits\MessageGenerator;

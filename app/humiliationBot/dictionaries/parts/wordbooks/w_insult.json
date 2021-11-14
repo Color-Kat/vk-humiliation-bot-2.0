@@ -1,9 +1,9 @@
 {
   "type": "wordbook",
   "name": "insult",
-  "us2e": ["insult_m", "insult_f", "insult_n"],
-  "content": ["дикий {@rand(монах|мономах|кактус|морж|человек)}"],
-  "content2": [
+  "use": ["insult_m", "insult_f", "insult_n"],
+  "content2": ["дикий {@rand(монах|мономах|кактус|морж|человек)}"],
+  "content": [
     "овечий сын",
     "кожаный мешок",
     "жирная слониха",
