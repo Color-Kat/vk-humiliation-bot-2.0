@@ -84,10 +84,16 @@ trait MessageProcessingTrait
     private function funcSubstitution($template)
     {
         $message = $template;
-
+//        print_r($message);
+//        echo ";\n";
         // get function calls - {@funcName(arg1|arg2|arg3)}
-        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*?)\)}/ui', function ($m) {
-            $params = explode('|', $m['params']); // get params as array
+        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*)\)}/ui', function ($m) {
+//            $params = explode('|', $m['params']); // get params as array
+            $params = $this->getStrFuncParams($m['params']); // get params as array
+
+//            print_r($m['params']);
+//            echo '~~~';
+//            print_r($params);
             $funcName = $m['func']; // get func name
 
             // call function by $funcName with $params from processingFunctions class
@@ -98,6 +104,55 @@ trait MessageProcessingTrait
         }, $message, 1);
 
         return $message;
+    }
+
+    private function getStrFuncParams(string $text): array{
+        return preg_split("~{@\w+\(.*?\)}(?![^|])(*SKIP)(*F)|\|~ui", $text);
+    }
+
+    private function getStrFuncParams2(string $text): array{
+        $params = [];
+
+//        echo $text;
+
+       // if in string is function set
+        if (
+            preg_match_all("/(@(\S+)\((.*)\))/", $text, $matches) &&
+            isset($matches[0]) &&
+            count($matches[0]) > 0
+        ) {
+            // in function ca
+            $rtext = preg_replace("/\|/", "~", $matches[0][0]);
+            //preg_quotes экранирует спец.символы использующиеся в регулярных выражениях - а их у нас в полученной строке полно
+            $text = preg_replace("/".preg_quote($matches[0][0])."/", $rtext, $text);
+
+            //После чего спокойно разбил всю исходную строку `$text`, по символу `|`
+            $params = explode("|", $text);
+
+            if ( is_array( $params ) && count( $params ) > 0 ) {
+                //Далее идем по массиву и ищем элемент-строку начинающийся на '@'
+                foreach( $params as $p ) {
+                    $p = trim( $p );
+                    if ( mb_substr( $p, 0, 1) == '@' ) {
+                        //@rand(тест {@rand(номер 1234&номер 4321)})
+                        //А теперь парсим эту строку на содержание параметров
+                        //Если кол-во параметров другое или формат строки отличается - подправьте регулярку
+                        if ( preg_match_all("/^\@\S+\(\W+\{\@\S+\((.+?)\&(.+?)\)\}\)/", $p, $matches) && is_array( $matches ) && count($matches) > 0 && is_array($matches[0]) && count($matches[0]) > 0) {
+
+
+                            $params[] = $matches; //номер 1234
+                        }
+                    }
+                }
+
+
+            }
+
+        } else {
+            $params = explode('|', $text);
+        }
+
+        return $params;
     }
 
     /**
