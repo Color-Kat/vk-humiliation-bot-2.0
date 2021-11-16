@@ -87,7 +87,9 @@ trait MessageProcessingTrait
 //        print_r($message);
 //        echo ";\n";
         // get function calls - {@funcName(arg1|arg2|arg3)}
-        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*)\)}/ui', function ($m) {
+        $re = '/{@(?<func>\w+)(\((?<params>(?:[^()]++|(?2))*)\))}/ui';
+        $message = preg_replace_callback($re, function ($m) {
+//        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*)\)}/ui', function ($m) {
 //            $params = explode('|', $m['params']); // get params as array
             $params = $this->getStrFuncParams($m['params']); // get params as array
 
