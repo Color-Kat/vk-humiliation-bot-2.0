@@ -83,6 +83,12 @@ trait DictionaryLoader
             $this->wordbook[$var] = $val;
         }
 
+        // --- VAR @u_insult --- //
+        $words = preg_split('/(\s+|!+|\?+|\)+|\(+|,+|\.+)/ui', $this->getMessage());
+        $insult_of_user =  array_intersect($words, $this->wordbook['insult'] ?? []);
+        $this->wordbook['u_insult'] = count($insult_of_user) > 0 ? $insult_of_user : $this->wordbook['insult'] ?? ["лох"];
+        // --------------------- //
+
         return true;
     }
 

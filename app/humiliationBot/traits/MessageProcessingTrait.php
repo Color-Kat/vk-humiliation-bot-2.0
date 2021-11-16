@@ -84,8 +84,7 @@ trait MessageProcessingTrait
     private function funcSubstitution($template)
     {
         $message = $template;
-//        print_r($message);
-//        echo ";\n";
+
         // get function calls - {@funcName(arg1|arg2|arg3)}
         $re = '/{@(?<func>\w+)(\((?<params>(?:[^()]++|(?2))*)\))}/ui';
         $message = preg_replace_callback($re, function ($m) {
@@ -93,9 +92,6 @@ trait MessageProcessingTrait
 //            $params = explode('|', $m['params']); // get params as array
             $params = $this->getStrFuncParams($m['params']); // get params as array
 
-//            print_r($m['params']);
-//            echo '~~~';
-//            print_r($params);
             $funcName = $m['func']; // get func name
 
             // call function by $funcName with $params from processingFunctions class
@@ -109,7 +105,8 @@ trait MessageProcessingTrait
     }
 
     private function getStrFuncParams(string $text): array{
-        return preg_split("~{@\w+\(.*?\)}(?![^|])(*SKIP)(*F)|\|~ui", $text);
+//        return preg_split("~{@\w+\(.*?\)}(?![^|])(*SKIP)(*F)|\|~ui", $text);
+        return preg_split("~{@\w+\(.*?\)}(*SKIP)(*F)|\|~ui", $text);
     }
 
     private function getStrFuncParams2(string $text): array{
