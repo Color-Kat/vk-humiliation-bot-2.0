@@ -73,8 +73,10 @@ class AbstractStrategy extends VkMessage
      * @return array|false dictionary with "answers" or false
      */
     public function getChanceAnswer(){
-        $chanceList = [1000000, 100, 50, 25, 0];
+        $chanceList = [1000000, 100, 75, 50, 25];
 
+
+        // TODO проверить шансы
         // iterate chances
         foreach ($chanceList as $chance) {
             // by random check chance

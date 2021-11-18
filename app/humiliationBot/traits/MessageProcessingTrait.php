@@ -29,7 +29,7 @@ trait MessageProcessingTrait
 
 //        preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message, $m);
 //        print_r($m);
-        if ($attempts > 0 && preg_match('/\{@\w+\((.|\s)*\)\}/ui', $message)) {
+        if ($attempts > 0 && preg_match('/\{@\w+\(.*\)\}/ui', $message)) {
             return $this->messageProcessing($message, $attempts - 1);
         }
 
@@ -87,6 +87,7 @@ trait MessageProcessingTrait
 
         // get function calls - {@funcName(arg1|arg2|arg3)}
         $re = '/{@(?<func>\w+)(\((?<params>(?:[^()]++|(?2))*)\))}/ui';
+        $re = '/{@(?<func>\w+)\((?<params>(?:[^{}]++|(?R))*)}/ui';
         $message = preg_replace_callback($re, function ($m) {
 //        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*)\)}/ui', function ($m) {
 //            $params = explode('|', $m['params']); // get params as array
