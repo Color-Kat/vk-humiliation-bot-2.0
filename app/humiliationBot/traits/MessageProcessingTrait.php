@@ -88,6 +88,7 @@ trait MessageProcessingTrait
         // get function calls - {@funcName(arg1|arg2|arg3)}
         $re = '/{@(?<func>\w+)(\((?<params>(?:[^()]++|(?2))*)\))}/ui';
         $re = '/{@(?<func>\w+)\((?<params>(?:[^{}]++|(?R))*)}/ui';
+        $re = '/{@(?<func>\w+)\((?<params>(?:(?!\)\})[^{]|(?R))*)\)}/ui';
         $message = preg_replace_callback($re, function ($m) {
 //        $message = preg_replace_callback('/{@(?<func>\w+?)\((?<params>.*)\)}/ui', function ($m) {
 //            $params = explode('|', $m['params']); // get params as array
@@ -162,11 +163,12 @@ trait MessageProcessingTrait
      * @return string
      */
     public function autoRegister(string $message): string{
+        // TODO пробелы до и после знаков
         // remove space before ,
         $message = preg_replace('/(\s+,)/ui', ',' , $message);
 
         // remove , after ! and ?
-        $message = preg_replace_callback('/(\?|\!|\)|\(),/ui', function ($m) {
+        $message = preg_replace_callback('/(\?|!|\)|\(),/ui', function ($m) {
             return trim($m[0], ',');
         }, $message);
 
