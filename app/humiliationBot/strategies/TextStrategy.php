@@ -34,8 +34,8 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
 
         // ===== answer array by CHANCE ===== //
         if(($answerArr['priority'] ?? 0) <= 50){
-            // don't use chance if priority is higher than 900
-            $chanceAnswerArr = $this->strategy->chance();
+            // don't use chance if priority is higher than 50
+            $chanceAnswerArr = $this->chance();
             if ($chanceAnswerArr) $answerArr = $chanceAnswerArr;
         }
 
