@@ -35,13 +35,6 @@ class AnswerContext
         // get answer array by user's message, prev_mess_id and other
         $answerArr = $this->strategy->parse();
 
-        // ===== answer array by CHANCE ===== //
-        if(($answerArr['priority'] ?? 0) <= 90){
-            // don't use chance if priority is higher than 900
-            $chanceAnswerArr = $this->strategy->chance();
-            if ($chanceAnswerArr) $answerArr = $chanceAnswerArr;
-        }
-
         // ===== do other action ===== //
         if($answerArr) $this->strategy->doActions($answerArr);
 
