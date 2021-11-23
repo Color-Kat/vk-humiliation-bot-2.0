@@ -32,17 +32,29 @@ class TextStrategy extends AbstractStrategy implements VkMessageAnswerInterface
                     [$this, "forcedCounter"]
                 );
 
-        // ===== answer array by CHANCE ===== //
-        if(($answerArr['priority'] ?? 0) <= 50){
-            // don't use chance if priority is higher than 50
-            $chanceAnswerArr = $this->chance();
-            if ($chanceAnswerArr) $answerArr = $chanceAnswerArr;
-        }
-
         // ===== by MESSAGE MATCH ===== //
         // get messages by match user's message and dictionary
-        return (new Answers($this->dictionary, $this->wordbook))
+        $answerArr =  (new Answers($this->dictionary, $this->wordbook))
             ->getAnswer($this->getMessage(), 'answers');
+
+
+        // ===== answer array by CHANCE ===== //
+        $chanceAnswerArr = $this->chance();
+
+        // chance works
+        if (isset($chanceAnswerArr['messages'])) {
+            if($chanceAnswerArr['chance'] > 90) return $chanceAnswerArr;
+
+            // don't use chance if priority is higher than 50
+            if(
+                ($answerArr['priority'] ?? 0) <= 50 &&
+                $chanceAnswerArr['chance'] > 24
+            )
+
+            if (!$answerArr) return $chanceAnswerArr;
+        }
+
+        return $answerArr;
     }
 
     /**

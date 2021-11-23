@@ -61,8 +61,8 @@ class AbstractStrategy extends VkMessage
     public function chance(){
         // ===== by CHANCE ===== //
         $dictionaryChance = $this->getChanceAnswer();
-        if ($dictionaryChance)
-            return ['messages' => $dictionaryChance['answers']];
+        if (isset($dictionaryChance["dict"]))
+            return ['messages' => $dictionaryChance["dict"]['answers'], "chance" => $dictionaryChance["chance"]];
         return false;
     }
 
@@ -75,7 +75,6 @@ class AbstractStrategy extends VkMessage
     public function getChanceAnswer(){
         $chanceList = [1000000, 100, 75, 50, 25];
 
-
         // TODO проверить шансы
         // iterate chances
         foreach ($chanceList as $chance) {
@@ -83,8 +82,12 @@ class AbstractStrategy extends VkMessage
             if(rand(0, $chance) == $chance) {
                 // try to load dictionary by chance name
                 $dict = $this->loadDictionary("chance_$chance", true);
+                if($dict) echo $chance;
 
-                if ($dict) return $dict;
+                if ($dict) return [
+                    "chance" => $chance,
+                    "dict" => $dict
+                ];
             }
         }
 
