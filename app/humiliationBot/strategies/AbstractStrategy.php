@@ -73,16 +73,17 @@ class AbstractStrategy extends VkMessage
      * @return array|false dictionary with "answers" or false
      */
     public function getChanceAnswer(){
-        $chanceList = [1000000, 100, 75, 50, 25];
+        $chanceList = [1000000, 100, 75, 50, 25, 10];
 
         // TODO проверить шансы
         // iterate chances
         foreach ($chanceList as $chance) {
             // by random check chance
             if(rand(0, $chance) == $chance) {
+                echo $chance;
                 // try to load dictionary by chance name
                 $dict = $this->loadDictionary("chance_$chance", true);
-                if($dict) echo $chance;
+//                if($dict) echo $chance;
 
                 if ($dict) return [
                     "chance" => $chance,
