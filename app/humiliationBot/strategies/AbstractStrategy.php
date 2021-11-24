@@ -80,7 +80,6 @@ class AbstractStrategy extends VkMessage
         foreach ($chanceList as $chance) {
             // by random check chance
             if(rand(0, $chance) == $chance) {
-                echo $chance;
                 // try to load dictionary by chance name
                 $dict = $this->loadDictionary("chance_$chance", true);
 //                if($dict) echo $chance;
@@ -137,10 +136,10 @@ class AbstractStrategy extends VkMessage
      *  - update prev_mess_id in db
      *  - exec functions
      *
-     * @param array $answerArr
+     * @param array|false $answerArr
      * @return void
      */
-    public function doActions(array $answerArr)
+    public function doActions($answerArr)
     {
         // ======== PREV_MESS_ID ========== //
         // update prev_mess_id in db if we have an answer with NEW "prev_mess_id"

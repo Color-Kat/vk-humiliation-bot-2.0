@@ -112,7 +112,7 @@ class Answers
         // get strict match BY PATTERN
         $strictMatch = $this->getAnswer($u_message, 'next');
         if ($strictMatch) {
-            call_user_func($forcedCounter, 'reset'); // recet forced_end counter
+            call_user_func($forcedCounter, 'reset'); // reset forced_end counter
             return (array)$strictMatch;
         }
 

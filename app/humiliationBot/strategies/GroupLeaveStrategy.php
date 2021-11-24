@@ -28,7 +28,7 @@ class GroupLeaveStrategy extends AbstractStrategy implements VkMessageAnswerInte
     /**
      * @inheritdoc
      */
-    public function generateAnswer($messages): string
+    public function getAnswerMessage($messages): string
     {
         $this->unsubscribe();
 

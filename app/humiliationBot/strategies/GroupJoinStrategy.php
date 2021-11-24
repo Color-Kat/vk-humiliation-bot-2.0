@@ -28,7 +28,7 @@ class GroupJoinStrategy extends AbstractStrategy implements VkMessageAnswerInter
     /**
      * @inheritdoc
      */
-    public function generateAnswer($messages): string
+    public function getAnswerMessage($messages): string
     {
         $this->subscribe();
 

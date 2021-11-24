@@ -43,7 +43,7 @@ class AnswerContext
 //        }
 
         // ===== do other action ===== //
-        if($answerArr) $this->strategy->doActions($answerArr);
+        $this->strategy->doActions($answerArr);
 
         // ===== generate message ===== //
         $message = $this->strategy->getAnswerMessage($answerArr['messages'] ?? false);
