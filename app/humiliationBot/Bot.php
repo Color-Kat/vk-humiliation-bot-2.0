@@ -110,9 +110,14 @@ class Bot
 
                     case 'reply_message':
                         // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
-                        (new AnswerContext(
-                            new ReplyMessageStrategy($this->data)
-                        ))->answer();
+                        if(rand(0,3) == 0)
+                            (new AnswerContext(
+                                new ReplyMessageStrategy($this->data)
+                            ))->answer();
+                        else
+                            (new AnswerContext(
+                                new TextStrategy($this->data)
+                            ))->answer();
                         break;
 
                     case 'audio_message':
@@ -123,10 +128,15 @@ class Bot
                         break;
 
                     case 'sticker':
-                        // reply to STICKERS
-                        (new AnswerContext(
-                            new StickerStrategy($this->data)
-                        ))->answer();
+                        // reply to STICKERS, but sometimes send answer to text
+                        if (rand(0, 3) == 3)
+                            (new AnswerContext(
+                                new StickerStrategy($this->data)
+                            ))->answer();
+                        else
+                            (new AnswerContext(
+                                new TextStrategy($this->data)
+                            ))->answer();
                         break;
 
                     case 'wall':
