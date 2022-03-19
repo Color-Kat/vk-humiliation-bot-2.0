@@ -5,6 +5,7 @@
     "answers": [
       "Ты (@insult){@rand(|(@str_end)|, (@laughter)|, (@damn)))}",
       "Ты (@adjective_m) (@insult_m)",
+      "Ты (@you_are){@rand()))|(@str_end)|!|=)||||||)}",
       "{@rand(ты (@you_are)|ты (@you_do)|у тебя (@you_have))}",
       "У {@rand(тебя|тебя|тебя|тебя|тебя|тебя|тебя|вас)} (@you_have){@rand(||, (@laughter)|!||||)|, (@insult)|, (@insult)!)}",
       "Ты{@rand(, я думаю,| скорее всего|, должно быть,| непосредственно| безоговорочно|, без всякого сомнения,| 100%|||)} (@insult)",
