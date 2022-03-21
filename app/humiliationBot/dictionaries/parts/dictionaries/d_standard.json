@@ -3,7 +3,7 @@
   "content": {
     "name": "standard",
     "answers": [
-      "Ты (@insult){@rand(|(@str_end)|, (@laughter)|, (@damn)))}",
+      "Ты {@rand((@insult)|(@you_are))}{@rand(|(@str_end)|, (@laughter)|, (@damn)))}",
       "Ты (@adjective_m) (@insult_m)",
       "Ты (@you_are){@rand()))|(@str_end)|!|=)||||||)}",
       "{@rand(ты (@you_are)|ты (@you_do)|у тебя (@you_have))}",
