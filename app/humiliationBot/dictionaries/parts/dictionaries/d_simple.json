@@ -8,11 +8,18 @@
         "priority": 1000,
         "messages": [
           {
-            "with_prev_mess_id": "say_bannana__you_mother_dead_test",
-            "messages": "Скажи {@rand(банан|банан|Зеленский)}",
-            "next": "Твоя мать сдохла"
-          },
-          "ты (@praise), {@rand(смог это вразумить|дошло до тебя в коем-то веке|понял ты наконец|осознал наконец-то)}{@rand(, что ты (@insult)|, что у тебя (@you_have)|, что ты (@you_do))}"
+            "with_prev_mess_id": "do_you_want_to_see_penis_test",
+            "messages" : "Хочешь я тебе свой член покажу??",
+            "next" : [{
+              "with_prev_mess_id": "do_you_want_to_see_penis_1_test",
+              "messages" : "Щас фотку отправлю, у меня как раз стояк",
+              "next" : [{
+                "with_prev_mess_id": "do_you_want_to_see_penis_2_test",
+                "messages" : "Надо, щас подожди",
+                "next" : "https://4lapy.ru/resize/1440x660/upload/iblock/ca8/ca8566634e24e165ae8d6b4a3c053a60.jpg"
+              }]
+            }]
+          }  
         ]
       },
       {
@@ -507,6 +514,7 @@
           "Не {@rand(обижай меня|издевайся надо мной|надо обзываться|надо меня оскорблять|надо так говорить про меня|говори так)}{@rand(!|!!!|(((|...|\uD83D\uDE2D|\uD83D\uDE22|\uD83D\uDE25|\uD83D\uDE21|\uD83D\uDE13|\uD83D\uDE2D\uD83D\uDE2D\uD83D\uDE2D|\uD83D\uDE2D\uD83D\uDE2D\uD83D\uDE2D\uD83D\uDE2D\uD83D\uDE2D)}",
           "Пустовство",
           "и что?",
+          "Ты не думай, что ты отсанешься безнаказанным",
           "Ещё раз так скажешь, я тебе пальчики-то секатором подравняю",
           "ЛАСКАВО ПРОСИМО В ПЕКЛО!!!",
           "Ещё раз так скажешь, я тебе паяльник в жопу запихну",
