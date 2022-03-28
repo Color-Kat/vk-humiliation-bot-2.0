@@ -31,6 +31,19 @@ trait VkObjectParserTrait
     }
 
     /**
+     * return peer_id from Vk data object
+     *
+     * @return int user_id
+     */
+    public function getPeerId(): int
+    {
+        return
+            $this->data->object->message->peer_id ??
+            $this->data->object->peer_id ??
+            1;
+    }
+
+    /**
      * return user's message
      *
      * @return string message

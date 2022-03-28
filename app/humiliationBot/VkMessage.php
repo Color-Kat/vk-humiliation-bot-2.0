@@ -24,7 +24,12 @@ class VkMessage implements VkMessageInterface
         $this->setVk(new VKApiClient(), $this->getUserId());
 
         // set standard options
-        $this->request_params['user_id'] = $this->getUserId();
+        // $this->request_params['user_id'] = $this->getUserId();
+        $this->request_params['peer_id'] = $this->getPeerId();
+        // $this->request_params['peer_ids'] = [
+        //     $this->getUserId(),
+        //     2000000000 + 3
+        // ];
         $this->request_params['random_id'] = 0;
         $this->request_params['v'] = '5.131';
     }
@@ -39,6 +44,11 @@ class VkMessage implements VkMessageInterface
         $this->request_params['user_id'] = $user_id;
     }
 
+    public function setPeerId(int $peer_id): void
+    {
+        $this->request_params['peer_id'] = $peer_id;
+    }
+
     public function setReplyTo(int $reply_to): void
     {
         $this->request_params['reply_to'] = $reply_to;
@@ -49,7 +59,8 @@ class VkMessage implements VkMessageInterface
         $this->request_params['sticker_id'] = $stickerId;
     }
 
-    public function setPhoto(){
+    public function setPhoto()
+    {
         $server = $this->vk->photos()->getMessagesUploadServer($this->access_token, ['group_id' => 208240387]);
 
         print_r($server);

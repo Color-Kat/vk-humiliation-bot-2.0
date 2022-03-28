@@ -62,22 +62,28 @@ trait Vk
         $user_info = $user->getUser($this->user_id);
 
         if (!$user_info || !$user_info['user_info']) {
-            // get data from vk api
-            $this->user_fields = $this->vk->users()->get($this->access_token, [
-                'user_ids' => $this->user_id,
-                'fields'   => [
-                    'first_name', 'first_name_gen', 'first_name_dat',
-                    'first_name_acc', 'first_name_ins', 'first_name_abl', 'last_name',
-                    'bdate', 'country', 'city', 'relation'
-                ]
-            ])[0];
+            try {
+                // // get data from vk api
+                $user_fields_data = $this->vk->users()->get($this->access_token, [
+                    'user_ids' => $this->user_id,
+                    'fields'   => [
+                        'first_name', 'first_name_gen', 'first_name_dat',
+                        'first_name_acc', 'first_name_ins', 'first_name_abl', 'last_name',
+                        'bdate', 'country', 'city', 'relation'
+                    ]
+                ]);
 
-            // and save data in DB as json
-            $user->set_user_info($this->user_id, json_encode($this->user_fields, JSON_UNESCAPED_UNICODE));
+                if ($user_fields_data) $this->user_fields = $user_fields_data[0];
+                else $this->user_fields = []; // if message is sended by chat, we can't get user fields
+
+                // and save data in DB as json
+                $user->set_user_info($this->user_id, json_encode($this->user_fields, JSON_UNESCAPED_UNICODE));
+            } catch (\Exception $e) {
+                $this->user_fields = json_decode($user_info['user_info'], JSON_UNESCAPED_UNICODE);
+            }
         } else
             // else we have already received data
             $this->user_fields = json_decode($user_info['user_info'], JSON_UNESCAPED_UNICODE);
-
     }
 
     /**
@@ -88,6 +94,8 @@ trait Vk
      */
     public function getName(string $case = 'nom'): string
     {
+        if (empty($this->user_fields)) return ''; // no user_fields. Because sender is group (second bot)
+
         switch ($case) {
             case 'nom':
                 return $this->user_fields['first_name'];
@@ -111,6 +119,7 @@ trait Vk
      */
     public function getLast_name(): string
     {
+        if (empty($this->user_fields)) return ''; // no user_fields. Because sender is group (second bot)
         return $this->user_fields['last_name'];
     }
 
@@ -119,6 +128,7 @@ trait Vk
      */
     public function getBirth(): string
     {
+        if (empty($this->user_fields)) return ''; // no user_fields. Because sender is group (second bot)
         return $this->user_fields['bdate'] ?? '01.01.2004';
     }
 
@@ -131,7 +141,7 @@ trait Vk
 
         try {
             $birth = DateTime::createFromFormat('d.m.Y', $this->getBirth(), $tz);
-            if(!$birth) $birth = DateTime::createFromFormat('d.m.Y', '01.01.2005', $tz);
+            if (!$birth) $birth = DateTime::createFromFormat('d.m.Y', '01.01.2005', $tz);
 
             return $birth->diff(new DateTime('now', $tz))->y;
         } catch (\Exception $e) {
@@ -144,6 +154,7 @@ trait Vk
      */
     public function getCountry(): string
     {
+        if (empty($this->user_fields)) return ''; // no user_fields. Because sender is group (second bot)
         return $this->user_fields['country']['title'] ?? 'плохой стране';
     }
 
@@ -152,6 +163,7 @@ trait Vk
      */
     public function getCity(): string
     {
+        if (empty($this->user_fields)) return ''; // no user_fields. Because sender is group (second bot)
         return $this->user_fields['city']['title'] ?? 'хрен знает где';
     }
 
@@ -161,7 +173,7 @@ trait Vk
     public function getRelation(): string
     {
         // TODO сделать получение семейного положения
-//        return $this->user_fields->relation;
+        //        return $this->user_fields->relation;
         return 'безответно влюблён';
     }
 
@@ -176,15 +188,15 @@ trait Vk
 
 
 
-//    public function isSubscribed(int $user_id): bool{
-//        $subscriptions = $this->vk->users()->getSubscriptions($this->vk_token, [
-//            'user_id' => $user_id,
-//        ])['response']['items'];
-//
-//        foreach ($subscriptions as $groupItem) {
-//            if($groupItem['id'] == GROUP_ID) return true;
-//        }
-//
-//        return false;
-//    }
+    //    public function isSubscribed(int $user_id): bool{
+    //        $subscriptions = $this->vk->users()->getSubscriptions($this->vk_token, [
+    //            'user_id' => $user_id,
+    //        ])['response']['items'];
+    //
+    //        foreach ($subscriptions as $groupItem) {
+    //            if($groupItem['id'] == GROUP_ID) return true;
+    //        }
+    //
+    //        return false;
+    //    }
 }
