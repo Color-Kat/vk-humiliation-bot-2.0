@@ -110,7 +110,7 @@ class Bot
 
                     case 'reply_message':
                         // create AnswerContext and strategy with vk data to reply to REPLY_MESSAGE
-                        if(rand(0,3) == 0)
+                        if(rand(0,7) == 0)
                             (new AnswerContext(
                                 new ReplyMessageStrategy($this->data)
                             ))->answer();
